@@ -1,31 +1,39 @@
 package com.eat.it.eatit.backend.data;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
 @Entity
 @Table(name="account")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
     private long id;
 
     private String username;
 
+    @Column(unique = true)
     private String mail;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fridge_id")
+    @OneToOne(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "fridge")
     private Fridge fridge;
 
-    @OneToMany
+    @OneToMany(
+            mappedBy = "ownerId"
+    )
     private List<Recipe> recipes;
 
     private boolean premium;
