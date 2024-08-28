@@ -26,20 +26,23 @@ public class Recipe {
     private String description;
 
     @OneToMany
+    @JoinColumn(name = "items")
     private List<Item> items;
 
     @OneToMany
-    private List<Cookware> cookwares;
+    @JoinColumn(name = "cookware")
+    private List<Cookware> cookware;
 
-    private Integer total_calories;
+    @Column(name = "total_calories")
+    private Integer totalCalories;
 
-    public Recipe(String name, Account owner, String description, List<Item> items, List<Cookware> cookwares, Integer total_calories) {
+    public Recipe(String name, Account owner, String description, List<Item> items, List<Cookware> cookware, Integer totalCalories) {
         this.name = name;
         this.owner = owner;
         this.description = description;
         this.items = items;
-        this.cookwares = cookwares;
-        this.total_calories = total_calories;
+        this.cookware = cookware;
+        this.totalCalories = totalCalories;
     }
 
     public Recipe(String name, Account owner, String description, List<Item> items) {

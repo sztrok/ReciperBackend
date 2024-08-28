@@ -13,19 +13,21 @@ import java.util.List;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
     private long id;
 
     private String username;
 
+    @Column(unique = true)
     private String mail;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fridge_id")
+    @JoinColumn(name = "fridge")
     private Fridge fridge;
 
     @OneToMany
+    @JoinColumn(name = "recipes")
     private List<Recipe> recipes;
 
     private boolean premium;

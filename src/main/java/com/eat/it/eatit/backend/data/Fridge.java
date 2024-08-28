@@ -17,19 +17,12 @@ public class Fridge {
     @Column(name = "fridge_id")
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id")
-    private Account owner;
-
     @OneToMany
+    @JoinColumn(name = "items")
     private List<Item> items;
 
-    public Fridge(Account owner, List<Item> items) {
-        this.owner = owner;
+    public Fridge(List<Item> items) {
         this.items = items;
     }
 
-    public Fridge(Account owner) {
-        this.owner = owner;
-    }
 }
