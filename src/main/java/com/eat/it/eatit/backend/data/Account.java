@@ -58,4 +58,16 @@ public class Account {
         this.recipes = recipes;
         this.premium = premium;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", mail='" + mail + '\'' +
+                ", fridge=" + fridge +
+                ", recipes=" + recipes +
+                ", premium=" + premium +
+                '}';
+    }
 }

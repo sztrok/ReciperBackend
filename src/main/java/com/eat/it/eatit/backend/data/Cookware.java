@@ -22,4 +22,12 @@ public class Cookware {
     public Cookware(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Cookware{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

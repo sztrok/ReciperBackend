@@ -50,4 +50,17 @@ public class Item {
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", barcode=" + barcode +
+                ", caloriesPer100g=" + caloriesPer100g +
+                ", proteinPer100G=" + proteinPer100G +
+                ", fatPer100G=" + fatPer100G +
+                ", carbsPer100G=" + carbsPer100G +
+                '}';
+    }
 }
