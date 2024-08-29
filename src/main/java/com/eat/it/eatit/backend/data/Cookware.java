@@ -13,8 +13,7 @@ import lombok.Setter;
 public class Cookware {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cookware_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;

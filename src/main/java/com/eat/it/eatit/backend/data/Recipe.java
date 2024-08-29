@@ -15,13 +15,11 @@ import java.util.List;
 public class Recipe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipe_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
 
-    @Column(name = "owner_id")
     private Long ownerId;
 
     private String description;
@@ -34,7 +32,6 @@ public class Recipe {
     @JoinColumn(name = "cookware")
     private List<Cookware> cookware;
 
-    @Column(name = "total_calories")
     private Integer totalCalories;
 
     public Recipe(String name, Long ownerId, String description, List<Item> items, List<Cookware> cookware, Integer totalCalories) {

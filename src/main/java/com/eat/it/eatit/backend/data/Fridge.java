@@ -15,8 +15,7 @@ import java.util.List;
 public class Fridge {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fridge_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @PrimaryKeyJoinColumn(name = "owner_id")

@@ -13,24 +13,19 @@ import lombok.Setter;
 public class Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
 
     private long barcode;
 
-    @Column(name = "calories_per_100G")
     private int caloriesPer100g;
 
-    @Column(name = "protein_per_100G")
     private int proteinPer100G;
 
-    @Column(name = "fat_per_100G")
     private int fatPer100G;
 
-    @Column(name = "carbs_per_100G")
     private int carbsPer100G;
 
 
