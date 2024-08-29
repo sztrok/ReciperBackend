@@ -1,13 +1,15 @@
 package com.eat.it.eatit.backend.data;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 @Entity
 @Table(name="cookware")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Cookware {
 
     @Id

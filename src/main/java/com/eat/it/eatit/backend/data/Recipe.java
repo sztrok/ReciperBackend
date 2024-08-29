@@ -1,15 +1,17 @@
 package com.eat.it.eatit.backend.data;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "recipe")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Recipe {
 
     @Id
@@ -19,33 +21,54 @@ public class Recipe {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Account owner;
+    @Column(name = "owner_id")
+    private Long ownerId;
 
     private String description;
 
     @OneToMany
+    @JoinColumn(name = "items")
     private List<Item> items;
 
     @OneToMany
-    private List<Cookware> cookwares;
+    @JoinColumn(name = "cookware")
+    private List<Cookware> cookware;
 
-    private Integer total_calories;
+    @Column(name = "total_calories")
+    private Integer totalCalories;
 
-    public Recipe(String name, Account owner, String description, List<Item> items, List<Cookware> cookwares, Integer total_calories) {
+    public Recipe(String name, Long ownerId, String description, List<Item> items, List<Cookware> cookware, Integer totalCalories) {
         this.name = name;
-        this.owner = owner;
+        this.ownerId = ownerId;
         this.description = description;
         this.items = items;
-        this.cookwares = cookwares;
-        this.total_calories = total_calories;
+        this.cookware = cookware;
+        this.totalCalories = totalCalories;
     }
 
-    public Recipe(String name, Account owner, String description, List<Item> items) {
+    public Recipe(String name, Long ownerId, String description, List<Item> items) {
         this.name = name;
-        this.owner = owner;
+        this.ownerId = ownerId;
         this.description = description;
         this.items = items;
+    }
+
+    public Recipe(String name, Long ownerId, String description) {
+        this.name = name;
+        this.ownerId = ownerId;
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", ownerId=" + ownerId +
+                ", description='" + description + '\'' +
+                ", items=" + items +
+                ", cookware=" + cookware +
+                ", totalCalories=" + totalCalories +
+                '}';
     }
 }
