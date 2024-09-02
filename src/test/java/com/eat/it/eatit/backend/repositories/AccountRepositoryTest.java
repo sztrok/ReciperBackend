@@ -48,23 +48,22 @@ class AccountRepositoryTest {
 
     @Test
     void testUpdate() {
-        testEntityManager.persist(account);
+        accountRepository.save(account);
         String newName = "krzysztof";
         account.setUsername(newName);
-        accountRepository.save(account);
         assertThat(testEntityManager.find(Account.class, account.getId()).getUsername()).isEqualTo(newName);
     }
 
     @Test
     void testFindById() {
-        testEntityManager.persist(account);
+        accountRepository.save(account);
         Optional<Account> retrievedAccount = accountRepository.findById(account.getId());
         assertThat(retrievedAccount).contains(account);
     }
 
     @Test
     void testFindByMail() {
-        testEntityManager.persist(account);
+        accountRepository.save(account);
         Optional<Account> retrievedMail = Optional.ofNullable(accountRepository.findByMail(account.getMail()));
         System.out.println(retrievedMail);
         assertThat(retrievedMail).contains(account);
@@ -84,8 +83,8 @@ class AccountRepositoryTest {
     @Test
     void testFindAllByPremiumIsTrue() {
         Account secondAccount = new Account("aaaakamilwada", "dasda@mail.com", false);
-        testEntityManager.persist(account);
-        testEntityManager.persist(secondAccount);
+        accountRepository.save(account);
+        accountRepository.save(secondAccount);
         account.setPremium(true);
         Optional<List<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsTrue());
         assertThat(allPremiumAccounts).contains(List.of(account));
@@ -94,8 +93,8 @@ class AccountRepositoryTest {
     @Test
     void testFindAllByPremiumIsFalse() {
         Account secondAccount = new Account("aaaakamilwada", "dasda@mail.com", false);
-        testEntityManager.persist(account);
-        testEntityManager.persist(secondAccount);
+        accountRepository.save(account);
+        accountRepository.save(secondAccount);
         account.setPremium(true);
         Optional<List<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsFalse());
         assertThat(allPremiumAccounts).contains(List.of(secondAccount));
@@ -103,7 +102,7 @@ class AccountRepositoryTest {
 
     @Test
     void testAttachingFridge() {
-        testEntityManager.persist(account);
+        accountRepository.save(account);
         Fridge fridge = new Fridge();
         account.setFridge(fridge);
         System.out.println(testEntityManager.find(Account.class, account.getId()).getFridge());
@@ -112,7 +111,7 @@ class AccountRepositoryTest {
 
     @Test
     void testAttachingRecipes() {
-        testEntityManager.persist(account);
+        accountRepository.save(account);
         List<Recipe> recipes = List.of(
                 new Recipe("test", account.getId(), "recipe for test purposes"),
                 new Recipe("test2", account.getId(), "recipe for test purposes")
