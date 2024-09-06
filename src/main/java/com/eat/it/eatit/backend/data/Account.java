@@ -23,6 +23,8 @@ public class Account {
     @Column(unique = true)
     private String mail;
 
+    private String password;
+
     @OneToOne(
             cascade = CascadeType.ALL,
             orphanRemoval = true
