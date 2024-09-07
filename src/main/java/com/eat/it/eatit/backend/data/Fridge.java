@@ -25,6 +25,11 @@ public class Fridge {
     @JoinColumn(name = "items")
     private Set<Item> items;
 
+    public Fridge(Long ownerId, Set<Item> items) {
+        this.ownerId = ownerId;
+        this.items = items;
+    }
+
     public Fridge(Set<Item> items) {
         this.items = items;
     }
