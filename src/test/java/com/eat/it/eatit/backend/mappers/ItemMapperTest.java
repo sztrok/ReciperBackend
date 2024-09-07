@@ -79,13 +79,13 @@ class ItemMapperTest {
     @Test
     void testConversionForNullEntityObject() {
         itemDTO = ItemMapper.toDTO(item);
-        assertNull(itemDTO);
+        assertNotNull(itemDTO);
     }
 
     @Test
     void testConversionForNullDTOObject() {
         item = ItemMapper.toEntity(itemDTO);
-        assertNull(item);
+        assertNotNull(item);
     }
 
     @Test

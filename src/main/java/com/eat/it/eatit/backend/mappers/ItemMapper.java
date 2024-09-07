@@ -13,7 +13,7 @@ public class ItemMapper {
 
     public static ItemDTO toDTO(Item item) {
         if(item == null) {
-            return null;
+            return new ItemDTO();
         }
         return new ItemDTO(
                 item.getName(),
@@ -26,7 +26,7 @@ public class ItemMapper {
 
     public static Item toEntity(ItemDTO itemDTO) {
         if(itemDTO == null) {
-            return null;
+            return new Item();
         }
         return new Item(
                 itemDTO.getName(),

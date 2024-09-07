@@ -8,8 +8,10 @@ public class AccountMapper {
     private AccountMapper() {
     }
 
-    //TODO: add null checks
     public static AccountDTO toDTO(Account account) {
+        if(account == null) {
+            return new AccountDTO();
+        }
         return new AccountDTO(
                 account.getUsername(),
                 account.getMail(),
@@ -19,6 +21,9 @@ public class AccountMapper {
     }
 
     public static Account toEntity(AccountDTO accountDTO){
+        if(accountDTO == null) {
+            return new Account();
+        }
         return new Account(
                 accountDTO.getUsername(),
                 accountDTO.getMail(),
