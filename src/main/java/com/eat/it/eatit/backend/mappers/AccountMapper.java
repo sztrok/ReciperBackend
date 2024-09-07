@@ -1,4 +1,4 @@
-package mappers;
+package com.eat.it.eatit.backend.mappers;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.dto.AccountDTO;
@@ -8,6 +8,7 @@ public class AccountMapper {
     private AccountMapper() {
     }
 
+    //TODO: add null checks
     public static AccountDTO toDTO(Account account) {
         return new AccountDTO(
                 account.getUsername(),

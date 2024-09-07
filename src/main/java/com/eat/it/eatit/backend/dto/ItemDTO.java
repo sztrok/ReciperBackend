@@ -1,9 +1,12 @@
 package com.eat.it.eatit.backend.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ItemDTO {
+
     private String name;
     private long barcode;
     private int caloriesPer100g;

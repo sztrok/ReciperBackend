@@ -1,10 +1,12 @@
 package com.eat.it.eatit.backend.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class RecipeDTO {
 
     private String name;

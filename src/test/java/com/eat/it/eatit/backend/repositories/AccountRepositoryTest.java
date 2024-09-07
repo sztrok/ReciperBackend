@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -112,7 +113,7 @@ class AccountRepositoryTest {
     @Test
     void testAttachingRecipes() {
         accountRepository.save(account);
-        List<Recipe> recipes = List.of(
+        Set<Recipe> recipes = Set.of(
                 new Recipe("test", account.getId(), "recipe for test purposes"),
                 new Recipe("test2", account.getId(), "recipe for test purposes")
         );

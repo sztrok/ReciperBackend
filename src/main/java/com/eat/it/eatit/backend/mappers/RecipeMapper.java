@@ -1,4 +1,4 @@
-package mappers;
+package com.eat.it.eatit.backend.mappers;
 
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class RecipeMapper {
 
+    //TODO: add null checks
     private RecipeMapper() {
     }
 

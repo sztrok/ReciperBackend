@@ -1,10 +1,11 @@
-package mappers;
+package com.eat.it.eatit.backend.mappers;
 
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 
 public class FridgeMapper {
 
+    //TODO: add null checks
     private FridgeMapper() {
     }
 
