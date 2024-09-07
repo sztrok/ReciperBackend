@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="account")
@@ -23,6 +23,8 @@ public class Account {
     @Column(unique = true)
     private String mail;
 
+    private String password;
+
     @OneToOne(
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -33,7 +35,7 @@ public class Account {
     @OneToMany(
             mappedBy = "ownerId"
     )
-    private List<Recipe> recipes;
+    private Set<Recipe> recipes;
 
     private boolean premium;
 
@@ -50,7 +52,7 @@ public class Account {
         this.premium = premium;
     }
 
-    public Account(String username, String mail, Fridge fridge, List<Recipe> recipes, boolean premium) {
+    public Account(String username, String mail, Fridge fridge, Set<Recipe> recipes, boolean premium) {
         this.username = username;
         this.mail = mail;
         this.fridge = fridge;
