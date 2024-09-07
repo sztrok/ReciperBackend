@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipe")
@@ -26,15 +26,15 @@ public class Recipe {
 
     @OneToMany
     @JoinColumn(name = "items")
-    private List<Item> items;
+    private Set<Item> items;
 
     @OneToMany
     @JoinColumn(name = "cookware")
-    private List<Cookware> cookware;
+    private Set<Cookware> cookware;
 
     private Integer totalCalories;
 
-    public Recipe(String name, Long ownerId, String description, List<Item> items, List<Cookware> cookware, Integer totalCalories) {
+    public Recipe(String name, Long ownerId, String description, Set<Item> items, Set<Cookware> cookware, Integer totalCalories) {
         this.name = name;
         this.ownerId = ownerId;
         this.description = description;
@@ -43,7 +43,7 @@ public class Recipe {
         this.totalCalories = totalCalories;
     }
 
-    public Recipe(String name, Long ownerId, String description, List<Item> items) {
+    public Recipe(String name, Long ownerId, String description, Set<Item> items) {
         this.name = name;
         this.ownerId = ownerId;
         this.description = description;

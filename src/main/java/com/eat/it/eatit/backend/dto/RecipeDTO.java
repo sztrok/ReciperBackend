@@ -2,7 +2,7 @@ package com.eat.it.eatit.backend.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class RecipeDTO {
@@ -10,11 +10,11 @@ public class RecipeDTO {
     private String name;
     private Long ownerId;
     private String description;
-    private List<ItemDTO> items;
-    private List<CookwareDTO> cookware;
+    private Set<ItemDTO> items;
+    private Set<CookwareDTO> cookware;
     private Integer totalCalories;
 
-    public RecipeDTO(String name, Long ownerId, String description, List<ItemDTO> items, List<CookwareDTO> cookware, Integer totalCalories) {
+    public RecipeDTO(String name, Long ownerId, String description, Set<ItemDTO> items, Set<CookwareDTO> cookware, Integer totalCalories) {
         this.name = name;
         this.ownerId = ownerId;
         this.description = description;

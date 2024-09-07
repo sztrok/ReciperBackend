@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="fridge")
@@ -23,9 +23,9 @@ public class Fridge {
 
     @OneToMany
     @JoinColumn(name = "items")
-    private List<Item> items;
+    private Set<Item> items;
 
-    public Fridge(List<Item> items) {
+    public Fridge(Set<Item> items) {
         this.items = items;
     }
 
