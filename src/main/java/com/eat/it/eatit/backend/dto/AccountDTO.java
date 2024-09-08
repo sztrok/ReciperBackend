@@ -13,9 +13,9 @@ public class AccountDTO {
     private String mail;
     private FridgeDTO fridge;
     private Set<RecipeDTO> recipes;
-    private boolean premium;
+    private Boolean premium;
 
-    public AccountDTO(String username, String mail, FridgeDTO fridge, Set<RecipeDTO> recipes, boolean premium) {
+    public AccountDTO(String username, String mail, FridgeDTO fridge, Set<RecipeDTO> recipes, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.fridge = fridge;
