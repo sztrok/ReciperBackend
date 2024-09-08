@@ -11,7 +11,7 @@ public class CookwareMapper {
     private CookwareMapper() {
     }
 
-    public static CookwareDTO toDto(Cookware cookware) {
+    public static CookwareDTO toDTO(Cookware cookware) {
         if(cookware == null) {
             return new CookwareDTO();
         }

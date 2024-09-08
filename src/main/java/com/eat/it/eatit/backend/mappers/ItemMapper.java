@@ -55,12 +55,12 @@ public class ItemMapper {
         return itemDTOSet;
     }
 
-    public static Set<Item> toEntitySet(Set<ItemDTO> itemDTOs) {
-        if(itemDTOs == null) {
+    public static Set<Item> toEntitySet(Set<ItemDTO> itemDTOSet) {
+        if(itemDTOSet == null) {
             return new HashSet<>();
         }
         Set<Item> itemEntitySet = new HashSet<>();
-        for(ItemDTO item: itemDTOs) {
+        for(ItemDTO item: itemDTOSet) {
             itemEntitySet.add(
                     new Item(
                             item.getName(),

@@ -17,7 +17,7 @@ public class AccountMapper {
                 account.getMail(),
                 FridgeMapper.toDTO(account.getFridge()),
                 RecipeMapper.toDTOSet(account.getRecipes()),
-                account.isPremium());
+                account.getPremium());
     }
 
     public static Account toEntity(AccountDTO accountDTO){
@@ -29,6 +29,6 @@ public class AccountMapper {
                 accountDTO.getMail(),
                 FridgeMapper.toEntity(accountDTO.getFridge()),
                 RecipeMapper.toEntitySet(accountDTO.getRecipes()),
-                accountDTO.isPremium());
+                accountDTO.getPremium());
     }
 }
