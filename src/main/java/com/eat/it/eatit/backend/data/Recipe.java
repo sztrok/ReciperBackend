@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,7 @@ public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String name;
 
@@ -67,5 +68,18 @@ public class Recipe {
                 ", cookware=" + cookware +
                 ", totalCalories=" + totalCalories +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Recipe recipe = (Recipe) o;
+        return Objects.equals(name, recipe.name) && Objects.equals(ownerId, recipe.ownerId) && Objects.equals(description, recipe.description) && Objects.equals(items, recipe.items) && Objects.equals(cookware, recipe.cookware) && Objects.equals(totalCalories, recipe.totalCalories);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, ownerId, description, items, cookware, totalCalories);
     }
 }
