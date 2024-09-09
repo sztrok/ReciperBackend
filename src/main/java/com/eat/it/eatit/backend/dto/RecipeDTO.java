@@ -24,4 +24,9 @@ public class RecipeDTO {
         this.cookware = cookware;
         this.totalCalories = totalCalories;
     }
+
+    public RecipeDTO(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
