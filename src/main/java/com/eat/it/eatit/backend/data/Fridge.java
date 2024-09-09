@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,7 @@ public class Fridge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @PrimaryKeyJoinColumn(name = "owner_id")
     private Long ownerId;
@@ -41,5 +42,18 @@ public class Fridge {
                 ", ownerId=" + ownerId +
                 ", items=" + items +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fridge fridge = (Fridge) o;
+        return Objects.equals(ownerId, fridge.ownerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ownerId);
     }
 }

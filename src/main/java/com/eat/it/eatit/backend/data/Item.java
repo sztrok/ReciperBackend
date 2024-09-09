@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "item")
 @NoArgsConstructor
@@ -14,22 +16,25 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String name;
 
-    private long barcode;
+    private Long barcode;
 
-    private int caloriesPer100g;
+    private Integer caloriesPer100g;
 
-    private int proteinPer100G;
+    private Integer proteinPer100G;
 
-    private int fatPer100G;
+    private Integer fatPer100G;
 
-    private int carbsPer100G;
+    private Integer carbsPer100G;
 
+    public Item(String name) {
+        this.name = name;
+    }
 
-    public Item(String name, long barcode, int caloriesPer100g, int proteinPer100G, int fatPer100G, int carbsPer100G) {
+    public Item(String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
@@ -38,7 +43,7 @@ public class Item {
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, int caloriesPer100g, int proteinPer100G, int fatPer100G, int carbsPer100G) {
+    public Item(String name, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G) {
         this.name = name;
         this.caloriesPer100g = caloriesPer100g;
         this.proteinPer100G = proteinPer100G;
@@ -57,5 +62,18 @@ public class Item {
                 ", fatPer100G=" + fatPer100G +
                 ", carbsPer100G=" + carbsPer100G +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(name, item.name) && Objects.equals(barcode, item.barcode) && Objects.equals(caloriesPer100g, item.caloriesPer100g) && Objects.equals(proteinPer100G, item.proteinPer100G) && Objects.equals(fatPer100G, item.fatPer100G) && Objects.equals(carbsPer100G, item.carbsPer100G);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, barcode, caloriesPer100g, proteinPer100G, fatPer100G, carbsPer100G);
     }
 }

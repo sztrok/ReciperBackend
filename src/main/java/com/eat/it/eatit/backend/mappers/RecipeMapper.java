@@ -1,4 +1,4 @@
-package mappers;
+package com.eat.it.eatit.backend.mappers;
 
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -12,6 +12,9 @@ public class RecipeMapper {
     }
 
     public static RecipeDTO toDTO(Recipe recipe) {
+        if(recipe == null) {
+            return new RecipeDTO();
+        }
         return new RecipeDTO(
                 recipe.getName(),
                 recipe.getOwnerId(),
@@ -22,6 +25,9 @@ public class RecipeMapper {
     }
 
     public static Recipe toEntity(RecipeDTO recipeDTO) {
+        if(recipeDTO == null) {
+            return new Recipe();
+        }
         return new Recipe(
                 recipeDTO.getName(),
                 recipeDTO.getOwnerId(),
@@ -31,9 +37,12 @@ public class RecipeMapper {
                 recipeDTO.getTotalCalories());
     }
 
-    public static Set<RecipeDTO> toDTOSet(Set<Recipe> recipes) {
+    public static Set<RecipeDTO> toDTOSet(Set<Recipe> recipeSet) {
+        if(recipeSet == null) {
+            return new HashSet<>();
+        }
         Set<RecipeDTO> recipeDTOSet = new HashSet<>();
-        for(Recipe recipe: recipes) {
+        for(Recipe recipe: recipeSet) {
             recipeDTOSet.add(
                     new RecipeDTO(
                             recipe.getName(),
@@ -46,9 +55,12 @@ public class RecipeMapper {
         return recipeDTOSet;
     }
 
-    public static Set<Recipe> toEntitySet(Set<RecipeDTO> recipes) {
+    public static Set<Recipe> toEntitySet(Set<RecipeDTO> recipeDTOSet) {
+        if(recipeDTOSet == null) {
+            return new HashSet<>();
+        }
         Set<Recipe> recipeEntitySet = new HashSet<>();
-        for(RecipeDTO recipe: recipes) {
+        for(RecipeDTO recipe: recipeDTOSet) {
             recipeEntitySet.add(
                     new Recipe(
                             recipe.getName(),

@@ -1,4 +1,4 @@
-package mappers;
+package com.eat.it.eatit.backend.mappers;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.dto.ItemDTO;
@@ -12,6 +12,9 @@ public class ItemMapper {
     }
 
     public static ItemDTO toDTO(Item item) {
+        if(item == null) {
+            return new ItemDTO();
+        }
         return new ItemDTO(
                 item.getName(),
                 item.getBarcode(),
@@ -22,6 +25,9 @@ public class ItemMapper {
     }
 
     public static Item toEntity(ItemDTO itemDTO) {
+        if(itemDTO == null) {
+            return new Item();
+        }
         return new Item(
                 itemDTO.getName(),
                 itemDTO.getBarcode(),
@@ -32,6 +38,9 @@ public class ItemMapper {
     }
 
     public static Set<ItemDTO> toDTOSet(Set<Item> items) {
+        if(items == null) {
+            return new HashSet<>();
+        }
         Set<ItemDTO> itemDTOSet = new HashSet<>();
         for(Item item: items) {
             itemDTOSet.add(
@@ -46,9 +55,12 @@ public class ItemMapper {
         return itemDTOSet;
     }
 
-    public static Set<Item> toEntitySet(Set<ItemDTO> items) {
+    public static Set<Item> toEntitySet(Set<ItemDTO> itemDTOSet) {
+        if(itemDTOSet == null) {
+            return new HashSet<>();
+        }
         Set<Item> itemEntitySet = new HashSet<>();
-        for(ItemDTO item: items) {
+        for(ItemDTO item: itemDTOSet) {
             itemEntitySet.add(
                     new Item(
                             item.getName(),

@@ -1,10 +1,12 @@
 package com.eat.it.eatit.backend.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class RecipeDTO {
 
     private String name;
@@ -21,5 +23,10 @@ public class RecipeDTO {
         this.items = items;
         this.cookware = cookware;
         this.totalCalories = totalCalories;
+    }
+
+    public RecipeDTO(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 }

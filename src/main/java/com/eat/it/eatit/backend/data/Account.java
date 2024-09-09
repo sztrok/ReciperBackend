@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String username;
 
@@ -37,22 +38,22 @@ public class Account {
     )
     private Set<Recipe> recipes;
 
-    private boolean premium;
+    private Boolean premium;
 
-    public Account(String username, String mail, boolean premium) {
+    public Account(String username, String mail, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.premium = premium;
     }
 
-    public Account(String username, String mail, Fridge fridge, boolean premium) {
+    public Account(String username, String mail, Fridge fridge, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.fridge = fridge;
         this.premium = premium;
     }
 
-    public Account(String username, String mail, Fridge fridge, Set<Recipe> recipes, boolean premium) {
+    public Account(String username, String mail, Fridge fridge, Set<Recipe> recipes, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.fridge = fridge;
@@ -70,5 +71,18 @@ public class Account {
                 ", recipes=" + recipes +
                 ", premium=" + premium +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(username, account.username) && Objects.equals(mail, account.mail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, mail);
     }
 }
