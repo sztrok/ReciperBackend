@@ -13,6 +13,7 @@ public class ItemDTO {
     private Integer proteinPer100G;
     private Integer fatPer100G;
     private Integer carbsPer100G;
+    private Integer amount;
 
     public ItemDTO(String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G) {
         this.name = name;
@@ -21,6 +22,16 @@ public class ItemDTO {
         this.proteinPer100G = proteinPer100G;
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
+    }
+
+    public ItemDTO(String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G, Integer amount) {
+        this.name = name;
+        this.barcode = barcode;
+        this.caloriesPer100g = caloriesPer100g;
+        this.proteinPer100G = proteinPer100G;
+        this.fatPer100G = fatPer100G;
+        this.carbsPer100G = carbsPer100G;
+        this.amount = amount;
     }
 
     public ItemDTO(String name) {

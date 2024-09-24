@@ -21,7 +21,8 @@ public class ItemMapper {
                 item.getCaloriesPer100g(),
                 item.getProteinPer100G(),
                 item.getFatPer100G(),
-                item.getCarbsPer100G());
+                item.getCarbsPer100G(),
+                item.getAmount());
     }
 
     public static Item toEntity(ItemDTO itemDTO) {
@@ -34,7 +35,8 @@ public class ItemMapper {
                 itemDTO.getCaloriesPer100g(),
                 itemDTO.getProteinPer100G(),
                 itemDTO.getFatPer100G(),
-                itemDTO.getCarbsPer100G());
+                itemDTO.getCarbsPer100G(),
+                itemDTO.getAmount());
     }
 
     public static Set<ItemDTO> toDTOSet(Set<Item> items) {
@@ -50,7 +52,8 @@ public class ItemMapper {
                             item.getCaloriesPer100g(),
                             item.getProteinPer100G(),
                             item.getFatPer100G(),
-                            item.getCarbsPer100G()));
+                            item.getCarbsPer100G(),
+                            item.getAmount()));
         }
         return itemDTOSet;
     }
@@ -68,7 +71,8 @@ public class ItemMapper {
                             item.getCaloriesPer100g(),
                             item.getProteinPer100G(),
                             item.getFatPer100G(),
-                            item.getCarbsPer100G()));
+                            item.getCarbsPer100G(),
+                            item.getAmount()));
         }
         return itemEntitySet;
     }
