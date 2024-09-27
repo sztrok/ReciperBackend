@@ -23,7 +23,7 @@ public class Fridge {
     private Long ownerId;
 
     @OneToMany
-    @JoinColumn(name = "items")
+    @JoinColumn(name = "items_in_fridge")
     private Set<Item> items;
 
     public Fridge(Long ownerId, Set<Item> items) {
