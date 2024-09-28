@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.controllers;
 
+import com.eat.it.eatit.backend.components.ItemHandler;
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.mappers.ItemMapper;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -19,10 +18,12 @@ import java.util.Set;
 public class ItemController {
 
     ItemRepository itemRepository;
+    ItemHandler itemHandler;
 
     @Autowired
-    public ItemController(ItemRepository itemRepository) {
+    public ItemController(ItemRepository itemRepository, ItemHandler itemHandler) {
         this.itemRepository = itemRepository;
+        this.itemHandler = itemHandler;
     }
 
 
@@ -33,18 +34,12 @@ public class ItemController {
 
     @GetMapping("/get_item/id/{id}")
     public ItemDTO getItemById(@PathVariable Long id) {
-        Item item = itemRepository.findById(id).orElse(null);
-        return ItemMapper.toDTO(item);
+        return itemHandler.getItemById(id);
     }
 
     @GetMapping("/get_all")
     public Set<ItemDTO> getAllItems() {
-        List<Item> items = itemRepository.findAll();
-        Set<ItemDTO> itemDTOSet = new HashSet<>();
-        for(Item i : items) {
-            itemDTOSet.add(ItemMapper.toDTO(i));
-        }
-        return itemDTOSet;
+        return itemHandler.getAllItems();
     }
 
     @GetMapping("/get_item/name/{name}")
