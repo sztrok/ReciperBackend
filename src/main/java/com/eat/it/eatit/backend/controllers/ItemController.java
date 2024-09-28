@@ -1,10 +1,7 @@
 package com.eat.it.eatit.backend.controllers;
 
 import com.eat.it.eatit.backend.components.ItemHandler;
-import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.dto.ItemDTO;
-import com.eat.it.eatit.backend.mappers.ItemMapper;
-import com.eat.it.eatit.backend.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +14,10 @@ import java.util.Set;
 @RequestMapping("/api/item")
 public class ItemController {
 
-    ItemRepository itemRepository;
     ItemHandler itemHandler;
 
     @Autowired
-    public ItemController(ItemRepository itemRepository, ItemHandler itemHandler) {
-        this.itemRepository = itemRepository;
+    public ItemController(ItemHandler itemHandler) {
         this.itemHandler = itemHandler;
     }
 
@@ -44,19 +39,17 @@ public class ItemController {
 
     @GetMapping("/get_item/name/{name}")
     public ItemDTO getItemByName(@PathVariable String name) {
-        Item item = itemRepository.findByName(name);
-        return ItemMapper.toDTO(item);
+        return itemHandler.getItemByName(name);
     }
 
     @GetMapping("/get_all/name/{name}")
     public Set<ItemDTO> getAllItemsContainingName(@PathVariable String name) {
-        return ItemMapper.toDTOSet(itemRepository.findAllByNameContains(name));
+        return itemHandler.getAllItemsContainingName(name);
     }
 
     @GetMapping("/get_item/barcode/{barcode}")
     public ItemDTO getItemByBarcode(@PathVariable Long barcode) {
-        Item item = itemRepository.findByBarcode(barcode);
-        return ItemMapper.toDTO(item);
+        return itemHandler.getItemByBarcode(barcode);
     }
 
 }

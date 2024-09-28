@@ -34,5 +34,19 @@ public class ItemHandler {
         return itemDTOSet;
     }
 
+    public ItemDTO getItemByName(String name) {
+        Item item = itemRepository.findByName(name);
+        return ItemMapper.toDTO(item);
+    }
+
+    public Set<ItemDTO> getAllItemsContainingName(String name) {
+        return ItemMapper.toDTOSet(itemRepository.findAllByNameContains(name));
+    }
+
+    public ItemDTO getItemByBarcode(Long barcode) {
+        Item item = itemRepository.findByBarcode(barcode);
+        return ItemMapper.toDTO(item);
+    }
+
 
 }
