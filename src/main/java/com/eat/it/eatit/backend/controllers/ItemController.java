@@ -3,10 +3,8 @@ package com.eat.it.eatit.backend.controllers;
 import com.eat.it.eatit.backend.components.ItemHandler;
 import com.eat.it.eatit.backend.dto.ItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -50,6 +48,11 @@ public class ItemController {
     @GetMapping("/get_item/barcode/{barcode}")
     public ItemDTO getItemByBarcode(@PathVariable Long barcode) {
         return itemHandler.getItemByBarcode(barcode);
+    }
+
+    @PostMapping(value = "/add_item", consumes = "application/json")
+    public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
+        return itemHandler.addNewItem(item);
     }
 
 }

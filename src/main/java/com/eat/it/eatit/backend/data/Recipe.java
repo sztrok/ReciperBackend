@@ -25,8 +25,7 @@ public class Recipe {
 
     private String description;
 
-    @OneToMany
-    @JoinColumn(name = "items_in_recipe")
+    @ManyToMany
     private Set<Item> items;
 
     @OneToMany
