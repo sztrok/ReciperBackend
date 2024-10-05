@@ -22,9 +22,12 @@ public class Fridge {
     @PrimaryKeyJoinColumn(name = "owner_id")
     private Long ownerId;
 
-    @OneToMany
-    @JoinColumn(name = "items_in_fridge")
+    @ManyToMany
     private Set<Item> items;
+
+    public Fridge(Long ownerId) {
+        this.ownerId = ownerId;
+    }
 
     public Fridge(Long ownerId, Set<Item> items) {
         this.ownerId = ownerId;

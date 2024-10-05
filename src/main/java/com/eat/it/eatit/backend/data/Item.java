@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "item")
@@ -32,8 +33,25 @@ public class Item {
 
     private Integer amount;
 
+    @ManyToMany(mappedBy = "items")
+    private Set<Recipe> recipesContainingItem;
+
+    @ManyToMany(mappedBy = "items")
+    private Set<Fridge> fridgesContainingItem;
+
     public Item(String name) {
         this.name = name;
+    }
+
+    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G, Integer amount) {
+        this.id = id;
+        this.name = name;
+        this.barcode = barcode;
+        this.caloriesPer100g = caloriesPer100g;
+        this.proteinPer100G = proteinPer100G;
+        this.fatPer100G = fatPer100G;
+        this.carbsPer100G = carbsPer100G;
+        this.amount = amount;
     }
 
     public Item(String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G) {
@@ -73,6 +91,7 @@ public class Item {
                 ", proteinPer100G=" + proteinPer100G +
                 ", fatPer100G=" + fatPer100G +
                 ", carbsPer100G=" + carbsPer100G +
+                ", amount=" + amount +
                 '}';
     }
 

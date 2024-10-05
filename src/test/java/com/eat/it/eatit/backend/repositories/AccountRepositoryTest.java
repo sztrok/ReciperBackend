@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -76,9 +75,9 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         accountRepository.save(secondAccount);
         String partOfUsername = "kamil";
-        Optional<List<Account>> accountList = Optional.ofNullable(accountRepository.findAllByUsernameContaining(partOfUsername));
+        Optional<Set<Account>> accountList = Optional.ofNullable(accountRepository.findAllByUsernameContaining(partOfUsername));
         System.out.println(accountList);
-        assertThat(accountList).contains(List.of(account, secondAccount));
+        assertThat(accountList).contains(Set.of(account, secondAccount));
     }
 
     @Test
@@ -87,8 +86,8 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         accountRepository.save(secondAccount);
         account.setPremium(true);
-        Optional<List<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsTrue());
-        assertThat(allPremiumAccounts).contains(List.of(account));
+        Optional<Set<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsTrue());
+        assertThat(allPremiumAccounts).contains(Set.of(account));
     }
 
     @Test
@@ -97,8 +96,8 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         accountRepository.save(secondAccount);
         account.setPremium(true);
-        Optional<List<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsFalse());
-        assertThat(allPremiumAccounts).contains(List.of(secondAccount));
+        Optional<Set<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsFalse());
+        assertThat(allPremiumAccounts).contains(Set.of(secondAccount));
     }
 
     @Test
