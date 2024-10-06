@@ -55,15 +55,9 @@ public class ItemHandler {
 
 
     public ResponseEntity<ItemDTO> addNewItem(ItemDTO item) {
-        itemRepository.flush();
-        Long newItemId = itemRepository.getMaxId() + 1;
-        System.out.println(newItemId);
         Item newItem = ItemMapper.toEntity(item);
-
-        newItem.setId(newItemId);
-        System.out.println(newItem.getId());
         itemRepository.save(newItem);
-        return new ResponseEntity<>(ItemMapper.toDTO(itemRepository.findById(newItemId).orElse(null)), HttpStatus.OK);
+        return new ResponseEntity<>(ItemMapper.toDTO(itemRepository.findById(newItem.getId()).orElse(null)), HttpStatus.OK);
     }
 
 
