@@ -1,5 +1,7 @@
-package com.eat.it.eatit.backend.dto;
+package com.eat.it.eatit.backend.account;
 
+import com.eat.it.eatit.backend.fridge.FridgeDTO;
+import com.eat.it.eatit.backend.recipe.RecipeDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

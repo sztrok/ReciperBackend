@@ -1,7 +1,8 @@
 package com.eat.it.eatit.backend.mappers;
 
-import com.eat.it.eatit.backend.data.Cookware;
-import com.eat.it.eatit.backend.dto.CookwareDTO;
+import com.eat.it.eatit.backend.cookware.Cookware;
+import com.eat.it.eatit.backend.cookware.CookwareDTO;
+import com.eat.it.eatit.backend.cookware.CookwareMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

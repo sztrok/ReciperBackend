@@ -1,9 +1,5 @@
-package com.eat.it.eatit.backend.components;
+package com.eat.it.eatit.backend.item;
 
-import com.eat.it.eatit.backend.data.Item;
-import com.eat.it.eatit.backend.dto.ItemDTO;
-import com.eat.it.eatit.backend.mappers.ItemMapper;
-import com.eat.it.eatit.backend.repositories.ItemRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

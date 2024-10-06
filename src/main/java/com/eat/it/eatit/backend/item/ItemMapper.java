@@ -1,7 +1,4 @@
-package com.eat.it.eatit.backend.mappers;
-
-import com.eat.it.eatit.backend.data.Item;
-import com.eat.it.eatit.backend.dto.ItemDTO;
+package com.eat.it.eatit.backend.item;
 
 import java.util.HashSet;
 import java.util.Set;

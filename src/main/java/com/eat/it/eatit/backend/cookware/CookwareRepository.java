@@ -1,6 +1,5 @@
-package com.eat.it.eatit.backend.repositories;
+package com.eat.it.eatit.backend.cookware;
 
-import com.eat.it.eatit.backend.data.Cookware;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

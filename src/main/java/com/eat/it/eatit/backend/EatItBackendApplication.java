@@ -1,8 +1,8 @@
 package com.eat.it.eatit.backend;
 
-import com.eat.it.eatit.backend.data.Account;
-import com.eat.it.eatit.backend.data.Fridge;
-import com.eat.it.eatit.backend.repositories.AccountRepository;
+import com.eat.it.eatit.backend.account.Account;
+import com.eat.it.eatit.backend.fridge.Fridge;
+import com.eat.it.eatit.backend.account.AccountRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

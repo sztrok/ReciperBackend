@@ -1,7 +1,8 @@
 package com.eat.it.eatit.backend.mappers;
 
-import com.eat.it.eatit.backend.data.Recipe;
-import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.recipe.Recipe;
+import com.eat.it.eatit.backend.recipe.RecipeDTO;
+import com.eat.it.eatit.backend.recipe.RecipeMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

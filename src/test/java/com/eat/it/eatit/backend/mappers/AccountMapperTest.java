@@ -1,7 +1,8 @@
 package com.eat.it.eatit.backend.mappers;
 
-import com.eat.it.eatit.backend.data.Account;
-import com.eat.it.eatit.backend.dto.AccountDTO;
+import com.eat.it.eatit.backend.account.Account;
+import com.eat.it.eatit.backend.account.AccountDTO;
+import com.eat.it.eatit.backend.account.AccountMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

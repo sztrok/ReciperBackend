@@ -1,7 +1,8 @@
 package com.eat.it.eatit.backend.mappers;
 
-import com.eat.it.eatit.backend.data.Item;
-import com.eat.it.eatit.backend.dto.ItemDTO;
+import com.eat.it.eatit.backend.item.Item;
+import com.eat.it.eatit.backend.item.ItemDTO;
+import com.eat.it.eatit.backend.item.ItemMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

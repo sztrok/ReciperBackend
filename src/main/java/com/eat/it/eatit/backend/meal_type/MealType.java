@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.data;
+package com.eat.it.eatit.backend.meal_type;
 
 import jakarta.persistence.*;
 import lombok.Getter;

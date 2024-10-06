@@ -1,5 +1,7 @@
-package com.eat.it.eatit.backend.data;
+package com.eat.it.eatit.backend.account;
 
+import com.eat.it.eatit.backend.fridge.Fridge;
+import com.eat.it.eatit.backend.recipe.Recipe;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

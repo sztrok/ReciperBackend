@@ -1,7 +1,5 @@
-package com.eat.it.eatit.backend.controllers;
+package com.eat.it.eatit.backend.item;
 
-import com.eat.it.eatit.backend.components.ItemHandler;
-import com.eat.it.eatit.backend.dto.ItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

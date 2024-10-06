@@ -1,8 +1,9 @@
 package com.eat.it.eatit.backend.repositories;
 
-import com.eat.it.eatit.backend.data.Account;
-import com.eat.it.eatit.backend.data.Fridge;
-import com.eat.it.eatit.backend.data.Recipe;
+import com.eat.it.eatit.backend.account.Account;
+import com.eat.it.eatit.backend.account.AccountRepository;
+import com.eat.it.eatit.backend.fridge.Fridge;
+import com.eat.it.eatit.backend.recipe.Recipe;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

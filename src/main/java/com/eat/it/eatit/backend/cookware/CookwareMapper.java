@@ -1,7 +1,4 @@
-package com.eat.it.eatit.backend.mappers;
-
-import com.eat.it.eatit.backend.data.Cookware;
-import com.eat.it.eatit.backend.dto.CookwareDTO;
+package com.eat.it.eatit.backend.cookware;
 
 import java.util.HashSet;
 import java.util.Set;
