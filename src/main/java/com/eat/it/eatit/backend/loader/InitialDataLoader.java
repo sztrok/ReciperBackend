@@ -9,6 +9,7 @@ import com.eat.it.eatit.backend.fridge.data.FridgeDTO;
 import com.eat.it.eatit.backend.fridge.data.FridgeRepository;
 import com.eat.it.eatit.backend.item.data.Item;
 import com.eat.it.eatit.backend.item.data.ItemRepository;
+import com.eat.it.eatit.backend.recipe.data.Recipe;
 import com.eat.it.eatit.backend.recipe.data.RecipeRepository;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +51,22 @@ class InitialDataLoader {
         List<Account> accounts = generateAccounts();
         List<Item> items = generateItems();
         List<Fridge> fridges = generateFridges();
+        List<Cookware> cookwares = generateCookware();
+
+        log.info("Finished loading initial data.");
+
+
+
+        log.info("Linking entities...");
+
+
+
+        log.info("Finished linking entities");
 
     }
 
     private List<Account> generateAccounts() {
         List<Account> accounts = new ArrayList<>();
-
         accounts.add(generateAccount("Emma", "Johnson", true));
         accounts.add(generateAccount("Ethan", "Taylor", false));
         accounts.add(generateAccount("Olivia", "Davis", true));
@@ -66,7 +77,6 @@ class InitialDataLoader {
         accounts.add(generateAccount("Noah", "Miller", false));
         accounts.add(generateAccount("Grace", "Anderson", true));
         accounts.add(generateAccount("Oliver", "Swift", false));
-
         return accounts;
     }
 
@@ -104,7 +114,45 @@ class InitialDataLoader {
         return fridgeRepository.saveAll(fridges);
     }
 
-    private List<Cookware>
+    private List<Cookware> generateCookware() {
+        List<Cookware> cookwares = new ArrayList<>();
+        cookwares.add(new Cookware("Patelnia"));
+        cookwares.add(new Cookware("Piekarnik"));
+        cookwares.add(new Cookware("Mały garnek"));
+        cookwares.add(new Cookware("Duży garnek"));
+        cookwares.add(new Cookware("Mikser"));
+        cookwares.add(new Cookware("Nóż"));
+        cookwares.add(new Cookware("Termomix"));
+        return cookwareRepository.saveAll(cookwares);
+    }
+
+    private List<Recipe> generateRecipes() {
+        List<Recipe> recipes = new ArrayList<>();
+        recipes.add(new Recipe("Recipe 1", "Test recipe 1 desc"));
+        recipes.add(new Recipe("Recipe 2", "Test recipe 2 desc"));
+        recipes.add(new Recipe("Recipe 3", "Test recipe 3 desc"));
+        recipes.add(new Recipe("Recipe 4", "Test recipe 4 desc"));
+        recipes.add(new Recipe("Recipe 5", "Test recipe 5 desc"));
+        recipes.add(new Recipe("Recipe 6", "Test recipe 6 desc"));
+        recipes.add(new Recipe("Recipe 7", "Test recipe 7 desc"));
+        recipes.add(new Recipe("Recipe 8", "Test recipe 8 desc"));
+        recipes.add(new Recipe("Recipe 9", "Test recipe 9 desc"));
+        recipes.add(new Recipe("Recipe 10", "Test recipe 10 desc"));
+        recipes.add(new Recipe("Recipe 11", "Test recipe 11 desc"));
+        recipes.add(new Recipe("Recipe 12", "Test recipe 12 desc"));
+        recipes.add(new Recipe("Recipe 13", "Test recipe 13 desc"));
+        recipes.add(new Recipe("Recipe 14", "Test recipe 14 desc"));
+        recipes.add(new Recipe("Recipe 15", "Test recipe 15 desc"));
+        recipes.add(new Recipe("Recipe 16", "Test recipe 16 desc"));
+        recipes.add(new Recipe("Recipe 17", "Test recipe 17 desc"));
+        recipes.add(new Recipe("Recipe 18", "Test recipe 18 desc"));
+        recipes.add(new Recipe("Recipe 19", "Test recipe 19 desc"));
+        recipes.add(new Recipe("Recipe 20", "Test recipe 20 desc"));
+        recipes.add(new Recipe("Recipe 21", "Test recipe 21 desc"));
+        recipes.add(new Recipe("Recipe 22", "Test recipe 22 desc"));
+        return recipeRepository.saveAll(recipes);
+    }
+
 
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
