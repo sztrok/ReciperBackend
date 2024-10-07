@@ -21,18 +21,21 @@ public class CookwareHandler {
         this.cookwareRepository = cookwareRepository;
     }
 
-    public CookwareDTO getCookwareById(Long id) {
+    public ResponseEntity<CookwareDTO> getCookwareById(Long id) {
         Cookware cookware = cookwareRepository.findById(id).orElse(null);
-        return CookwareMapper.toDTO(cookware);
+        if (cookware == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(CookwareMapper.toDTO(cookware));
     }
 
-    public List<CookwareDTO> getAllCookwares() {
+    public ResponseEntity<List<CookwareDTO>> getAllCookwares() {
         List<Cookware> cookwares = cookwareRepository.findAll();
         List<CookwareDTO> cookwareDTOList = new ArrayList<>();
         for(Cookware cookware : cookwares) {
             cookwareDTOList.add(CookwareMapper.toDTO(cookware));
         }
-        return cookwareDTOList;
+        return ResponseEntity.ok(cookwareDTOList);
     }
 
     public ResponseEntity<CookwareDTO> addNewCookware(CookwareDTO cookwareDTO) {

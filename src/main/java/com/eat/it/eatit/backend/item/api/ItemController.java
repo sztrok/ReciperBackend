@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -25,17 +26,17 @@ public class ItemController {
     }
 
     @GetMapping("/get/id/{id}")
-    public ItemDTO getItemById(@PathVariable Long id) {
+    public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         return itemHandler.getItemById(id);
     }
 
     @GetMapping("/get_all")
-    public Set<ItemDTO> getAllItems() {
+    public ResponseEntity<List<ItemDTO>> getAllItems() {
         return itemHandler.getAllItems();
     }
 
     @GetMapping("/get/name/{name}")
-    public ItemDTO getItemByName(@PathVariable String name) {
+    public ResponseEntity<ItemDTO> getItemByName(@PathVariable String name) {
         return itemHandler.getItemByName(name);
     }
 
@@ -45,7 +46,7 @@ public class ItemController {
     }
 
     @GetMapping("/get/barcode/{barcode}")
-    public ItemDTO getItemByBarcode(@PathVariable Long barcode) {
+    public ResponseEntity<ItemDTO> getItemByBarcode(@PathVariable Long barcode) {
         return itemHandler.getItemByBarcode(barcode);
     }
 

@@ -5,11 +5,10 @@ import com.eat.it.eatit.backend.item.data.ItemDTO;
 import com.eat.it.eatit.backend.item.data.ItemMapper;
 import com.eat.it.eatit.backend.item.data.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,39 +21,48 @@ public class ItemHandler {
         this.itemRepository = itemRepository;
     }
 
-    public ItemDTO getItemById(Long id) {
+    public ResponseEntity<ItemDTO> getItemById(Long id) {
         Item item = itemRepository.findById(id).orElse(null);
-        return ItemMapper.toDTO(item);
-    }
-
-    public Set<ItemDTO> getAllItems() {
-        List<Item> items = itemRepository.findAll();
-        Set<ItemDTO> itemDTOSet = new HashSet<>();
-        for(Item i : items) {
-            itemDTOSet.add(ItemMapper.toDTO(i));
+        if(item == null) {
+            return ResponseEntity.notFound().build();
         }
-        return itemDTOSet;
+        return ResponseEntity.ok(ItemMapper.toDTO(item));
     }
 
-    public ItemDTO getItemByName(String name) {
+    public ResponseEntity<List<ItemDTO>> getAllItems() {
+        List<Item> items = itemRepository.findAll();
+        List<ItemDTO> itemDTOList = new ArrayList<>();
+        for(Item i : items) {
+            itemDTOList.add(ItemMapper.toDTO(i));
+        }
+        return ResponseEntity.ok(itemDTOList);
+    }
+
+    public ResponseEntity<ItemDTO> getItemByName(String name) {
         Item item = itemRepository.findByName(name);
-        return ItemMapper.toDTO(item);
+        if(item == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ItemMapper.toDTO(item));
     }
 
     public Set<ItemDTO> getAllItemsContainingName(String name) {
         return ItemMapper.toDTOSet(itemRepository.findAllByNameContains(name));
     }
 
-    public ItemDTO getItemByBarcode(Long barcode) {
+    public ResponseEntity<ItemDTO> getItemByBarcode(Long barcode) {
         Item item = itemRepository.findByBarcode(barcode);
-        return ItemMapper.toDTO(item);
+        if(item == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ItemMapper.toDTO(item));
     }
 
 
     public ResponseEntity<ItemDTO> addNewItem(ItemDTO item) {
         Item newItem = ItemMapper.toEntity(item);
-        itemRepository.save(newItem);
-        return new ResponseEntity<>(ItemMapper.toDTO(itemRepository.findById(newItem.getId()).orElse(null)), HttpStatus.OK);
+        Item savedItem = itemRepository.save(newItem);
+        return ResponseEntity.ok(ItemMapper.toDTO(savedItem));
     }
 
 

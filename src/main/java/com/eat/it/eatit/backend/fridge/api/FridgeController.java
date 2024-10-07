@@ -24,12 +24,12 @@ public class FridgeController {
     }
 
     @GetMapping("/get/id/{id}")
-    public FridgeDTO getFridgeById(@PathVariable Long id) {
+    public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
         return fridgeHandler.getFridgeById(id);
     }
 
     @GetMapping("/get_all")
-    public List<FridgeDTO> getAllFridges() {
+    public ResponseEntity<List<FridgeDTO>> getAllFridges() {
         return fridgeHandler.getAllFridges();
     }
 

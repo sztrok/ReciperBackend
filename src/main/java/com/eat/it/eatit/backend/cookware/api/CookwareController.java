@@ -24,12 +24,12 @@ public class CookwareController {
     }
 
     @GetMapping("/get/id/{id}")
-    public CookwareDTO getCookwareById(@PathVariable Long id) {
+    public ResponseEntity<CookwareDTO> getCookwareById(@PathVariable Long id) {
         return cookwareHandler.getCookwareById(id);
     }
 
     @GetMapping("/get_all")
-    public List<CookwareDTO> getAllCookwares() {
+    public ResponseEntity<List<CookwareDTO>> getAllCookwares() {
         return cookwareHandler.getAllCookwares();
     }
 

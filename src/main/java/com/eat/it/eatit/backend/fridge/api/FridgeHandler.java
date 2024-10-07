@@ -21,18 +21,21 @@ public class FridgeHandler {
         this.fridgeRepository = fridgeRepository;
     }
 
-    public FridgeDTO getFridgeById(Long id) {
+    public ResponseEntity<FridgeDTO> getFridgeById(Long id) {
         Fridge fridge = fridgeRepository.findById(id).orElse(null);
-        return FridgeMapper.toDTO(fridge);
+        if(fridge == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(FridgeMapper.toDTO(fridge));
     }
 
-    public List<FridgeDTO> getAllFridges() {
+    public ResponseEntity<List<FridgeDTO>> getAllFridges() {
         List<Fridge> fridgeList = fridgeRepository.findAll();
         List<FridgeDTO> fridgeDTOList = new ArrayList<>();
         for (Fridge fridge : fridgeList) {
             fridgeDTOList.add(FridgeMapper.toDTO(fridge));
         }
-        return fridgeDTOList;
+        return ResponseEntity.ok(fridgeDTOList);
     }
 
     public ResponseEntity<FridgeDTO> addNewFridge(FridgeDTO fridgeDTO) {
