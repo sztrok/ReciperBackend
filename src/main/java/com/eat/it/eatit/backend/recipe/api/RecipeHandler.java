@@ -21,18 +21,21 @@ public class RecipeHandler {
         this.recipeRepository = recipeRepository;
     }
 
-    public RecipeDTO getRecipeById(Long id) {
+    public ResponseEntity<RecipeDTO> getRecipeById(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElse(null);
-        return RecipeMapper.toDTO(recipe);
+        if (recipe == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(RecipeMapper.toDTO(recipe));
     }
 
-    public List<RecipeDTO> getAllRecipes() {
+    public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         List<Recipe> recipes = recipeRepository.findAll();
         List<RecipeDTO> recipeDTOList = new ArrayList<>();
         for (Recipe recipe : recipes) {
             recipeDTOList.add(RecipeMapper.toDTO(recipe));
         }
-        return recipeDTOList;
+        return ResponseEntity.ok(recipeDTOList);
     }
 
     public ResponseEntity<RecipeDTO> addNewRecipe(RecipeDTO recipeDTO) {

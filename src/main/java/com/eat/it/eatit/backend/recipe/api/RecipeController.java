@@ -24,12 +24,12 @@ public class RecipeController {
     }
 
     @GetMapping("/get/id/{id}")
-    public RecipeDTO getRecipeById(@PathVariable Long id) {
+    public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
         return recipeHandler.getRecipeById(id);
     }
 
     @GetMapping("/get_all")
-    public List<RecipeDTO> getAllRecipes() {
+    public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         return recipeHandler.getAllRecipes();
     }
 
