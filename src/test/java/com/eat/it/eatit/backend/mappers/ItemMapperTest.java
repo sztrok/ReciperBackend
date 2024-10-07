@@ -21,9 +21,10 @@ class ItemMapperTest {
         item.setName("test item");
         item.setBarcode(12283456L);
         item.setCaloriesPer100g(1111);
-        item.setCarbsPer100G(123);
-        item.setFatPer100G(11);
-        item.setProteinPer100G(324);
+        item.setCarbsPer100G(123d);
+        item.setFatPer100G(11d);
+        item.setProteinPer100G(324d);
+        item.setAmount(24d);
 
         itemDTO = ItemMapper.toDTO(item);
         assertEquals(item.getName(), itemDTO.getName());
@@ -32,6 +33,7 @@ class ItemMapperTest {
         assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
         assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
         assertEquals(item.getProteinPer100G(), itemDTO.getProteinPer100G());
+        assertEquals(item.getAmount(), itemDTO.getAmount());
     }
 
     @Test
@@ -40,9 +42,10 @@ class ItemMapperTest {
         itemDTO.setName("test dto item");
         itemDTO.setBarcode(122334356L);
         itemDTO.setCaloriesPer100g(1142311);
-        itemDTO.setCarbsPer100G(1253);
-        itemDTO.setFatPer100G(121);
-        itemDTO.setProteinPer100G(3224);
+        itemDTO.setCarbsPer100G(1253d);
+        itemDTO.setFatPer100G(121d);
+        itemDTO.setProteinPer100G(3224d);
+        itemDTO.setAmount(24.523d);
 
         item = ItemMapper.toEntity(itemDTO);
         assertEquals(item.getName(), itemDTO.getName());
@@ -51,19 +54,20 @@ class ItemMapperTest {
         assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
         assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
         assertEquals(item.getProteinPer100G(), itemDTO.getProteinPer100G());
+        assertEquals(item.getAmount(), itemDTO.getAmount());
     }
 
     @Test
     void testToDTOSetConversion() {
         Set<Item> itemSet = Set.of(
-                new Item("test item 1", 100, 20, 30, 50),
-                new Item("test item 2", 100, 20, 30, 50),
-                new Item("test item 3", 100, 20, 30, 50)
+                new Item("test item 1", 100, 20d, 30d, 50d),
+                new Item("test item 2", 100, 20d, 30d, 50d),
+                new Item("test item 3", 100, 20d, 30d, 50d)
         );
         Set<ItemDTO> itemDTOExpectedSet = Set.of(
-                new ItemDTO("test item 1", null, 100, 20, 30, 50),
-                new ItemDTO("test item 2", null, 100, 20, 30, 50),
-                new ItemDTO("test item 3", null, 100, 20, 30, 50)
+                new ItemDTO("test item 1", null, 100, 20d, 30d, 50d),
+                new ItemDTO("test item 2", null, 100, 20d, 30d, 50d),
+                new ItemDTO("test item 3", null, 100, 20d, 30d, 50d)
         );
         Set<ItemDTO> itemDTOSet = ItemMapper.toDTOSet(itemSet);
         assertEquals(itemDTOExpectedSet, itemDTOSet);
@@ -72,14 +76,14 @@ class ItemMapperTest {
     @Test
     void testToEntitySetConversion() {
         Set<ItemDTO> itemDTOSet = Set.of(
-                new ItemDTO("test item 1", 0L, 100, 20, 30, 50),
-                new ItemDTO("test item 2", 0L, 100, 20, 30, 50),
-                new ItemDTO("test item 3", 0L, 100, 20, 30, 50)
+                new ItemDTO("test item 1", 0L, 100, 20d, 30d, 50d),
+                new ItemDTO("test item 2", 0L, 100, 20d, 30d, 50d),
+                new ItemDTO("test item 3", 0L, 100, 20d, 30d, 50d)
         );
         Set<Item> itemExpectedSet = Set.of(
-                new Item("test item 1", 0L, 100, 20, 30, 50),
-                new Item("test item 2", 0L, 100, 20, 30, 50),
-                new Item("test item 3", 0L, 100, 20, 30, 50)
+                new Item("test item 1", 0L, 100, 20d, 30d, 50d),
+                new Item("test item 2", 0L, 100, 20d, 30d, 50d),
+                new Item("test item 3", 0L, 100, 20d, 30d, 50d)
         );
         Set<Item> itemSet = ItemMapper.toEntitySet(itemDTOSet);
         assertEquals(itemExpectedSet, itemSet);

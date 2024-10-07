@@ -27,13 +27,13 @@ public class Item {
 
     private Integer caloriesPer100g;
 
-    private Integer proteinPer100G;
+    private Double proteinPer100G;
 
-    private Integer fatPer100G;
+    private Double fatPer100G;
 
-    private Integer carbsPer100G;
+    private Double carbsPer100G;
 
-    private Integer amount;
+    private Double amount;
 
     @ManyToMany(mappedBy = "items")
     private Set<Recipe> recipesContainingItem;
@@ -45,7 +45,7 @@ public class Item {
         this.name = name;
     }
 
-    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G, Integer amount) {
+    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G, Double amount) {
         this.id = id;
         this.name = name;
         this.barcode = barcode;
@@ -56,7 +56,7 @@ public class Item {
         this.amount = amount;
     }
 
-    public Item(String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G) {
+    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
@@ -65,7 +65,7 @@ public class Item {
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G) {
+    public Item(String name, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G) {
         this.name = name;
         this.caloriesPer100g = caloriesPer100g;
         this.proteinPer100G = proteinPer100G;
@@ -73,7 +73,7 @@ public class Item {
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Long barcode, Integer caloriesPer100g, Integer proteinPer100G, Integer fatPer100G, Integer carbsPer100G, Integer amount) {
+    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G, Double amount) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
