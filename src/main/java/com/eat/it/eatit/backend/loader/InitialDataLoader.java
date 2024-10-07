@@ -50,6 +50,17 @@ class InitialDataLoader {
         List<Account> accounts = generateAccounts();
         List<Item> items = generateItems();
         List<Fridge> fridges = generateFridges();
+        List<Cookware> cookwares = generateCookware();
+
+        log.info("Finished loading initial data.");
+
+
+
+        log.info("Linking entities...");
+
+
+
+        log.info("Finished linking entities");
 
     }
 
@@ -104,7 +115,18 @@ class InitialDataLoader {
         return fridgeRepository.saveAll(fridges);
     }
 
-    private List<Cookware>
+    private List<Cookware> generateCookware() {
+        List<Cookware> cookwares = new ArrayList<>();
+        cookwares.add(new Cookware("Patelnia"));
+        cookwares.add(new Cookware("Piekarnik"));
+        cookwares.add(new Cookware("Mały garnek"));
+        cookwares.add(new Cookware("Duży garnek"));
+        cookwares.add(new Cookware("Mikser"));
+        cookwares.add(new Cookware("Nóż"));
+        cookwares.add(new Cookware("Termomix"));
+        return cookwareRepository.saveAll(cookwares);
+    }
+
 
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
