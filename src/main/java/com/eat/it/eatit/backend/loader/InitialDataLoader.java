@@ -2,7 +2,10 @@ package com.eat.it.eatit.backend.loader;
 
 import com.eat.it.eatit.backend.account.data.Account;
 import com.eat.it.eatit.backend.account.data.AccountRepository;
+import com.eat.it.eatit.backend.cookware.data.Cookware;
 import com.eat.it.eatit.backend.cookware.data.CookwareRepository;
+import com.eat.it.eatit.backend.fridge.data.Fridge;
+import com.eat.it.eatit.backend.fridge.data.FridgeDTO;
 import com.eat.it.eatit.backend.fridge.data.FridgeRepository;
 import com.eat.it.eatit.backend.item.data.Item;
 import com.eat.it.eatit.backend.item.data.ItemRepository;
@@ -44,6 +47,9 @@ class InitialDataLoader {
     public void loadInitialData(ContextRefreshedEvent event){
         log.info("Loading initial data to database...");
 
+        List<Account> accounts = generateAccounts();
+        List<Item> items = generateItems();
+        List<Fridge> fridges = generateFridges();
 
     }
 
@@ -87,9 +93,18 @@ class InitialDataLoader {
         items.add(new Item("Pasta", 1234567890140L, 157, 5.80, 0.93, 30.92, 250.00));
         items.add(new Item("Tofu", 1234567890141L, 76, 8.08, 4.78, 1.87, 300.00));
         items.add(new Item("Avocado", 1234567890142L, 160, 2.00, 14.66, 8.53, 110.00));
-
-        return items;
+        return itemRepository.saveAll(items);
     }
+
+    private List<Fridge> generateFridges() {
+        List<Fridge> fridges = new ArrayList<>();
+        for(int i=0; i<10; i++) {
+            fridges.add(new Fridge());
+        }
+        return fridgeRepository.saveAll(fridges);
+    }
+
+    private List<Cookware>
 
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
@@ -99,6 +114,7 @@ class InitialDataLoader {
         account.setPremium(premium);
         return accountRepository.save(account);
     }
+
 
 
     private void linkFridgeAndItems() {
