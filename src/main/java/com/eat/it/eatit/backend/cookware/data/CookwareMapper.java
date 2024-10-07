@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.cookware;
+package com.eat.it.eatit.backend.cookware.data;
 
 import java.util.HashSet;
 import java.util.Set;

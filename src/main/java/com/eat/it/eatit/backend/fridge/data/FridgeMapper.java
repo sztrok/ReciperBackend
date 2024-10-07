@@ -1,6 +1,6 @@
-package com.eat.it.eatit.backend.fridge;
+package com.eat.it.eatit.backend.fridge.data;
 
-import com.eat.it.eatit.backend.item.ItemMapper;
+import com.eat.it.eatit.backend.item.data.ItemMapper;
 
 public class FridgeMapper {
 

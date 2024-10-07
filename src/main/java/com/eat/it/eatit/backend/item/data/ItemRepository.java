@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.item;
+package com.eat.it.eatit.backend.item.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,7 +1,7 @@
-package com.eat.it.eatit.backend.account;
+package com.eat.it.eatit.backend.account.data;
 
-import com.eat.it.eatit.backend.fridge.FridgeMapper;
-import com.eat.it.eatit.backend.recipe.RecipeMapper;
+import com.eat.it.eatit.backend.fridge.data.FridgeMapper;
+import com.eat.it.eatit.backend.recipe.data.RecipeMapper;
 
 public class AccountMapper {
 

@@ -1,5 +1,6 @@
-package com.eat.it.eatit.backend.item;
+package com.eat.it.eatit.backend.item.api;
 
+import com.eat.it.eatit.backend.item.data.ItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/item")
+@RequestMapping("/api/v1/item")
 public class ItemController {
 
     ItemHandler itemHandler;
@@ -23,7 +24,7 @@ public class ItemController {
         return "Success";
     }
 
-    @GetMapping("/get_item/id/{id}")
+    @GetMapping("/get/id/{id}")
     public ItemDTO getItemById(@PathVariable Long id) {
         return itemHandler.getItemById(id);
     }
@@ -33,7 +34,7 @@ public class ItemController {
         return itemHandler.getAllItems();
     }
 
-    @GetMapping("/get_item/name/{name}")
+    @GetMapping("/get/name/{name}")
     public ItemDTO getItemByName(@PathVariable String name) {
         return itemHandler.getItemByName(name);
     }
@@ -43,12 +44,12 @@ public class ItemController {
         return itemHandler.getAllItemsContainingName(name);
     }
 
-    @GetMapping("/get_item/barcode/{barcode}")
+    @GetMapping("/get/barcode/{barcode}")
     public ItemDTO getItemByBarcode(@PathVariable Long barcode) {
         return itemHandler.getItemByBarcode(barcode);
     }
 
-    @PostMapping(value = "/add_item", consumes = "application/json")
+    @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
         return itemHandler.addNewItem(item);
     }

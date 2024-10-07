@@ -1,7 +1,7 @@
-package com.eat.it.eatit.backend.recipe;
+package com.eat.it.eatit.backend.recipe.data;
 
-import com.eat.it.eatit.backend.cookware.Cookware;
-import com.eat.it.eatit.backend.item.Item;
+import com.eat.it.eatit.backend.cookware.data.Cookware;
+import com.eat.it.eatit.backend.item.data.Item;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

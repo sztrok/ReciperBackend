@@ -1,7 +1,7 @@
-package com.eat.it.eatit.backend.recipe;
+package com.eat.it.eatit.backend.recipe.data;
 
-import com.eat.it.eatit.backend.cookware.CookwareDTO;
-import com.eat.it.eatit.backend.item.ItemDTO;
+import com.eat.it.eatit.backend.cookware.data.CookwareDTO;
+import com.eat.it.eatit.backend.item.data.ItemDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

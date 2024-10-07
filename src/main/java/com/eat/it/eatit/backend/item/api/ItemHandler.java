@@ -1,24 +1,25 @@
-package com.eat.it.eatit.backend.item;
+package com.eat.it.eatit.backend.item.api;
 
-import jakarta.persistence.EntityManager;
+import com.eat.it.eatit.backend.item.data.Item;
+import com.eat.it.eatit.backend.item.data.ItemDTO;
+import com.eat.it.eatit.backend.item.data.ItemMapper;
+import com.eat.it.eatit.backend.item.data.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component
+@Service
 public class ItemHandler {
 
     ItemRepository itemRepository;
-    EntityManager entityManager;
     @Autowired
-    public ItemHandler(ItemRepository itemRepository, EntityManager entityManager) {
+    public ItemHandler(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
-        this.entityManager = entityManager;
     }
 
     public ItemDTO getItemById(Long id) {

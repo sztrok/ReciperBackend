@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.cookware;
+package com.eat.it.eatit.backend.cookware.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

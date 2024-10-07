@@ -1,6 +1,6 @@
-package com.eat.it.eatit.backend.fridge;
+package com.eat.it.eatit.backend.fridge.data;
 
-import com.eat.it.eatit.backend.item.ItemDTO;
+import com.eat.it.eatit.backend.item.data.ItemDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
