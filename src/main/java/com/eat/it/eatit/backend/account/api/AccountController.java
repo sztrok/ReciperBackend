@@ -24,12 +24,12 @@ public class AccountController {
     }
 
     @GetMapping("/get/id/{id}")
-    public AccountDTO getAccountById(@PathVariable Long id) {
+    public ResponseEntity<?> getAccountById(@PathVariable Long id) {
         return accountHandler.getAccountById(id);
     }
 
     @GetMapping("/get_all")
-    public List<AccountDTO> getAllAccounts() {
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         return accountHandler.getAllAccounts();
     }
 

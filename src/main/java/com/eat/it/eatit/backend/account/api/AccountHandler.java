@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.account.data.AccountDTO;
 import com.eat.it.eatit.backend.account.data.AccountMapper;
 import com.eat.it.eatit.backend.account.data.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +22,21 @@ public class AccountHandler {
         this.accountRepository = accountRepository;
     }
 
-    public AccountDTO getAccountById(Long id) {
+    public ResponseEntity<?> getAccountById(Long id) {
         Account account = accountRepository.findById(id).orElse(null);
-        return AccountMapper.toDTO(account);
+        if(account == null) {
+            return new ResponseEntity<>(new AccountDTO(), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(account);
     }
 
-    public List<AccountDTO> getAllAccounts() {
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
         List<AccountDTO> accountDTOList = new ArrayList<>();
         for (Account account : accounts) {
             accountDTOList.add(AccountMapper.toDTO(account));
         }
-        return accountDTOList;
+        return ResponseEntity.ok(accountDTOList);
     }
 
     public ResponseEntity<AccountDTO> addNewAccount(AccountDTO accountDTO) {
