@@ -41,14 +41,14 @@ class RecipeMapperTest {
     @Test
     void testToDTOSetConversion() {
         Set<Recipe> recipeSet = Set.of(
-                new Recipe("recipe 1", 1L, "desc 1", new HashSet<>(), new HashSet<>(), 0),
-                new Recipe("recipe 2", 1L, "desc 2", new HashSet<>(), new HashSet<>(), 0),
-                new Recipe("recipe 3", 1L, "desc 3", new HashSet<>(), new HashSet<>(), 0)
+                new Recipe("recipe 1", "desc 1", new HashSet<>(), new HashSet<>(), 0),
+                new Recipe("recipe 2", "desc 2", new HashSet<>(), new HashSet<>(), 0),
+                new Recipe("recipe 3", "desc 3", new HashSet<>(), new HashSet<>(), 0)
         );
         Set<RecipeDTO> recipeDTOExpectedSet = Set.of(
-                new RecipeDTO("recipe 1", 1L, "desc 1", new HashSet<>(), new HashSet<>(), 0),
-                new RecipeDTO("recipe 2", 1L, "desc 2", new HashSet<>(), new HashSet<>(), 0),
-                new RecipeDTO("recipe 3", 1L, "desc 3", new HashSet<>(), new HashSet<>(), 0)
+                new RecipeDTO("recipe 1", "desc 1", new HashSet<>(), new HashSet<>(), 0),
+                new RecipeDTO("recipe 2", "desc 2", new HashSet<>(), new HashSet<>(), 0),
+                new RecipeDTO("recipe 3", "desc 3", new HashSet<>(), new HashSet<>(), 0)
         );
         Set<RecipeDTO> recipeDTOSet = RecipeMapper.toDTOSet(recipeSet);
         assertEquals(recipeDTOExpectedSet, recipeDTOSet);
@@ -57,14 +57,14 @@ class RecipeMapperTest {
     @Test
     void testToEntitySetConversion() {
         Set<RecipeDTO> recipeDTOSet = Set.of(
-                new RecipeDTO("recipe 1", 1L, "desc 1", new HashSet<>(), new HashSet<>(), 0),
-                new RecipeDTO("recipe 2", 1L, "desc 2", new HashSet<>(), new HashSet<>(), 0),
-                new RecipeDTO("recipe 3", 1L, "desc 3", new HashSet<>(), new HashSet<>(), 0)
+                new RecipeDTO("recipe 1", "desc 1", new HashSet<>(), new HashSet<>(), 0),
+                new RecipeDTO("recipe 2", "desc 2", new HashSet<>(), new HashSet<>(), 0),
+                new RecipeDTO("recipe 3", "desc 3", new HashSet<>(), new HashSet<>(), 0)
         );
         Set<Recipe> recipeExpectedSet = Set.of(
-                new Recipe("recipe 1", 1L, "desc 1", new HashSet<>(), new HashSet<>(), 0),
-                new Recipe("recipe 2", 1L, "desc 2", new HashSet<>(), new HashSet<>(), 0),
-                new Recipe("recipe 3", 1L, "desc 3", new HashSet<>(), new HashSet<>(), 0)
+                new Recipe("recipe 1", "desc 1", new HashSet<>(), new HashSet<>(), 0),
+                new Recipe("recipe 2", "desc 2", new HashSet<>(), new HashSet<>(), 0),
+                new Recipe("recipe 3", "desc 3", new HashSet<>(), new HashSet<>(), 0)
         );
         Set<Recipe> recipeSet = RecipeMapper.toEntitySet(recipeDTOSet);
         assertEquals(recipeExpectedSet, recipeSet);

@@ -17,7 +17,6 @@ public class RecipeMapper {
         }
         return new RecipeDTO(
                 recipe.getName(),
-                recipe.getOwnerId(),
                 recipe.getDescription(),
                 ItemMapper.toDTOSet(recipe.getItems()),
                 CookwareMapper.toDTOSet(recipe.getCookware()),
@@ -30,7 +29,6 @@ public class RecipeMapper {
         }
         return new Recipe(
                 recipeDTO.getName(),
-                recipeDTO.getOwnerId(),
                 recipeDTO.getDescription(),
                 ItemMapper.toEntitySet(recipeDTO.getItems()),
                 CookwareMapper.toEntitySet(recipeDTO.getCookware()),
@@ -46,7 +44,6 @@ public class RecipeMapper {
             recipeDTOSet.add(
                     new RecipeDTO(
                             recipe.getName(),
-                            recipe.getOwnerId(),
                             recipe.getDescription(),
                             ItemMapper.toDTOSet(recipe.getItems()),
                             CookwareMapper.toDTOSet(recipe.getCookware()),
@@ -64,7 +61,6 @@ public class RecipeMapper {
             recipeEntitySet.add(
                     new Recipe(
                             recipe.getName(),
-                            recipe.getOwnerId(),
                             recipe.getDescription(),
                             ItemMapper.toEntitySet(recipe.getItems()),
                             CookwareMapper.toEntitySet(recipe.getCookware()),

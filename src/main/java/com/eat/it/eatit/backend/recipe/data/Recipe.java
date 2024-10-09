@@ -23,10 +23,6 @@ public class Recipe {
 
     private String name;
 
-    //TODO usunąć to pole
-//    @PrimaryKeyJoinColumn()
-//    private Long ownerId;
-
     private String description;
 
     @ManyToMany
@@ -37,26 +33,18 @@ public class Recipe {
 
     private Integer totalCalories;
 
-    public Recipe(String name, Long ownerId, String description, Set<Item> items, Set<Cookware> cookware, Integer totalCalories) {
+    public Recipe(String name, String description, Set<Item> items, Set<Cookware> cookware, Integer totalCalories) {
         this.name = name;
-        this.ownerId = ownerId;
         this.description = description;
         this.items = items;
         this.cookware = cookware;
         this.totalCalories = totalCalories;
     }
 
-    public Recipe(String name, Long ownerId, String description, Set<Item> items) {
+    public Recipe(String name, String description, Set<Item> items) {
         this.name = name;
-        this.ownerId = ownerId;
         this.description = description;
         this.items = items;
-    }
-
-    public Recipe(String name, Long ownerId, String description) {
-        this.name = name;
-        this.ownerId = ownerId;
-        this.description = description;
     }
 
     public Recipe(String name, String description) {
@@ -69,7 +57,6 @@ public class Recipe {
         return "Recipe{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", ownerId=" + ownerId +
                 ", description='" + description + '\'' +
                 ", items=" + items +
                 ", cookware=" + cookware +
@@ -82,11 +69,11 @@ public class Recipe {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Recipe recipe = (Recipe) o;
-        return Objects.equals(name, recipe.name) && Objects.equals(ownerId, recipe.ownerId) && Objects.equals(description, recipe.description) && Objects.equals(items, recipe.items) && Objects.equals(cookware, recipe.cookware) && Objects.equals(totalCalories, recipe.totalCalories);
+        return Objects.equals(name, recipe.name) && Objects.equals(description, recipe.description) && Objects.equals(items, recipe.items) && Objects.equals(cookware, recipe.cookware);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, ownerId, description, items, cookware, totalCalories);
+        return Objects.hash(name, description, items, cookware);
     }
 }
