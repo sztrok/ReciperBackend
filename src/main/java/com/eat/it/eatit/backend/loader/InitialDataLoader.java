@@ -5,7 +5,6 @@ import com.eat.it.eatit.backend.account.data.AccountRepository;
 import com.eat.it.eatit.backend.cookware.data.Cookware;
 import com.eat.it.eatit.backend.cookware.data.CookwareRepository;
 import com.eat.it.eatit.backend.fridge.data.Fridge;
-import com.eat.it.eatit.backend.fridge.data.FridgeDTO;
 import com.eat.it.eatit.backend.fridge.data.FridgeRepository;
 import com.eat.it.eatit.backend.item.data.Item;
 import com.eat.it.eatit.backend.item.data.ItemRepository;
@@ -83,7 +82,6 @@ class InitialDataLoader {
 
     private List<Item> generateItems() {
         List<Item> items = new ArrayList<>();
-
         items.add(new Item("Apple", 1234567890123L, 52, 0.26, 0.17, 13.81, 150.00));
         items.add(new Item("Banana", 1234567890124L, 89, 1.09, 0.33, 22.84, 120.00));
         items.add(new Item("Chicken Breast", 1234567890125L, 165, 31.02, 3.57, 0.00, 250.00));
@@ -175,7 +173,7 @@ class InitialDataLoader {
     }
 
     private void linkAccountAndFridge() {
-
+        List<Account> changedAccounts = new ArrayList<>();
     }
 
     private void linkRecipeAndItems() {
