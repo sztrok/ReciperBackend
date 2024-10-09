@@ -52,6 +52,7 @@ class InitialDataLoader {
         List<Item> items = generateItems();
         List<Fridge> fridges = generateFridges();
         List<Cookware> cookwares = generateCookware();
+        List<Recipe> recipes = generateRecipes();
 
         log.info("Finished loading initial data.");
 
