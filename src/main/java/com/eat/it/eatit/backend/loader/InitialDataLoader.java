@@ -26,11 +26,13 @@ import java.util.*;
 @Slf4j
 @ToString
 class InitialDataLoader {
+
     private final AccountRepository accountRepository;
     private final ItemRepository itemRepository;
     private final RecipeRepository recipeRepository;
     private final FridgeRepository fridgeRepository;
     private final CookwareRepository cookwareRepository;
+    private final Random random = new Random();
 
     @Autowired
     public InitialDataLoader(AccountRepository accountRepository, ItemRepository itemRepository, RecipeRepository recipeRepository, FridgeRepository fridgeRepository, CookwareRepository cookwareRepository) {
@@ -53,18 +55,15 @@ class InitialDataLoader {
         List<Recipe> recipes = generateRecipes();
 
         log.info("Finished loading initial data.");
-
-
-
         log.info("Linking entities...");
 
         linkFridgeAndItems(fridges, items);
         linkAccountAndFridge(fridges, accounts);
         linkCookwareAndRecipes(cookwares, recipes);
-
+        linkRecipeAndItems(recipes, items);
+        linkAccountAndRecipes(accounts, recipes);
 
         log.info("Finished linking entities");
-
     }
 
     private List<Account> generateAccounts() {
@@ -154,7 +153,6 @@ class InitialDataLoader {
         return recipeRepository.saveAll(recipes);
     }
 
-
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
         account.setUsername("%s %s".formatted(firstName, lastName));
@@ -163,8 +161,6 @@ class InitialDataLoader {
         account.setPremium(premium);
         return accountRepository.save(account);
     }
-
-
 
     private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
         Random random = new Random();
@@ -180,7 +176,6 @@ class InitialDataLoader {
     }
 
     private void linkCookwareAndRecipes(List<Cookware> cookwares, List<Recipe> recipes) {
-        Random random = new Random();
         for(Recipe recipe : recipes) {
             Set<Cookware> addedCookwares = new HashSet<>();
             for(int i=0; i<4; i++){
@@ -200,7 +195,28 @@ class InitialDataLoader {
         }
     }
 
-    private void linkRecipeAndItems() {
+    private void linkRecipeAndItems(List<Recipe> recipes, List<Item> items) {
+        for(Recipe recipe : recipes) {
+            Set<Item> addedItems = new HashSet<>();
+            for(int i=0; i<7; i++) {
+                addedItems.add(items.get(random.nextInt(items.size())));
+            }
+            recipe.setItems(addedItems);
+            recipeRepository.save(recipe);
+        }
+        itemRepository.saveAll(items);
+    }
+
+    private void linkAccountAndRecipes(List<Account> accounts, List<Recipe> recipes) {
+
+        accounts.get(0).setRecipes(Set.of(recipes.get(0), recipes.get(1), recipes.get(2)));
+        accounts.get(2).setRecipes(Set.of(recipes.get(3), recipes.get(4)));
+        accounts.get(5).setRecipes(Set.of(recipes.get(5), recipes.get(6)));
+        accounts.get(6).setRecipes(Set.of(recipes.get(7)));
+        accounts.get(9).setRecipes(Set.of(recipes.get(10), recipes.get(11), recipes.get(12), recipes.get(13), recipes.get(14), recipes.get(15)));
+
+        recipeRepository.saveAll(recipes);
 
     }
+
 }

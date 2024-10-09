@@ -23,7 +23,9 @@ public class Recipe {
 
     private String name;
 
-    private Long ownerId;
+    //TODO usunąć to pole
+//    @PrimaryKeyJoinColumn()
+//    private Long ownerId;
 
     private String description;
 
