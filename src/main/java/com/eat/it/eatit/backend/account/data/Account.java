@@ -35,9 +35,8 @@ public class Account {
     @JoinColumn(name = "fridge")
     private Fridge fridge;
 
-    @OneToMany(
-            mappedBy = "ownerId"
-    )
+    @OneToMany
+    @JoinColumn(name = "owner_id")
     private Set<Recipe> recipes;
 
     private Boolean premium;
@@ -45,13 +44,6 @@ public class Account {
     public Account(String username, String mail, Boolean premium) {
         this.username = username;
         this.mail = mail;
-        this.premium = premium;
-    }
-
-    public Account(String username, String mail, Fridge fridge, Boolean premium) {
-        this.username = username;
-        this.mail = mail;
-        this.fridge = fridge;
         this.premium = premium;
     }
 
