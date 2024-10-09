@@ -29,6 +29,11 @@ public class Cookware {
         this.name = name;
     }
 
+    public Cookware(String name, Set<Recipe> recipesContainingCookware) {
+        this.name = name;
+        this.recipesContainingCookware = recipesContainingCookware;
+    }
+
     @Override
     public String toString() {
         return "Cookware{" +
