@@ -30,8 +30,7 @@ public class Recipe {
     @ManyToMany
     private Set<Item> items;
 
-    @OneToMany
-    @JoinColumn(name = "cookware")
+    @ManyToMany
     private Set<Cookware> cookware;
 
     private Integer totalCalories;

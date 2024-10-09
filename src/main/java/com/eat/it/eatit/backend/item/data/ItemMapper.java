@@ -1,5 +1,8 @@
 package com.eat.it.eatit.backend.item.data;
 
+import com.eat.it.eatit.backend.fridge.data.FridgeMapper;
+import com.eat.it.eatit.backend.recipe.data.RecipeMapper;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +22,9 @@ public class ItemMapper {
                 item.getProteinPer100G(),
                 item.getFatPer100G(),
                 item.getCarbsPer100G(),
-                item.getAmount());
+                item.getAmount(),
+                RecipeMapper.toDTOSet(item.getRecipesContainingItem()),
+                FridgeMapper.toDTOSet(item.getFridgesContainingItem()));
     }
 
     public static Item toEntity(ItemDTO itemDTO) {
@@ -33,7 +38,9 @@ public class ItemMapper {
                 itemDTO.getProteinPer100G(),
                 itemDTO.getFatPer100G(),
                 itemDTO.getCarbsPer100G(),
-                itemDTO.getAmount());
+                itemDTO.getAmount(),
+                RecipeMapper.toEntitySet(itemDTO.getRecipesContainingItem()),
+                FridgeMapper.toEntitySet(itemDTO.getFridgesContainingItem()));
     }
 
     public static Set<ItemDTO> toDTOSet(Set<Item> items) {
@@ -50,7 +57,9 @@ public class ItemMapper {
                             item.getProteinPer100G(),
                             item.getFatPer100G(),
                             item.getCarbsPer100G(),
-                            item.getAmount()));
+                            item.getAmount(),
+                            RecipeMapper.toDTOSet(item.getRecipesContainingItem()),
+                            FridgeMapper.toDTOSet(item.getFridgesContainingItem())));
         }
         return itemDTOSet;
     }
@@ -69,7 +78,9 @@ public class ItemMapper {
                             item.getProteinPer100G(),
                             item.getFatPer100G(),
                             item.getCarbsPer100G(),
-                            item.getAmount()));
+                            item.getAmount(),
+                            RecipeMapper.toEntitySet(item.getRecipesContainingItem()),
+                            FridgeMapper.toEntitySet(item.getFridgesContainingItem())));
         }
         return itemEntitySet;
     }

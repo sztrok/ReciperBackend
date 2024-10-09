@@ -12,14 +12,14 @@ public class CookwareMapper {
         if(cookware == null) {
             return new CookwareDTO();
         }
-        return new CookwareDTO(cookware.getName());
+        return new CookwareDTO(cookware.getName(), cookware.getRecipesContainingCookware());
     }
 
     public static Cookware toEntity(CookwareDTO cookwareDTO) {
         if(cookwareDTO == null) {
             return new Cookware();
         }
-        return new Cookware(cookwareDTO.getName());
+        return new Cookware(cookwareDTO.getName(), cookwareDTO.getRecipesContainingCookware());
     }
 
     public static Set<CookwareDTO> toDTOSet(Set<Cookware> cookwareSet) {
@@ -28,7 +28,7 @@ public class CookwareMapper {
         }
         Set<CookwareDTO> cookwareDTOSet = new HashSet<>();
         for(Cookware cookware : cookwareSet) {
-            cookwareDTOSet.add(new CookwareDTO(cookware.getName()));
+            cookwareDTOSet.add(new CookwareDTO(cookware.getName(), cookware.getRecipesContainingCookware()));
         }
         return cookwareDTOSet;
     }
@@ -38,8 +38,8 @@ public class CookwareMapper {
             return new HashSet<>();
         }
         Set<Cookware> cookwareEntitySet = new HashSet<>();
-        for(CookwareDTO cookware : cookwareDTOSet) {
-            cookwareEntitySet.add(new Cookware(cookware.getName()));
+        for(CookwareDTO cookwareDTO : cookwareDTOSet) {
+            cookwareEntitySet.add(new Cookware(cookwareDTO.getName(), cookwareDTO.getRecipesContainingCookware()));
         }
         return cookwareEntitySet;
     }

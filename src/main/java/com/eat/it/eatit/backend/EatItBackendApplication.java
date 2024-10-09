@@ -18,6 +18,7 @@ public class EatItBackendApplication {
 
         Account account = new Account();
         Fridge fridge = new Fridge();
+        System.out.println(fridge);
         account.setUsername("kamil");
         account.setMail("kamil@mail.com");
         account.setFridge(fridge);
