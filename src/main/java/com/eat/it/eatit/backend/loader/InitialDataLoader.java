@@ -19,8 +19,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Profile("loadInitialData")
@@ -59,6 +58,9 @@ class InitialDataLoader {
 
         log.info("Linking entities...");
 
+        linkFridgeAndItems(fridges, items);
+        linkAccountAndFridge(fridges, accounts);
+        linkCookwareAndRecipes(cookwares, recipes);
 
 
         log.info("Finished linking entities");
@@ -164,16 +166,38 @@ class InitialDataLoader {
 
 
 
-    private void linkFridgeAndItems() {
-
+    private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
+        Random random = new Random();
+        for(Fridge fridge : fridges) {
+            Set<Item> addedItems = new HashSet<>();
+            for(int i=0; i<7; i++) {
+                addedItems.add(items.get(random.nextInt(items.size())));
+            }
+            fridge.setItems(addedItems);
+            fridgeRepository.save(fridge);
+        }
+        itemRepository.saveAll(items);
     }
 
-    private void linkCookwareAndRecipes() {
-
+    private void linkCookwareAndRecipes(List<Cookware> cookwares, List<Recipe> recipes) {
+        Random random = new Random();
+        for(Recipe recipe : recipes) {
+            Set<Cookware> addedCookwares = new HashSet<>();
+            for(int i=0; i<4; i++){
+                addedCookwares.add(cookwares.get(random.nextInt(cookwares.size())));
+            }
+            recipe.setCookware(addedCookwares);
+            recipeRepository.save(recipe);
+        }
     }
 
-    private void linkAccountAndFridge() {
-        List<Account> changedAccounts = new ArrayList<>();
+    private void linkAccountAndFridge(List<Fridge> fridges, List<Account> accounts) {
+        for(int i=0; i<accounts.size(); i++) {
+            accounts.get(i).setFridge(fridges.get(i));
+            fridges.get(i).setOwnerId(accounts.get(i).getId());
+            fridgeRepository.save(fridges.get(i));
+            accountRepository.save(accounts.get(i));
+        }
     }
 
     private void linkRecipeAndItems() {
