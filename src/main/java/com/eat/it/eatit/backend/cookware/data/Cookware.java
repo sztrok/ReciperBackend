@@ -1,11 +1,13 @@
 package com.eat.it.eatit.backend.cookware.data;
 
+import com.eat.it.eatit.backend.recipe.data.Recipe;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="cookware")
@@ -19,6 +21,9 @@ public class Cookware {
     private Long id;
 
     private String name;
+
+    @ManyToMany(mappedBy = "cookware")
+    private Set<Recipe> recipesContainingCookware;
 
     public Cookware(String name) {
         this.name = name;
