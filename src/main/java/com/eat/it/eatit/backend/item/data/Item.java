@@ -1,14 +1,11 @@
 package com.eat.it.eatit.backend.item.data;
 
-import com.eat.it.eatit.backend.fridge.data.Fridge;
-import com.eat.it.eatit.backend.recipe.data.Recipe;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "item")
@@ -27,7 +24,7 @@ public class Item {
 
     private Integer caloriesPer100g;
 
-    private Double proteinPer100G;
+    private Double proteins;
 
     private Double fatPer100G;
 
@@ -35,64 +32,47 @@ public class Item {
 
     private Double amount;
 
-    @ManyToMany(mappedBy = "items")
-    private Set<Recipe> recipesContainingItem;
-
-    @ManyToMany(mappedBy = "items")
-    private Set<Fridge> fridgesContainingItem;
 
     public Item(String name) {
         this.name = name;
     }
 
-    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G, Double amount) {
+    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, Double amount) {
         this.id = id;
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
-        this.proteinPer100G = proteinPer100G;
+        this.proteins = proteins;
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
         this.amount = amount;
     }
 
-    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G) {
+    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
-        this.proteinPer100G = proteinPer100G;
+        this.proteins = proteins;
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G) {
+    public Item(String name, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
         this.name = name;
         this.caloriesPer100g = caloriesPer100g;
-        this.proteinPer100G = proteinPer100G;
+        this.proteins = proteins;
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G, Double amount) {
+    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, Double amount) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
-        this.proteinPer100G = proteinPer100G;
+        this.proteins = proteins;
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
         this.amount = amount;
-    }
-
-    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteinPer100G, Double fatPer100G, Double carbsPer100G, Double amount, Set<Recipe> recipesContainingItem, Set<Fridge> fridgesContainingItem) {
-        this.name = name;
-        this.barcode = barcode;
-        this.caloriesPer100g = caloriesPer100g;
-        this.proteinPer100G = proteinPer100G;
-        this.fatPer100G = fatPer100G;
-        this.carbsPer100G = carbsPer100G;
-        this.amount = amount;
-        this.recipesContainingItem = recipesContainingItem;
-        this.fridgesContainingItem = fridgesContainingItem;
     }
 
     @Override
@@ -102,7 +82,7 @@ public class Item {
                 ", name='" + name + '\'' +
                 ", barcode=" + barcode +
                 ", caloriesPer100g=" + caloriesPer100g +
-                ", proteinPer100G=" + proteinPer100G +
+                ", proteins=" + proteins +
                 ", fatPer100G=" + fatPer100G +
                 ", carbsPer100G=" + carbsPer100G +
                 ", amount=" + amount +
@@ -114,11 +94,11 @@ public class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return Objects.equals(name, item.name) && Objects.equals(barcode, item.barcode) && Objects.equals(caloriesPer100g, item.caloriesPer100g) && Objects.equals(proteinPer100G, item.proteinPer100G) && Objects.equals(fatPer100G, item.fatPer100G) && Objects.equals(carbsPer100G, item.carbsPer100G);
+        return Objects.equals(name, item.name) && Objects.equals(barcode, item.barcode) && Objects.equals(caloriesPer100g, item.caloriesPer100g) && Objects.equals(proteins, item.proteins) && Objects.equals(fatPer100G, item.fatPer100G) && Objects.equals(carbsPer100G, item.carbsPer100G);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, barcode, caloriesPer100g, proteinPer100G, fatPer100G, carbsPer100G);
+        return Objects.hash(name, barcode, caloriesPer100g, proteins, fatPer100G, carbsPer100G);
     }
 }

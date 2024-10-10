@@ -23,7 +23,7 @@ class ItemMapperTest {
         item.setCaloriesPer100g(1111);
         item.setCarbsPer100G(123d);
         item.setFatPer100G(11d);
-        item.setProteinPer100G(324d);
+        item.setProteins(324d);
         item.setAmount(24d);
 
         itemDTO = ItemMapper.toDTO(item);
@@ -32,7 +32,7 @@ class ItemMapperTest {
         assertEquals(item.getCaloriesPer100g(), itemDTO.getCaloriesPer100g());
         assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
         assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
-        assertEquals(item.getProteinPer100G(), itemDTO.getProteinPer100G());
+        assertEquals(item.getProteins(), itemDTO.getProteins());
         assertEquals(item.getAmount(), itemDTO.getAmount());
     }
 
@@ -44,7 +44,7 @@ class ItemMapperTest {
         itemDTO.setCaloriesPer100g(1142311);
         itemDTO.setCarbsPer100G(1253d);
         itemDTO.setFatPer100G(121d);
-        itemDTO.setProteinPer100G(3224d);
+        itemDTO.setProteins(3224d);
         itemDTO.setAmount(24.523d);
 
         item = ItemMapper.toEntity(itemDTO);
@@ -53,7 +53,7 @@ class ItemMapperTest {
         assertEquals(item.getCaloriesPer100g(), itemDTO.getCaloriesPer100g());
         assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
         assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
-        assertEquals(item.getProteinPer100G(), itemDTO.getProteinPer100G());
+        assertEquals(item.getProteins(), itemDTO.getProteins());
         assertEquals(item.getAmount(), itemDTO.getAmount());
     }
 

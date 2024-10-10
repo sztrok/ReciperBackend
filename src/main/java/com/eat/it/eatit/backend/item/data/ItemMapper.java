@@ -1,8 +1,5 @@
 package com.eat.it.eatit.backend.item.data;
 
-import com.eat.it.eatit.backend.fridge.data.FridgeMapper;
-import com.eat.it.eatit.backend.recipe.data.RecipeMapper;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,12 +16,11 @@ public class ItemMapper {
                 item.getName(),
                 item.getBarcode(),
                 item.getCaloriesPer100g(),
-                item.getProteinPer100G(),
+                item.getProteins(),
                 item.getFatPer100G(),
                 item.getCarbsPer100G(),
-                item.getAmount(),
-                RecipeMapper.toDTOSet(item.getRecipesContainingItem()),
-                FridgeMapper.toDTOSet(item.getFridgesContainingItem()));
+                item.getAmount()
+        );
     }
 
     public static Item toEntity(ItemDTO itemDTO) {
@@ -35,12 +31,11 @@ public class ItemMapper {
                 itemDTO.getName(),
                 itemDTO.getBarcode(),
                 itemDTO.getCaloriesPer100g(),
-                itemDTO.getProteinPer100G(),
+                itemDTO.getProteins(),
                 itemDTO.getFatPer100G(),
                 itemDTO.getCarbsPer100G(),
-                itemDTO.getAmount(),
-                RecipeMapper.toEntitySet(itemDTO.getRecipesContainingItem()),
-                FridgeMapper.toEntitySet(itemDTO.getFridgesContainingItem()));
+                itemDTO.getAmount()
+        );
     }
 
     public static Set<ItemDTO> toDTOSet(Set<Item> items) {
@@ -54,12 +49,14 @@ public class ItemMapper {
                             item.getName(),
                             item.getBarcode(),
                             item.getCaloriesPer100g(),
-                            item.getProteinPer100G(),
+                            item.getProteins(),
                             item.getFatPer100G(),
                             item.getCarbsPer100G(),
-                            item.getAmount(),
-                            RecipeMapper.toDTOSet(item.getRecipesContainingItem()),
-                            FridgeMapper.toDTOSet(item.getFridgesContainingItem())));
+                            item.getAmount()
+//                            RecipeMapper.toDTOSet(item.getRecipesContainingItem()),
+//                            FridgeMapper.toDTOSet(item.getFridgesContainingItem())
+                    )
+            );
         }
         return itemDTOSet;
     }
@@ -75,12 +72,14 @@ public class ItemMapper {
                             item.getName(),
                             item.getBarcode(),
                             item.getCaloriesPer100g(),
-                            item.getProteinPer100G(),
+                            item.getProteins(),
                             item.getFatPer100G(),
                             item.getCarbsPer100G(),
-                            item.getAmount(),
-                            RecipeMapper.toEntitySet(item.getRecipesContainingItem()),
-                            FridgeMapper.toEntitySet(item.getFridgesContainingItem())));
+                            item.getAmount()
+//                            RecipeMapper.toEntitySet(item.getRecipesContainingItem()),
+//                            FridgeMapper.toEntitySet(item.getFridgesContainingItem())
+                    )
+            );
         }
         return itemEntitySet;
     }
