@@ -15,6 +15,7 @@ public class AccountMapper {
         return new AccountDTO(
                 account.getUsername(),
                 account.getMail(),
+                account.getPassword(),
                 FridgeMapper.toDTO(account.getFridge()),
                 RecipeMapper.toDTOSet(account.getRecipes()),
                 account.getPremium());
@@ -27,6 +28,7 @@ public class AccountMapper {
         return new Account(
                 accountDTO.getUsername(),
                 accountDTO.getMail(),
+                accountDTO.getPassword(),
                 FridgeMapper.toEntity(accountDTO.getFridge()),
                 RecipeMapper.toEntitySet(accountDTO.getRecipes()),
                 accountDTO.getPremium());

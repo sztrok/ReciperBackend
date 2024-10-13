@@ -12,11 +12,11 @@ import java.util.Set;
 @RequestMapping("/api/v1/item")
 public class ItemController {
 
-    ItemHandler itemHandler;
+    ItemService itemService;
 
     @Autowired
-    public ItemController(ItemHandler itemHandler) {
-        this.itemHandler = itemHandler;
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
     }
 
 
@@ -27,32 +27,32 @@ public class ItemController {
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
-        return itemHandler.getItemById(id);
+        return itemService.getItemById(id);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<ItemDTO>> getAllItems() {
-        return itemHandler.getAllItems();
+        return itemService.getAllItems();
     }
 
     @GetMapping("/get/name/{name}")
     public ResponseEntity<ItemDTO> getItemByName(@PathVariable String name) {
-        return itemHandler.getItemByName(name);
+        return itemService.getItemByName(name);
     }
 
     @GetMapping("/get_all/name/{name}")
     public Set<ItemDTO> getAllItemsContainingName(@PathVariable String name) {
-        return itemHandler.getAllItemsContainingName(name);
+        return itemService.getAllItemsContainingName(name);
     }
 
     @GetMapping("/get/barcode/{barcode}")
     public ResponseEntity<ItemDTO> getItemByBarcode(@PathVariable Long barcode) {
-        return itemHandler.getItemByBarcode(barcode);
+        return itemService.getItemByBarcode(barcode);
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
-        return itemHandler.addNewItem(item);
+        return itemService.addNewItem(item);
     }
 
 }

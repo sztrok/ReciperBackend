@@ -114,8 +114,8 @@ class AccountRepositoryTest {
     void testAttachingRecipes() {
         accountRepository.save(account);
         Set<Recipe> recipes = Set.of(
-                new Recipe("test", account.getId(), "recipe for test purposes"),
-                new Recipe("test2", account.getId(), "recipe for test purposes")
+                new Recipe("test", "recipe for test purposes"),
+                new Recipe("test2", "recipe for test purposes")
         );
         account.setRecipes(recipes);
         System.out.println(testEntityManager.find(Account.class, account.getId()).getRecipes());

@@ -2,6 +2,7 @@ package com.eat.it.eatit.backend.loader;
 
 import com.eat.it.eatit.backend.account.data.Account;
 import com.eat.it.eatit.backend.account.data.AccountRepository;
+import com.eat.it.eatit.backend.account.data.Role;
 import com.eat.it.eatit.backend.cookware.data.Cookware;
 import com.eat.it.eatit.backend.cookware.data.CookwareRepository;
 import com.eat.it.eatit.backend.fridge.data.Fridge;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,15 +34,23 @@ class InitialDataLoader {
     private final RecipeRepository recipeRepository;
     private final FridgeRepository fridgeRepository;
     private final CookwareRepository cookwareRepository;
+    private final PasswordEncoder passwordEncoder;
     private final Random random = new Random();
 
     @Autowired
-    public InitialDataLoader(AccountRepository accountRepository, ItemRepository itemRepository, RecipeRepository recipeRepository, FridgeRepository fridgeRepository, CookwareRepository cookwareRepository) {
+    public InitialDataLoader(AccountRepository accountRepository,
+                             ItemRepository itemRepository,
+                             RecipeRepository recipeRepository,
+                             FridgeRepository fridgeRepository,
+                             CookwareRepository cookwareRepository,
+                             PasswordEncoder passwordEncoder
+                             ) {
         this.accountRepository = accountRepository;
         this.itemRepository = itemRepository;
         this.recipeRepository = recipeRepository;
         this.fridgeRepository = fridgeRepository;
         this.cookwareRepository = cookwareRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @EventListener
@@ -63,6 +73,8 @@ class InitialDataLoader {
         linkRecipeAndItems(recipes, items);
         linkAccountAndRecipes(accounts, recipes);
 
+        assingRoles(accounts);
+
         log.info("Finished linking entities");
     }
 
@@ -78,6 +90,11 @@ class InitialDataLoader {
         accounts.add(generateAccount("Noah", "Miller", false));
         accounts.add(generateAccount("Grace", "Anderson", true));
         accounts.add(generateAccount("Oliver", "Swift", false));
+        Account adminAccount = new Account();
+        adminAccount.setUsername("admin");
+        adminAccount.setRoles(Set.of(Role.ROLE_ADMIN));
+        adminAccount.setPassword("secret");
+        accountRepository.save(adminAccount);
         return accounts;
     }
 
@@ -156,14 +173,20 @@ class InitialDataLoader {
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
         account.setUsername("%s %s".formatted(firstName, lastName));
-        account.setPassword("password");
+        account.setPassword(passwordEncoder.encode("password" + firstName));
         account.setMail("%s.%s@test.com".formatted(firstName, lastName));
         account.setPremium(premium);
         return accountRepository.save(account);
     }
 
+    private void assingRoles(List<Account> accounts) {
+        for(Account account : accounts) {
+            account.addRole(Role.ROLE_USER);
+            accountRepository.save(account);
+        }
+    }
+
     private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
-        Random random = new Random();
         for(Fridge fridge : fridges) {
             Set<Item> addedItems = new HashSet<>();
             for(int i=0; i<7; i++) {

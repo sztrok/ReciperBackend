@@ -11,11 +11,11 @@ import java.util.List;
 @RequestMapping("/api/v1/cookware")
 public class CookwareController {
 
-    CookwareHandler cookwareHandler;
+    CookwareService cookwareService;
 
     @Autowired
-    public CookwareController(CookwareHandler cookwareHandler) {
-        this.cookwareHandler = cookwareHandler;
+    public CookwareController(CookwareService cookwareService) {
+        this.cookwareService = cookwareService;
     }
 
     @GetMapping("/test")
@@ -25,16 +25,16 @@ public class CookwareController {
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<CookwareDTO> getCookwareById(@PathVariable Long id) {
-        return cookwareHandler.getCookwareById(id);
+        return cookwareService.getCookwareById(id);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<CookwareDTO>> getAllCookwares() {
-        return cookwareHandler.getAllCookwares();
+        return cookwareService.getAllCookwares();
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<CookwareDTO> addNewCookware(@RequestBody CookwareDTO cookwareDTO) {
-        return cookwareHandler.addNewCookware(cookwareDTO);
+        return cookwareService.addNewCookware(cookwareDTO);
     }
 }

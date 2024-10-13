@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class ItemHandler {
+public class ItemService {
 
     ItemRepository itemRepository;
     @Autowired
-    public ItemHandler(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
 
