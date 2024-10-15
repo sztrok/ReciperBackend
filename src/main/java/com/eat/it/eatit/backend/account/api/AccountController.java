@@ -11,11 +11,11 @@ import java.util.List;
 @RequestMapping("/api/v1/account")
 public class AccountController {
 
-    AccountHandler accountHandler;
+    AccountService accountService;
 
     @Autowired
-    public AccountController(AccountHandler accountHandler) {
-        this.accountHandler = accountHandler;
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @GetMapping("/test")
@@ -25,16 +25,16 @@ public class AccountController {
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
-        return accountHandler.getAccountById(id);
+        return accountService.getAccountById(id);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
-        return accountHandler.getAllAccounts();
+        return accountService.getAllAccounts();
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<AccountDTO> addNewAccount(@RequestBody AccountDTO accountDTO) {
-        return accountHandler.addNewAccount(accountDTO);
+        return accountService.addNewAccount(accountDTO);
     }
 }

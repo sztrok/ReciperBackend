@@ -11,11 +11,11 @@ import java.util.List;
 @RequestMapping("/api/v1/recipe")
 public class RecipeController {
 
-    RecipeHandler recipeHandler;
+    RecipeService recipeService;
 
     @Autowired
-    public RecipeController(RecipeHandler recipeHandler) {
-        this.recipeHandler = recipeHandler;
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
     @GetMapping("/test")
@@ -25,16 +25,16 @@ public class RecipeController {
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
-        return recipeHandler.getRecipeById(id);
+        return recipeService.getRecipeById(id);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
-        return recipeHandler.getAllRecipes();
+        return recipeService.getAllRecipes();
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<RecipeDTO> addNewRecipe(@RequestBody RecipeDTO recipeDTO) {
-        return recipeHandler.addNewRecipe(recipeDTO);
+        return recipeService.addNewRecipe(recipeDTO);
     }
 }

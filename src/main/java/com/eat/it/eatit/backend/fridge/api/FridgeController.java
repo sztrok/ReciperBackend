@@ -11,11 +11,11 @@ import java.util.List;
 @RequestMapping("/api/v1/fridge")
 public class FridgeController {
 
-    FridgeHandler fridgeHandler;
+    FridgeService fridgeService;
 
     @Autowired
-    public FridgeController(FridgeHandler fridgeHandler) {
-        this.fridgeHandler = fridgeHandler;
+    public FridgeController(FridgeService fridgeService) {
+        this.fridgeService = fridgeService;
     }
 
     @GetMapping("/test")
@@ -25,16 +25,16 @@ public class FridgeController {
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
-        return fridgeHandler.getFridgeById(id);
+        return fridgeService.getFridgeById(id);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<FridgeDTO>> getAllFridges() {
-        return fridgeHandler.getAllFridges();
+        return fridgeService.getAllFridges();
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<FridgeDTO> addNewFridge(@RequestBody FridgeDTO fridgeDTO) {
-        return fridgeHandler.addNewFridge(fridgeDTO);
+        return fridgeService.addNewFridge(fridgeDTO);
     }
 }

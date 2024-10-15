@@ -11,5 +11,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Set<Account> findAllByUsernameContaining(String username);
     Set<Account> findAllByPremiumIsTrue();
     Set<Account> findAllByPremiumIsFalse();
+    Account findByUsername(String username);
 
 }
