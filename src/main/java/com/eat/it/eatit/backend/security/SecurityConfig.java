@@ -31,8 +31,9 @@ public class SecurityConfig {
 
         httpSecurity.formLogin(Customizer.withDefaults());
 
-        httpSecurity.authorizeHttpRequests()
-                .requestMatchers("/api/v1/account/get**/**").permitAll();
+        httpSecurity.authorizeHttpRequests(
+                auth -> auth
+                        .anyRequest().permitAll());
         return httpSecurity.build();
     }
 
