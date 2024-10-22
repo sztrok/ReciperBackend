@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * NIE MOŻNA ZROBIC DELETE FRIDGE BO JEST ŚCISLE ZWIĄZANA Z ACCOUNT
+ */
 @RestController
 @RequestMapping("/api/v1/fridge")
 public class FridgeController {
@@ -33,8 +36,10 @@ public class FridgeController {
         return fridgeService.getAllFridges();
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
-    public ResponseEntity<FridgeDTO> addNewFridge(@RequestBody FridgeDTO fridgeDTO) {
-        return fridgeService.addNewFridge(fridgeDTO);
-    }
+    // CZY TO MA SENS? CZY TO ZROBIC TAM GDZIE SIE TWORZY UZYTKOWNIKA?
+//    @PostMapping(value = "/add/{ownerId}", consumes = "application/json")
+//    public ResponseEntity<FridgeDTO> addNewFridge(@RequestBody FridgeDTO fridgeDTO, @PathVariable Long ownerId) {
+//        return fridgeService.addNewFridge(fridgeDTO, ownerId);
+//    }
+
 }

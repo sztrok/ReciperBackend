@@ -37,4 +37,9 @@ public class AccountController {
     public ResponseEntity<AccountDTO> addNewAccount(@RequestBody AccountDTO accountDTO) {
         return accountService.addNewAccount(accountDTO);
     }
+
+    @DeleteMapping(value="/delete/{id}")
+    public ResponseEntity<AccountDTO> deleteAccount(@PathVariable Long id) {
+        return accountService.deleteAccountById(id);
+    }
 }
