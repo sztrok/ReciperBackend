@@ -1,11 +1,13 @@
 package com.eat.it.eatit.backend.account.api;
 
 import com.eat.it.eatit.backend.account.data.AccountDTO;
+import com.eat.it.eatit.backend.recipe.data.RecipeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/account")
@@ -38,8 +40,18 @@ public class AccountController {
         return accountService.addNewAccount(accountDTO);
     }
 
-    @DeleteMapping(value="/delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<AccountDTO> deleteAccount(@PathVariable Long id) {
         return accountService.deleteAccountById(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
+        return accountService.updateAccountById(id, accountDTO);
+    }
+
+    @PutMapping("/update/{id}/recipe")
+    public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
+        return accountService.addRecipesToAccount(id, recipeDTOS);
     }
 }

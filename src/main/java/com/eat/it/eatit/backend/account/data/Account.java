@@ -15,7 +15,6 @@ import java.util.Set;
 @Table(name="account")
 @NoArgsConstructor
 @Getter
-//@Setter
 public class Account {
 
     @Id
@@ -54,6 +53,16 @@ public class Account {
     public Account(String username, String mail, Boolean premium) {
         this.username = username;
         this.mail = mail;
+        this.premium = premium;
+    }
+
+    public Account(String username, String mail, String password, Fridge fridge, Set<Recipe> recipes, Set<Role> roles, Boolean premium) {
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+        this.fridge = fridge;
+        this.recipes = recipes;
+        this.roles = roles;
         this.premium = premium;
     }
 
