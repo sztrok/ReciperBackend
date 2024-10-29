@@ -36,10 +36,4 @@ public class FridgeController {
         return fridgeService.getAllFridges();
     }
 
-    // CZY TO MA SENS? CZY TO ZROBIC TAM GDZIE SIE TWORZY UZYTKOWNIKA?
-//    @PostMapping(value = "/add/{ownerId}", consumes = "application/json")
-//    public ResponseEntity<FridgeDTO> addNewFridge(@RequestBody FridgeDTO fridgeDTO, @PathVariable Long ownerId) {
-//        return fridgeService.addNewFridge(fridgeDTO, ownerId);
-//    }
-
 }

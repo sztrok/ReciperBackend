@@ -20,17 +20,17 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/test")
+    @GetMapping(value = "/test")
     public String test() {
         return "Success";
     }
 
-    @GetMapping("/get/id/{id}")
+    @GetMapping(value = "/get/id/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
         return accountService.getAccountById(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping(value = "/get_all")
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         return accountService.getAllAccounts();
     }
@@ -45,13 +45,14 @@ public class AccountController {
         return accountService.deleteAccountById(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(value = "/update/{id}")
     public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
         return accountService.updateAccountById(id, accountDTO);
     }
 
-    @PutMapping("/update/{id}/recipe")
+    @PutMapping(value = "/update/{id}/recipe")
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
         return accountService.addRecipesToAccount(id, recipeDTOS);
     }
+
 }

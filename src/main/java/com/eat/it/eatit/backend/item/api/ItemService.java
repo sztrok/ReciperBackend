@@ -16,6 +16,7 @@ import java.util.Set;
 public class ItemService {
 
     ItemRepository itemRepository;
+
     @Autowired
     public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
@@ -23,7 +24,7 @@ public class ItemService {
 
     public ResponseEntity<ItemDTO> getItemById(Long id) {
         Item item = itemRepository.findById(id).orElse(null);
-        if(item == null) {
+        if (item == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ItemMapper.toDTO(item));
@@ -32,38 +33,36 @@ public class ItemService {
     public ResponseEntity<List<ItemDTO>> getAllItems() {
         List<Item> items = itemRepository.findAll();
         List<ItemDTO> itemDTOList = new ArrayList<>();
-        for(Item i : items) {
+        for (Item i : items) {
             itemDTOList.add(ItemMapper.toDTO(i));
         }
         return ResponseEntity.ok(itemDTOList);
     }
 
     public ResponseEntity<ItemDTO> getItemByName(String name) {
-        Item item = itemRepository.findByName(name);
-        if(item == null) {
+        Item item = itemRepository.findByNameIgnoreCase(name);
+        if (item == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ItemMapper.toDTO(item));
     }
 
     public Set<ItemDTO> getAllItemsContainingName(String name) {
-        return ItemMapper.toDTOSet(itemRepository.findAllByNameContains(name));
+        return ItemMapper.toDTOSet(itemRepository.findAllByNameContainsIgnoreCase(name));
     }
 
     public ResponseEntity<ItemDTO> getItemByBarcode(Long barcode) {
         Item item = itemRepository.findByBarcode(barcode);
-        if(item == null) {
+        if (item == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ItemMapper.toDTO(item));
     }
-
 
     public ResponseEntity<ItemDTO> addNewItem(ItemDTO item) {
         Item newItem = ItemMapper.toEntity(item);
         Item savedItem = itemRepository.save(newItem);
         return ResponseEntity.ok(ItemMapper.toDTO(savedItem));
     }
-
 
 }
