@@ -43,9 +43,9 @@ public class Account {
     @JoinColumn(name = "owner_id")
     private Set<Recipe> recipes = new HashSet<>();
 
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = AccountRole.class)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Set<AccountRole> accountRoles = new HashSet<>();
 
     @Setter
     private Boolean premium;
@@ -56,13 +56,13 @@ public class Account {
         this.premium = premium;
     }
 
-    public Account(String username, String mail, String password, Fridge fridge, Set<Recipe> recipes, Set<Role> roles, Boolean premium) {
+    public Account(String username, String mail, String password, Fridge fridge, Set<Recipe> recipes, Set<AccountRole> accountRoles, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.password = password;
         this.fridge = fridge;
         this.recipes = recipes;
-        this.roles = roles;
+        this.accountRoles = accountRoles;
         this.premium = premium;
     }
 
@@ -88,12 +88,12 @@ public class Account {
         this.recipes = new HashSet<>(recipes);
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = new HashSet<>(roles);
+    public void setAccountRoles(Set<AccountRole> accountRoles) {
+        this.accountRoles = new HashSet<>(accountRoles);
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public void addRole(AccountRole accountRole) {
+        this.accountRoles.add(accountRole);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class Account {
                 ", password='" + password + '\'' +
                 ", fridge=" + fridge +
                 ", recipes=" + recipes +
-                ", roles=" + roles +
+                ", roles=" + accountRoles +
                 ", premium=" + premium +
                 '}';
     }

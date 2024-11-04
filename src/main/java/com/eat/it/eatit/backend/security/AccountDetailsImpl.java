@@ -1,7 +1,7 @@
 package com.eat.it.eatit.backend.security;
 
 import com.eat.it.eatit.backend.account.data.Account;
-import com.eat.it.eatit.backend.account.data.Role;
+import com.eat.it.eatit.backend.account.data.AccountRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,11 +21,11 @@ public class AccountDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = account.getRoles();
+        Set<AccountRole> accountRoles = account.getAccountRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        for(Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.name()));
+        for(AccountRole accountRole : accountRoles) {
+            authorities.add(new SimpleGrantedAuthority(accountRole.name()));
         }
         return authorities;
     }

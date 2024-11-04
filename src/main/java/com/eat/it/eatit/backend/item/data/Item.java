@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -30,14 +30,15 @@ public class Item {
 
     private Double carbsPer100G;
 
-    private Double amount;
+    @Enumerated(EnumType.STRING)
+    private ItemType itemType;
 
 
     public Item(String name) {
         this.name = name;
     }
 
-    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, Double amount) {
+    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
         this.id = id;
         this.name = name;
         this.barcode = barcode;
@@ -45,7 +46,24 @@ public class Item {
         this.proteins = proteins;
         this.fatPer100G = fatPer100G;
         this.carbsPer100G = carbsPer100G;
-        this.amount = amount;
+    }
+
+    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, ItemType itemType) {
+        this.name = name;
+        this.barcode = barcode;
+        this.caloriesPer100g = caloriesPer100g;
+        this.proteins = proteins;
+        this.fatPer100G = fatPer100G;
+        this.carbsPer100G = carbsPer100G;
+        this.itemType = itemType;
+    }
+
+    public Item(String name, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
+        this.name = name;
+        this.caloriesPer100g = caloriesPer100g;
+        this.proteins = proteins;
+        this.fatPer100G = fatPer100G;
+        this.carbsPer100G = carbsPer100G;
     }
 
     public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
@@ -57,23 +75,6 @@ public class Item {
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
-        this.name = name;
-        this.caloriesPer100g = caloriesPer100g;
-        this.proteins = proteins;
-        this.fatPer100G = fatPer100G;
-        this.carbsPer100G = carbsPer100G;
-    }
-
-    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, Double amount) {
-        this.name = name;
-        this.barcode = barcode;
-        this.caloriesPer100g = caloriesPer100g;
-        this.proteins = proteins;
-        this.fatPer100G = fatPer100G;
-        this.carbsPer100G = carbsPer100G;
-        this.amount = amount;
-    }
 
     @Override
     public String toString() {
@@ -85,7 +86,6 @@ public class Item {
                 ", proteins=" + proteins +
                 ", fatPer100G=" + fatPer100G +
                 ", carbsPer100G=" + carbsPer100G +
-                ", amount=" + amount +
                 '}';
     }
 

@@ -1,6 +1,7 @@
 package com.eat.it.eatit.backend.fridge.data;
 
 import com.eat.it.eatit.backend.item.data.Item;
+import com.eat.it.eatit.backend.item.data.ItemInFridge;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,18 +25,18 @@ public class Fridge {
     private Long ownerId;
 
     @ManyToMany
-    private Set<Item> items;
+    private Set<ItemInFridge> items;
 
     public Fridge(Long ownerId) {
         this.ownerId = ownerId;
     }
 
-    public Fridge(Long ownerId, Set<Item> items) {
+    public Fridge(Long ownerId, Set<ItemInFridge> items) {
         this.ownerId = ownerId;
         this.items = items;
     }
 
-    public Fridge(Set<Item> items) {
+    public Fridge(Set<ItemInFridge> items) {
         this.items = items;
     }
 

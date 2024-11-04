@@ -19,7 +19,7 @@ public class AccountMapper {
                 FridgeMapper.toDTO(account.getFridge()),
                 RecipeMapper.toDTOSet(account.getRecipes()),
                 account.getPremium(),
-                account.getRoles());
+                account.getAccountRoles());
     }
 
     public static Account toEntity(AccountDTO accountDTO) {
@@ -32,7 +32,7 @@ public class AccountMapper {
                 accountDTO.getPassword(),
                 FridgeMapper.toEntity(accountDTO.getFridge()),
                 RecipeMapper.toEntitySet(accountDTO.getRecipes()),
-                accountDTO.getRoles(),
+                accountDTO.getAccountRoles(),
                 accountDTO.getPremium());
     }
 }

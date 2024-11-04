@@ -19,7 +19,7 @@ public class ItemMapper {
                 item.getProteins(),
                 item.getFatPer100G(),
                 item.getCarbsPer100G(),
-                item.getAmount()
+                item.getItemType()
         );
     }
 
@@ -34,7 +34,7 @@ public class ItemMapper {
                 itemDTO.getProteins(),
                 itemDTO.getFatPer100G(),
                 itemDTO.getCarbsPer100G(),
-                itemDTO.getAmount()
+                itemDTO.getItemType()
         );
     }
 
@@ -52,7 +52,7 @@ public class ItemMapper {
                             item.getProteins(),
                             item.getFatPer100G(),
                             item.getCarbsPer100G(),
-                            item.getAmount()
+                            item.getItemType()
 //                            RecipeMapper.toDTOSet(item.getRecipesContainingItem()),
 //                            FridgeMapper.toDTOSet(item.getFridgesContainingItem())
                     )
@@ -75,8 +75,8 @@ public class ItemMapper {
                             item.getProteins(),
                             item.getFatPer100G(),
                             item.getCarbsPer100G(),
-                            item.getAmount()
-//                            RecipeMapper.toEntitySet(item.getRecipesContainingItem()),
+                            item.getItemType()
+                            //                            RecipeMapper.toEntitySet(item.getRecipesContainingItem()),
 //                            FridgeMapper.toEntitySet(item.getFridgesContainingItem())
                     )
             );

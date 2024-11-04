@@ -18,15 +18,15 @@ public class AccountDTO {
     private FridgeDTO fridge;
     private Set<RecipeDTO> recipes = new HashSet<>();
     private Boolean premium;
-    private Set<Role> roles = new HashSet<>();
+    private Set<AccountRole> accountRoles = new HashSet<>();
 
-    public AccountDTO(String username, String mail, String password, FridgeDTO fridge, Set<RecipeDTO> recipes, Boolean premium, Set<Role> roles) {
+    public AccountDTO(String username, String mail, String password, FridgeDTO fridge, Set<RecipeDTO> recipes, Boolean premium, Set<AccountRole> accountRoles) {
         this.username = username;
         this.mail = mail;
         this.password = password;
         this.fridge = fridge;
         this.recipes = recipes;
         this.premium = premium;
-        this.roles = roles;
+        this.accountRoles = accountRoles;
     }
 }

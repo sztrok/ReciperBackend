@@ -3,6 +3,7 @@ package com.eat.it.eatit.backend.mappers;
 import com.eat.it.eatit.backend.item.data.Item;
 import com.eat.it.eatit.backend.item.data.ItemDTO;
 import com.eat.it.eatit.backend.item.data.ItemMapper;
+import com.eat.it.eatit.backend.item.data.ItemType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -24,7 +25,7 @@ class ItemMapperTest {
         item.setCarbsPer100G(123d);
         item.setFatPer100G(11d);
         item.setProteins(324d);
-        item.setAmount(24d);
+        item.setItemType(ItemType.FRUIT);
 
         itemDTO = ItemMapper.toDTO(item);
         assertEquals(item.getName(), itemDTO.getName());
@@ -33,7 +34,7 @@ class ItemMapperTest {
         assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
         assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
         assertEquals(item.getProteins(), itemDTO.getProteins());
-        assertEquals(item.getAmount(), itemDTO.getAmount());
+        assertEquals(item.getItemType(), itemDTO.getItemType());
     }
 
     @Test
@@ -45,7 +46,7 @@ class ItemMapperTest {
         itemDTO.setCarbsPer100G(1253d);
         itemDTO.setFatPer100G(121d);
         itemDTO.setProteins(3224d);
-        itemDTO.setAmount(24.523d);
+        itemDTO.setItemType(ItemType.LEGUME);
 
         item = ItemMapper.toEntity(itemDTO);
         assertEquals(item.getName(), itemDTO.getName());
@@ -54,7 +55,7 @@ class ItemMapperTest {
         assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
         assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
         assertEquals(item.getProteins(), itemDTO.getProteins());
-        assertEquals(item.getAmount(), itemDTO.getAmount());
+        assertEquals(item.getItemType(), itemDTO.getItemType());
     }
 
     @Test
