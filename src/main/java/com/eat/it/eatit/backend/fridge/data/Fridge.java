@@ -24,7 +24,7 @@ public class Fridge {
     @PrimaryKeyJoinColumn(name = "owner_id")
     private Long ownerId;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "fridge")
     private Set<ItemInFridge> items;
 
     public Fridge(Long ownerId) {
