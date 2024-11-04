@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * NIE MOŻNA ZROBIC DELETE FRIDGE BO JEST ŚCISLE ZWIĄZANA Z ACCOUNT
+ */
 @RestController
 @RequestMapping("/api/v1/fridge")
 public class FridgeController {
@@ -33,8 +36,4 @@ public class FridgeController {
         return fridgeService.getAllFridges();
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
-    public ResponseEntity<FridgeDTO> addNewFridge(@RequestBody FridgeDTO fridgeDTO) {
-        return fridgeService.addNewFridge(fridgeDTO);
-    }
 }

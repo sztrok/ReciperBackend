@@ -38,9 +38,4 @@ public class FridgeService {
         return ResponseEntity.ok(fridgeDTOList);
     }
 
-    public ResponseEntity<FridgeDTO> addNewFridge(FridgeDTO fridgeDTO) {
-        Fridge newFridge = FridgeMapper.toEntity(fridgeDTO);
-        Fridge savedFridge = fridgeRepository.save(newFridge);
-        return ResponseEntity.ok(FridgeMapper.toDTO(savedFridge));
-    }
 }

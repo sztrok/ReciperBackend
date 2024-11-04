@@ -9,7 +9,7 @@ public class AccountMapper {
     }
 
     public static AccountDTO toDTO(Account account) {
-        if(account == null) {
+        if (account == null) {
             return new AccountDTO();
         }
         return new AccountDTO(
@@ -18,11 +18,12 @@ public class AccountMapper {
                 account.getPassword(),
                 FridgeMapper.toDTO(account.getFridge()),
                 RecipeMapper.toDTOSet(account.getRecipes()),
-                account.getPremium());
+                account.getPremium(),
+                account.getRoles());
     }
 
-    public static Account toEntity(AccountDTO accountDTO){
-        if(accountDTO == null) {
+    public static Account toEntity(AccountDTO accountDTO) {
+        if (accountDTO == null) {
             return new Account();
         }
         return new Account(
@@ -31,6 +32,7 @@ public class AccountMapper {
                 accountDTO.getPassword(),
                 FridgeMapper.toEntity(accountDTO.getFridge()),
                 RecipeMapper.toEntitySet(accountDTO.getRecipes()),
+                accountDTO.getRoles(),
                 accountDTO.getPremium());
     }
 }
