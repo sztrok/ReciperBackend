@@ -1,11 +1,9 @@
-package com.eat.it.eatit.backend.mappers;
+package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.dto.ItemInFridgeDTO;
-import com.eat.it.eatit.backend.mapper.FridgeMapper;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
-import com.eat.it.eatit.backend.mapper.ItemInFridgeMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

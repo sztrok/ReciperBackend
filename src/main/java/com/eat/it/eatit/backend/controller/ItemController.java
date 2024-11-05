@@ -20,12 +20,6 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-
-    @GetMapping("/test")
-    public String test() {
-        return "Success";
-    }
-
     @GetMapping("/get/id/{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         return itemService.getItemById(id);
@@ -55,5 +49,7 @@ public class ItemController {
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
         return itemService.addNewItem(item);
     }
+
+    //TODO: Add Delete and Put mappings
 
 }

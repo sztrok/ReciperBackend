@@ -1,8 +1,7 @@
-package com.eat.it.eatit.backend.mappers;
+package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.dto.ItemDTO;
-import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.enums.ItemType;
 import org.junit.jupiter.api.Test;
 
