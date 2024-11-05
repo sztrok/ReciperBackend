@@ -1,7 +1,7 @@
 package com.eat.it.eatit.backend.security;
 
-import com.eat.it.eatit.backend.account.data.Account;
-import com.eat.it.eatit.backend.account.data.AccountRole;
+import com.eat.it.eatit.backend.data.Account;
+import com.eat.it.eatit.backend.enums.AccountRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

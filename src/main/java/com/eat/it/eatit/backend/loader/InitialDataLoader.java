@@ -1,17 +1,9 @@
 package com.eat.it.eatit.backend.loader;
 
-import com.eat.it.eatit.backend.account.data.Account;
-import com.eat.it.eatit.backend.account.data.AccountRepository;
-import com.eat.it.eatit.backend.account.data.AccountRole;
-import com.eat.it.eatit.backend.cookware.data.Cookware;
-import com.eat.it.eatit.backend.cookware.data.CookwareRepository;
-import com.eat.it.eatit.backend.fridge.data.Fridge;
-import com.eat.it.eatit.backend.fridge.data.FridgeRepository;
-import com.eat.it.eatit.backend.item.data.Item;
-import com.eat.it.eatit.backend.item.data.ItemRepository;
-import com.eat.it.eatit.backend.item.data.ItemType;
-import com.eat.it.eatit.backend.recipe.data.Recipe;
-import com.eat.it.eatit.backend.recipe.data.RecipeRepository;
+import com.eat.it.eatit.backend.data.*;
+import com.eat.it.eatit.backend.enums.ItemType;
+import com.eat.it.eatit.backend.repository.*;
+import com.eat.it.eatit.backend.enums.AccountRole;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +27,7 @@ class InitialDataLoader {
     private final RecipeRepository recipeRepository;
     private final FridgeRepository fridgeRepository;
     private final CookwareRepository cookwareRepository;
+    private final ItemInFridgeRepository itemInFridgeRepository;
     private final PasswordEncoder passwordEncoder;
     private final Random random = new Random();
 
@@ -44,19 +37,21 @@ class InitialDataLoader {
                              RecipeRepository recipeRepository,
                              FridgeRepository fridgeRepository,
                              CookwareRepository cookwareRepository,
+                             ItemInFridgeRepository itemInFridgeRepository,
                              PasswordEncoder passwordEncoder
-                             ) {
+    ) {
         this.accountRepository = accountRepository;
         this.itemRepository = itemRepository;
         this.recipeRepository = recipeRepository;
         this.fridgeRepository = fridgeRepository;
         this.cookwareRepository = cookwareRepository;
+        this.itemInFridgeRepository = itemInFridgeRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @EventListener
     @Transactional
-    public void loadInitialData(ContextRefreshedEvent event){
+    public void loadInitialData(ContextRefreshedEvent event) {
         log.info("Loading initial data to database...");
 
         List<Account> accounts = generateAccounts();
@@ -116,7 +111,7 @@ class InitialDataLoader {
         items.add(new Item("Potato", 1234567890135L, 77, 2.02, 0.09, 17.58, ItemType.VEGETABLE));
         items.add(new Item("Butter", 1234567890136L, 717, 0.85, 81.11, 0.06, ItemType.DAIRY));
         items.add(new Item("Yogurt", 1234567890137L, 59, 3.47, 1.46, 7.04, ItemType.DAIRY));
-        items.add(new Item("Cheddar Cheese", 1234567890138L, 403, 24.90, 33.14, 1.28,ItemType.DAIRY));
+        items.add(new Item("Cheddar Cheese", 1234567890138L, 403, 24.90, 33.14, 1.28, ItemType.DAIRY));
         items.add(new Item("Tomato", 1234567890139L, 18, 0.88, 0.20, 3.89, ItemType.VEGETABLE));
         items.add(new Item("Pasta", 1234567890140L, 157, 5.80, 0.93, 30.92, ItemType.GRAIN));
         items.add(new Item("Tofu", 1234567890141L, 76, 8.08, 4.78, 1.87, ItemType.LEGUME));
@@ -126,7 +121,7 @@ class InitialDataLoader {
 
     private List<Fridge> generateFridges() {
         List<Fridge> fridges = new ArrayList<>();
-        for(int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             fridges.add(new Fridge());
         }
         return fridgeRepository.saveAll(fridges);
@@ -181,28 +176,45 @@ class InitialDataLoader {
     }
 
     private void assingRoles(List<Account> accounts) {
-        for(Account account : accounts) {
+        for (Account account : accounts) {
             account.addRole(AccountRole.ROLE_USER);
             accountRepository.save(account);
         }
     }
 
     private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
-        for(Fridge fridge : fridges) {
-            Set<Item> addedItems = new HashSet<>();
+        for (Fridge fridge : fridges) {
+            Set<ItemInFridge> addedItems = new HashSet<>();
             for(int i=0; i<7; i++) {
-                addedItems.add(items.get(random.nextInt(items.size())));
+                ItemInFridge itemInFridge = new ItemInFridge();
+                itemInFridge.setFridgeId(fridge.getId());
+                itemInFridge.setAmount(random.nextDouble(10, 300));
+                itemInFridge.setItem(items.get(random.nextInt(items.size())));
+                addedItems.add(itemInFridge);
             }
+            itemInFridgeRepository.saveAll(addedItems);
             fridge.setItems(addedItems);
             fridgeRepository.save(fridge);
+
         }
-        itemRepository.saveAll(items);
+//        itemInFridgeRepository.saveAll(allItems);
+
+
+//        for(Fridge fridge : fridges) {
+//            Set<Item> addedItems = new HashSet<>();
+//            for(int i=0; i<7; i++) {
+//                addedItems.add(items.get(random.nextInt(items.size())));
+//            }
+//            fridge.setItems(addedItems);
+//            fridgeRepository.save(fridge);
+//        }
+//        itemRepository.saveAll(items);
     }
 
     private void linkCookwareAndRecipes(List<Cookware> cookwares, List<Recipe> recipes) {
-        for(Recipe recipe : recipes) {
+        for (Recipe recipe : recipes) {
             Set<Cookware> addedCookwares = new HashSet<>();
-            for(int i=0; i<4; i++){
+            for (int i = 0; i < 4; i++) {
                 addedCookwares.add(cookwares.get(random.nextInt(cookwares.size())));
             }
             recipe.setCookware(addedCookwares);
@@ -211,7 +223,7 @@ class InitialDataLoader {
     }
 
     private void linkAccountAndFridge(List<Fridge> fridges, List<Account> accounts) {
-        for(int i=0; i<accounts.size(); i++) {
+        for (int i = 0; i < accounts.size(); i++) {
             accounts.get(i).setFridge(fridges.get(i));
             fridges.get(i).setOwnerId(accounts.get(i).getId());
             fridgeRepository.save(fridges.get(i));
@@ -220,9 +232,9 @@ class InitialDataLoader {
     }
 
     private void linkRecipeAndItems(List<Recipe> recipes, List<Item> items) {
-        for(Recipe recipe : recipes) {
+        for (Recipe recipe : recipes) {
             Set<Item> addedItems = new HashSet<>();
-            for(int i=0; i<7; i++) {
+            for (int i = 0; i < 7; i++) {
                 addedItems.add(items.get(random.nextInt(items.size())));
             }
             recipe.setItems(addedItems);
