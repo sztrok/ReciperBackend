@@ -72,29 +72,29 @@ class ItemControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test Item"));
     }
 
-//    @Test
-//    void shouldUpdateItem() throws Exception {
-//        testItem.setName("Updated Test Item");
-//
-//        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/item/{id}", testItem.getId())
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(testItem)))
-//                .andExpect(status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test Item"));
-//
-//        Item updatedItem = itemRepository.findById(testItem.getId()).orElseThrow();
-//        assertEquals("Updated Test Item", updatedItem.getName(), "The item name should have been updated in the repository");
-//    }
+    @Test
+    void shouldUpdateItem() throws Exception {
+        testItem.setName("Updated Test Item");
 
-//    @Test
-//    void shouldDeleteItem() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.delete("/api/items/{id}", testItem.getId())
-//                        .contentType("application/json"))
-//                .andExpect(status().isNoContent());
-//
-//        Item deletedItem = itemRepository.findById(testItem.getId()).orElse(null);
-//        assertNull(deletedItem, "The item should have been deleted from the repository");
-//    }
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/item/update/{id}", testItem.getId())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(testItem)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test Item"));
+
+        Item updatedItem = itemRepository.findById(testItem.getId()).orElseThrow();
+        assertEquals("Updated Test Item", updatedItem.getName(), "The item name should have been updated in the repository");
+    }
+
+    @Test
+    void shouldDeleteItem() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/item/delete/{id}", testItem.getId())
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
+
+        Item deletedItem = itemRepository.findById(testItem.getId()).orElse(null);
+        assertNull(deletedItem, "The item should have been deleted from the repository");
+    }
 
     @Test
     void shouldGetAllItems() throws Exception {
@@ -145,4 +145,90 @@ class ItemControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void shouldFilterItemsByMacrosAndCalories() throws Exception {
+        // Create and save test items
+        Item item1 = new Item("Item 1", 100D, 10.0, 5.0, 20.0);
+        Item item2 = new Item("Item 2", 200D, 15.0, 2.0, 10.0);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+
+        String urlTemplate = "/api/v1/item/get/macro";
+
+        // Filter by proteins greater than or equal to 10
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "10.0")
+                        .param("macros", "PROTEINS")
+                        .param("comparator", "GREATER_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+
+        // Filter by proteins less than or equal to 10
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "10.0")
+                        .param("macros", "PROTEINS")
+                        .param("comparator", "LESS_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+
+        // Filter by FATS greater than or equal to 5
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "5.0")
+                        .param("macros", "FATS")
+                        .param("comparator", "GREATER_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+
+        // Filter by FATS less than or equal to 5
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "5.0")
+                        .param("macros", "FATS")
+                        .param("comparator", "LESS_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+
+        // Filter by carbs greater than or equal to 20
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "20.0")
+                        .param("macros", "CARBS")
+                        .param("comparator", "GREATER_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+
+        // Filter by carbs less than or equal to 20
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "20.0")
+                        .param("macros", "CARBS")
+                        .param("comparator", "LESS_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+
+        // Filter by calories greater than or equal to 100
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "100")
+                        .param("macros", "CALORIES")
+                        .param("comparator", "GREATER_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+
+        // Filter by calories less than or equal to 150
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("value", "150")
+                        .param("macros", "CALORIES")
+                        .param("comparator", "LESS_THAN_OR_EQUAL")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+    }
 }

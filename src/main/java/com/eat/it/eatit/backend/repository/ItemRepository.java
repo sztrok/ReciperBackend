@@ -13,6 +13,20 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Item findByBarcode(Long barcode);
     Set<Item> findAllByNameContainsIgnoreCase(String name);
 
-    @Query("SELECT coalesce(MAX(id), 0) FROM Item")
-    Long getMaxId();
+    Set<Item> findAllByProteinsIsGreaterThanEqual(Double amount);
+
+    Set<Item> findAllByProteinsIsLessThanEqual(Double amount);
+
+    Set<Item> findAllByCaloriesPer100gIsGreaterThanEqual(Double amount);
+
+    Set<Item> findAllByCaloriesPer100gIsLessThanEqual(Double amount);
+
+    Set<Item> findAllByFatPer100GIsGreaterThanEqual(Double amount);
+
+    Set<Item> findAllByFatPer100GIsLessThanEqual(Double amount);
+
+    Set<Item> findAllByCarbsPer100GIsGreaterThanEqual(Double amount);
+
+    Set<Item> findAllByCarbsPer100GIsLessThanEqual(Double amount);
+
 }

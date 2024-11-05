@@ -1,7 +1,9 @@
 package com.eat.it.eatit.backend.controller;
 
+import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.service.ItemService;
 import com.eat.it.eatit.backend.dto.ItemDTO;
+import org.hibernate.query.sqm.ComparisonOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +51,24 @@ public class ItemController {
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
         return itemService.addNewItem(item);
     }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
+        return itemService.deleteItemById(id);
+    }
 
-    //TODO: Add Delete and Put mappings
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
+        return itemService.updateItem(id, itemDTO);
+    }
+
+
+    @GetMapping("/get/macro")
+    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
+            @RequestParam Double value,
+            @RequestParam Macros macros,
+            @RequestParam ComparisonOperator comparator) {
+        return itemService.getItemsFilteredByMacros(value, macros, comparator);
+    }
 
 }

@@ -96,26 +96,26 @@ class InitialDataLoader {
 
     private List<Item> generateItems() {
         List<Item> items = new ArrayList<>();
-        items.add(new Item("Apple", 1234567890123L, 52, 0.26, 0.17, 13.81, ItemType.FRUIT));
-        items.add(new Item("Banana", 1234567890124L, 89, 1.09, 0.33, 22.84, ItemType.FRUIT));
-        items.add(new Item("Chicken Breast", 1234567890125L, 165, 31.02, 3.57, 0.00, ItemType.POULTRY));
-        items.add(new Item("Broccoli", 1234567890126L, 34, 2.82, 0.37, 6.64, ItemType.VEGETABLE));
-        items.add(new Item("Almonds", 1234567890127L, 579, 21.15, 49.93, 21.55, ItemType.NUTS_AND_SEEDS));
-        items.add(new Item("Salmon", 1234567890128L, 208, 20.42, 13.42, 0.00, ItemType.FISH));
-        items.add(new Item("Rice", 1234567890129L, 130, 2.69, 0.28, 28.17, ItemType.GRAIN));
-        items.add(new Item("Milk", 1234567890130L, 42, 3.37, 0.97, 4.99, ItemType.DAIRY));
-        items.add(new Item("Egg", 1234567890131L, 155, 12.58, 10.61, 1.12, ItemType.DAIRY));
-        items.add(new Item("Beef Steak", 1234567890132L, 250, 26.00, 15.00, 0.00, ItemType.BEEF));
-        items.add(new Item("Orange", 1234567890133L, 47, 0.94, 0.12, 11.75, ItemType.FRUIT));
-        items.add(new Item("Carrot", 1234567890134L, 41, 0.93, 0.24, 9.58, ItemType.VEGETABLE));
-        items.add(new Item("Potato", 1234567890135L, 77, 2.02, 0.09, 17.58, ItemType.VEGETABLE));
-        items.add(new Item("Butter", 1234567890136L, 717, 0.85, 81.11, 0.06, ItemType.DAIRY));
-        items.add(new Item("Yogurt", 1234567890137L, 59, 3.47, 1.46, 7.04, ItemType.DAIRY));
-        items.add(new Item("Cheddar Cheese", 1234567890138L, 403, 24.90, 33.14, 1.28, ItemType.DAIRY));
-        items.add(new Item("Tomato", 1234567890139L, 18, 0.88, 0.20, 3.89, ItemType.VEGETABLE));
-        items.add(new Item("Pasta", 1234567890140L, 157, 5.80, 0.93, 30.92, ItemType.GRAIN));
-        items.add(new Item("Tofu", 1234567890141L, 76, 8.08, 4.78, 1.87, ItemType.LEGUME));
-        items.add(new Item("Avocado", 1234567890142L, 160, 2.00, 14.66, 8.53, ItemType.FRUIT));
+        items.add(new Item("Apple", 1234567890123L, 52.0, 0.26, 0.17, 13.81, ItemType.FRUIT));
+        items.add(new Item("Banana", 1234567890124L, 89.0, 1.09, 0.33, 22.84, ItemType.FRUIT));
+        items.add(new Item("Chicken Breast", 1234567890125L, 165.0, 31.02, 3.57, 0.0, ItemType.POULTRY));
+        items.add(new Item("Broccoli", 1234567890126L, 34.0, 2.82, 0.37, 6.64, ItemType.VEGETABLE));
+        items.add(new Item("Almonds", 1234567890127L, 579.0, 21.15, 49.93, 21.55, ItemType.NUTS_AND_SEEDS));
+        items.add(new Item("Salmon", 1234567890128L, 208.0, 20.42, 13.42, 0.0, ItemType.FISH));
+        items.add(new Item("Rice", 1234567890129L, 130.0, 2.69, 0.28, 28.17, ItemType.GRAIN));
+        items.add(new Item("Milk", 1234567890130L, 42.0, 3.37, 0.97, 4.99, ItemType.DAIRY));
+        items.add(new Item("Egg", 1234567890131L, 155.0, 12.58, 10.61, 1.12, ItemType.DAIRY));
+        items.add(new Item("Beef Steak", 1234567890132L, 250.0, 26.0, 15.0, 0.0, ItemType.BEEF));
+        items.add(new Item("Orange", 1234567890133L, 47.0, 0.94, 0.12, 11.75, ItemType.FRUIT));
+        items.add(new Item("Carrot", 1234567890134L, 41.0, 0.93, 0.24, 9.58, ItemType.VEGETABLE));
+        items.add(new Item("Potato", 1234567890135L, 77.0, 2.02, 0.09, 17.58, ItemType.VEGETABLE));
+        items.add(new Item("Butter", 1234567890136L, 717.0, 0.85, 81.11, 0.06, ItemType.DAIRY));
+        items.add(new Item("Yogurt", 1234567890137L, 59.0, 3.47, 1.46, 7.04, ItemType.DAIRY));
+        items.add(new Item("Cheddar Cheese", 1234567890138L, 403.0, 24.9, 33.14, 1.28, ItemType.DAIRY));
+        items.add(new Item("Tomato", 1234567890139L, 18.0, 0.88, 0.2, 3.89, ItemType.VEGETABLE));
+        items.add(new Item("Pasta", 1234567890140L, 157.0, 5.8, 0.93, 30.92, ItemType.GRAIN));
+        items.add(new Item("Tofu", 1234567890141L, 76.0, 8.08, 4.78, 1.87, ItemType.LEGUME));
+        items.add(new Item("Avocado", 1234567890142L, 160.0, 2.0, 14.66, 8.53, ItemType.FRUIT));
         return itemRepository.saveAll(items);
     }
 

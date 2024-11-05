@@ -23,7 +23,7 @@ public class Item {
 
     private Long barcode;
 
-    private Integer caloriesPer100g;
+    private Double caloriesPer100g;
 
     private Double proteins;
 
@@ -39,7 +39,7 @@ public class Item {
         this.name = name;
     }
 
-    public Item(Long id, String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
+    public Item(Long id, String name, Long barcode, Double caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
         this.id = id;
         this.name = name;
         this.barcode = barcode;
@@ -49,7 +49,7 @@ public class Item {
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, ItemType itemType) {
+    public Item(String name, Long barcode, Double caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, ItemType itemType) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
@@ -59,7 +59,7 @@ public class Item {
         this.itemType = itemType;
     }
 
-    public Item(String name, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
+    public Item(String name, Double caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
         this.name = name;
         this.caloriesPer100g = caloriesPer100g;
         this.proteins = proteins;
@@ -67,7 +67,7 @@ public class Item {
         this.carbsPer100G = carbsPer100G;
     }
 
-    public Item(String name, Long barcode, Integer caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
+    public Item(String name, Long barcode, Double caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;

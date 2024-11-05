@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
+
+import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 
 /**
  * Service class that handles operations related to user accounts.
@@ -150,17 +150,6 @@ public class AccountService {
         recipeRepository.saveAll(accountRecipes);
         accountRepository.save(account);
         return ResponseEntity.ok(RecipeMapper.toDTOSet(account.getRecipes()));
-    }
-
-    /**
-     * Updates a field using the provided setter if the value is not null.
-     *
-     * @param <T> the type of the field to be updated
-     * @param value the new value for the field
-     * @param setter a Consumer that sets the field to the new value
-     */
-    private <T> void updateField(T value, Consumer<T> setter) {
-        Optional.ofNullable(value).ifPresent(setter);
     }
 
     /**

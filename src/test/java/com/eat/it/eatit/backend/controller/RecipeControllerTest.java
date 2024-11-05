@@ -44,7 +44,7 @@ class RecipeControllerTest {
         testRecipe = new Recipe(
                 "Test Recipe",
                 "This is a test description",
-                new HashSet<>(List.of(new Item("Egg", 100, 12.0, 10.0, 1.0))),
+                new HashSet<>(List.of(new Item("Egg", 100.0, 12.0, 10.0, 1.0))),
                 new HashSet<>(List.of(new Cookware("Pan"))),
                 500
         );
@@ -79,7 +79,7 @@ class RecipeControllerTest {
         Recipe newRecipe = new Recipe(
                 "New Recipe",
                 "This is a new description",
-                new HashSet<>(List.of(new Item("Milk", 50, 3.0, 2.0, 0.5))),
+                new HashSet<>(List.of(new Item("Milk", 50.0, 3.0, 2.0, 0.5))),
                 new HashSet<>(List.of(new Cookware("Spoon"))),
                 200
         );
