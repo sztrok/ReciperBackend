@@ -30,4 +30,12 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Set<Item> findAllByCarbsPer100GIsLessThanEqual(Double amount);
 
+    Set<Item> findAllByProteinsBetween(Double min, Double max);
+
+    Set<Item> findAllByCaloriesPer100gBetween(Double min, Double max);
+
+    Set<Item> findAllByFatPer100GBetween(Double min, Double max);
+
+    Set<Item> findAllByCarbsPer100GBetween(Double min, Double max);
+
 }

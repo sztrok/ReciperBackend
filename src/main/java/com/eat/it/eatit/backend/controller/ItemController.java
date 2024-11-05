@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.controller;
 
+import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.service.ItemService;
 import com.eat.it.eatit.backend.dto.ItemDTO;
@@ -67,8 +68,9 @@ public class ItemController {
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
             @RequestParam Double value,
             @RequestParam Macros macros,
-            @RequestParam ComparisonOperator comparator) {
-        return itemService.getItemsFilteredByMacros(value, macros, comparator);
+            @RequestParam Comparator comparator,
+            @RequestParam(required = false, defaultValue = "0.0") Double maxValue) {
+        return itemService.getItemsFilteredByMacros(value, macros, comparator, maxValue);
     }
 
 }
