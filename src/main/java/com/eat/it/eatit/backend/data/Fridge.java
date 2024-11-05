@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name="fridge")
+@Table(name = "fridge")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -23,7 +23,10 @@ public class Fridge {
     @PrimaryKeyJoinColumn(name = "owner_id")
     private Long ownerId;
 
-    @OneToMany
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<ItemInFridge> items = new HashSet<>();
 
     public Fridge(Long ownerId, Set<ItemInFridge> items) {

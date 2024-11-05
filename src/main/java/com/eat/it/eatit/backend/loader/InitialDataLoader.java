@@ -185,7 +185,7 @@ class InitialDataLoader {
     private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
         for (Fridge fridge : fridges) {
             Set<ItemInFridge> addedItems = new HashSet<>();
-            for(int i=0; i<7; i++) {
+            for (int i = 0; i < 7; i++) {
                 ItemInFridge itemInFridge = new ItemInFridge();
                 itemInFridge.setFridgeId(fridge.getId());
                 itemInFridge.setAmount(random.nextDouble(10, 300));
