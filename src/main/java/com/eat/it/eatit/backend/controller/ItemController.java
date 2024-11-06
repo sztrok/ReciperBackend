@@ -68,9 +68,17 @@ public class ItemController {
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
             @RequestParam Double value,
             @RequestParam Macros macros,
-            @RequestParam Comparator comparator,
-            @RequestParam(required = false, defaultValue = "0.0") Double maxValue) {
-        return itemService.getItemsFilteredByMacros(value, macros, comparator, maxValue);
+            @RequestParam Comparator comparator) {
+        return itemService.getItemsFilteredByMacros(value, macros, comparator);
     }
+
+    @GetMapping("get/macro/range")
+    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosInRange(
+            @RequestParam Double minValue,
+            @RequestParam Double maxValue,
+            @RequestParam Macros macros) {
+        return itemService.getItemsFilteredByMacrosInRange(minValue, maxValue, macros);
+    }
+
 
 }

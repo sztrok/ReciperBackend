@@ -150,6 +150,28 @@ public class ItemService {
 
     /**
      * Retrieves a set of ItemDTO objects filtered by a specified macronutrient (e.g., calories, fats, proteins, carbs)
+     * within a range based on the minimum and maximum values.
+     *
+     * @param minValue The minimum threshold value used for filtering the items.
+     * @param maxValue The maximum threshold value used for filtering the items.
+     * @param macros   The macronutrient by which to filter the items (calories, fats, proteins, carbs).
+     * @return A ResponseEntity containing a set of filtered ItemDTO objects.
+     */
+    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosInRange(Double minValue, Double maxValue, Macros macros) {
+        return switch (macros) {
+            case CALORIES ->
+                    ResponseEntity.ok(ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gBetween(minValue, maxValue)));
+            case FATS ->
+                    ResponseEntity.ok(ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GBetween(minValue, maxValue)));
+            case PROTEINS ->
+                    ResponseEntity.ok(ItemMapper.toDTOSet(itemRepository.findAllByProteinsBetween(minValue, maxValue)));
+            case CARBS ->
+                    ResponseEntity.ok(ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GBetween(minValue, maxValue)));
+        };
+    }
+
+    /**
+     * Retrieves a set of ItemDTO objects filtered by a specified macronutrient (e.g., calories, fats, proteins, carbs)
      * based on a comparison operator and threshold value.
      *
      * @param value      The threshold value used for filtering the items.
@@ -157,30 +179,29 @@ public class ItemService {
      * @param comparator The comparison operator used to apply the threshold (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL).
      * @return A ResponseEntity containing a set of filtered ItemDTO objects.
      */
-    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(Double value, Macros macros, Comparator comparator, Double maxValue) {
+    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(Double value, Macros macros, Comparator comparator) {
         return switch (macros) {
             case CALORIES -> ResponseEntity.ok(getItemsFilteredByCalories(value, comparator));
             case FATS -> ResponseEntity.ok(getItemsFilteredByFats(value, comparator));
             case PROTEINS -> ResponseEntity.ok(getItemsFilteredByProteins(value, comparator));
             case CARBS -> ResponseEntity.ok(getItemsFilteredByCarbs(value, comparator));
         };
-
     }
 
     /**
      * Retrieves a set of ItemDTO objects filtered by calorie content.
      *
      * @param value      the calorie value to compare against
-     * @param comparator the comparison operator to use (e.g. GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, BETWEEN)
+     * @param comparator the comparison operator to use (e.g. GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL)
      * @return a set of ItemDTO objects that match the specified calorie filter criteria
      */
-    private Set<ItemDTO> getItemsFilteredByCalories(Double value, Comparator comparator, Double maxValue) {
+    private Set<ItemDTO> getItemsFilteredByCalories(Double value, Comparator comparator) {
         return switch (comparator) {
             case GREATER_THAN_OR_EQUAL ->
                     ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gIsGreaterThanEqual(value));
             case LESS_THAN_OR_EQUAL ->
                     ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gIsLessThanEqual(value));
-            case BETWEEN -> ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gBetween(value, maxValue));
+            default -> new HashSet<>(); // Default case returns an empty set
         };
     }
 
@@ -188,15 +209,15 @@ public class ItemService {
      * Filters items based on their carbohydrate content and returns them as a set of ItemDTOs.
      *
      * @param value      the carbohydrate value to compare against.
-     * @param comparator the comparison operator used to filter the items (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, BETWEEN).
+     * @param comparator the comparison operator used to filter the items (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL).
      * @return a set of ItemDTOs that match the specified carbohydrate filter criteria.
      */
-    private Set<ItemDTO> getItemsFilteredByCarbs(Double value, Comparator comparator, Double maxValue) {
+    private Set<ItemDTO> getItemsFilteredByCarbs(Double value, Comparator comparator) {
         return switch (comparator) {
             case GREATER_THAN_OR_EQUAL ->
                     ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GIsGreaterThanEqual(value));
             case LESS_THAN_OR_EQUAL -> ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GIsLessThanEqual(value));
-            case BETWEEN -> ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GBetween(value, maxValue));
+            default -> new HashSet<>(); // Default case returns an empty set
         };
     }
 
@@ -204,15 +225,15 @@ public class ItemService {
      * Filters items based on their protein content using a specified comparison operator and value.
      *
      * @param value      the reference value of proteins to filter items by
-     * @param comparator the comparison operator to use for filtering (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, BETWEEN)
+     * @param comparator the comparison operator to use for filtering (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL)
      * @return a set of ItemDTO objects that match the filtering criteria
      */
-    private Set<ItemDTO> getItemsFilteredByProteins(Double value, Comparator comparator, Double maxValue) {
+    private Set<ItemDTO> getItemsFilteredByProteins(Double value, Comparator comparator) {
         return switch (comparator) {
             case GREATER_THAN_OR_EQUAL ->
                     ItemMapper.toDTOSet(itemRepository.findAllByProteinsIsGreaterThanEqual(value));
             case LESS_THAN_OR_EQUAL -> ItemMapper.toDTOSet(itemRepository.findAllByProteinsIsLessThanEqual(value));
-            case BETWEEN -> ItemMapper.toDTOSet(itemRepository.findAllByProteinsBetween(value, maxValue));
+            default -> new HashSet<>(); // Default case returns an empty set
         };
     }
 
@@ -220,15 +241,15 @@ public class ItemService {
      * Retrieves a set of ItemDTOs filtered by fat content based on the specified value and comparison operator.
      *
      * @param value      the fat content value to compare against
-     * @param comparator the comparison operator to use (GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, BETWEEN)
+     * @param comparator the comparison operator to use (GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL)
      * @return a set of ItemDTOs that match the specified fat content criteria
      */
-    private Set<ItemDTO> getItemsFilteredByFats(Double value, Comparator comparator, Double maxValue) {
+    private Set<ItemDTO> getItemsFilteredByFats(Double value, Comparator comparator) {
         return switch (comparator) {
             case GREATER_THAN_OR_EQUAL ->
                     ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GIsGreaterThanEqual(value));
             case LESS_THAN_OR_EQUAL -> ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
-            case BETWEEN -> ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GBetween(value, maxValue));
+            default -> new HashSet<>(); // Default case returns an empty set
         };
     }
 

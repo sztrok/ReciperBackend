@@ -145,6 +145,61 @@ class ItemControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+
+    @Test
+    void shouldGetItemsFilteredByMacrosInRange() throws Exception {
+        // Create and save test items
+        Item item1 = new Item("Item 1", 100D, 10.0, 5.0, 20.0);
+        Item item2 = new Item("Item 2", 200D, 15.0, 2.0, 10.0);
+        Item item3 = new Item("Item 3", 300D, 8.0, 6.0, 25.0);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+
+        String urlTemplate = "/api/v1/item/get/macro/range";
+
+        // Filter by proteins between 8 and 12
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "8.0")
+                        .param("maxValue", "12.0")
+                        .param("macros", "PROTEINS")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 3"));
+
+        // Filter by fats between 2 and 5
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "2.0")
+                        .param("maxValue", "5.0")
+                        .param("macros", "FATS")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"));
+
+        // Filter by carbs between 10 and 25
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "10.0")
+                        .param("maxValue", "25.0")
+                        .param("macros", "CARBS")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
+
+        // Filter by calories between 100 and 300
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "100.0")
+                        .param("maxValue", "300.0")
+                        .param("macros", "CALORIES")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
+    }
+
     @Test
     void shouldFilterItemsByMacrosAndCalories() throws Exception {
         // Create and save test items
