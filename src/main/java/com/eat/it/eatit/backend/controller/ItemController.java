@@ -4,7 +4,6 @@ import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.service.ItemService;
 import com.eat.it.eatit.backend.dto.ItemDTO;
-import org.hibernate.query.sqm.ComparisonOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +51,7 @@ public class ItemController {
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
         return itemService.addNewItem(item);
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
         return itemService.deleteItemById(id);
@@ -62,7 +61,6 @@ public class ItemController {
     public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         return itemService.updateItem(id, itemDTO);
     }
-
 
     @GetMapping("/get/macro")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
@@ -78,6 +76,14 @@ public class ItemController {
             @RequestParam Double maxValue,
             @RequestParam Macros macros) {
         return itemService.getItemsFilteredByMacrosInRange(minValue, maxValue, macros);
+    }
+
+    @GetMapping("get/macro/percentage")
+    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosPercentage(
+            @RequestParam Double minValue,
+            @RequestParam Double maxValue,
+            @RequestParam Macros macros) {
+        return itemService.getItemsFilteredByMacrosPercentage(minValue, maxValue, macros);
     }
 
 

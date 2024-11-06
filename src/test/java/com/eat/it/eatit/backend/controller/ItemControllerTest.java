@@ -165,8 +165,8 @@ class ItemControllerTest {
                         .param("macros", "PROTEINS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 3"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
 
         // Filter by fats between 2 and 5
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -184,9 +184,9 @@ class ItemControllerTest {
                         .param("macros", "CARBS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 1"));
 
         // Filter by calories between 100 and 300
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -195,9 +195,9 @@ class ItemControllerTest {
                         .param("macros", "CALORIES")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 1"));
     }
 
     @Test
@@ -285,5 +285,49 @@ class ItemControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+    }
+
+
+    @Test
+    void shouldGetItemsFilteredByMacrosPercentage() throws Exception {
+        // Create and save test items
+        Item item1 = new Item("Item 1", 100D, 20.0, 10.0, 70.0);
+        Item item2 = new Item("Item 2", 100D, 25.0, 5.0, 70.0);
+        Item item3 = new Item("Item 3", 100D, 15.0, 8.0, 77.0);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+
+        String urlTemplate = "/api/v1/item/get/macro/percentage";
+
+        // Filter by protein percentage between 15 and 25
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "15.0")
+                        .param("maxValue", "25.0")
+                        .param("macros", "PROTEINS")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+
+        // Filter by fat percentage between 5 and 10
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "5.0")
+                        .param("maxValue", "10.0")
+                        .param("macros", "FATS")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+
+        // Filter by carbs percentage between 70 and 75
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .param("minValue", "70.0")
+                        .param("maxValue", "75.0")
+                        .param("macros", "CARBS")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
     }
 }

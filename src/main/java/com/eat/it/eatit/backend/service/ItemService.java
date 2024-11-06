@@ -170,6 +170,44 @@ public class ItemService {
         };
     }
 
+
+    /**
+     * Retrieves a set of ItemDTO objects filtered by a specified macronutrient (e.g., fats, proteins, carbs)
+     * based on a percentage range specified by minimum and maximum values.
+     *
+     * @param minValue The minimum percentage value used for filtering the items.
+     * @param maxValue The maximum percentage value used for filtering the items.
+     * @param macros   The macronutrient by which to filter the items (fats, proteins, carbs).
+     * @return A ResponseEntity containing a set of filtered ItemDTO objects.
+     */
+    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosPercentage(Double minValue, Double maxValue, Macros macros) {
+
+        if (minValue > 100 || maxValue > 100 || macros == Macros.CALORIES) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        double macrosCaloriesMin = 0.0;
+        double macrosCaloriesMax = 0.0;
+        switch (macros) {
+            case FATS -> {
+                macrosCaloriesMin = minValue * 9.0;
+                macrosCaloriesMax = maxValue * 9.0;
+            }
+            case CARBS, PROTEINS -> {
+                macrosCaloriesMin = minValue * 4.0;
+                macrosCaloriesMax = maxValue * 4.0;
+            }
+        }
+
+        return switch (macros) {
+            case FATS -> getItemsFilteredByMacrosInRange(macrosCaloriesMin, macrosCaloriesMax, Macros.FATS);
+            case PROTEINS -> getItemsFilteredByMacrosInRange(macrosCaloriesMin, macrosCaloriesMax, Macros.PROTEINS);
+            case CARBS -> getItemsFilteredByMacrosInRange(macrosCaloriesMin, macrosCaloriesMax, Macros.CARBS);
+            default -> ResponseEntity.noContent().build();
+        };
+    }
+
+
     /**
      * Retrieves a set of ItemDTO objects filtered by a specified macronutrient (e.g., calories, fats, proteins, carbs)
      * based on a comparison operator and threshold value.
