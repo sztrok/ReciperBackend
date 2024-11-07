@@ -19,11 +19,6 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Success";
-    }
-
     @GetMapping("/get/id/{id}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
         return recipeService.getRecipeById(id);
@@ -38,4 +33,8 @@ public class RecipeController {
     public ResponseEntity<RecipeDTO> addNewRecipe(@RequestBody RecipeDTO recipeDTO) {
         return recipeService.addNewRecipe(recipeDTO);
     }
+    // TODO: delete,
+    //  update wybranych pól,
+    //  zmiana cookware,
+    //  zmiana itemów (musze zrobic ItemInRecipe????)
 }
