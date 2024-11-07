@@ -29,12 +29,17 @@ public class FridgeController {
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
-        return fridgeService.getFridgeById(id);
+        FridgeDTO fridge = fridgeService.getFridgeById(id);
+        if(fridge == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(fridge);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<FridgeDTO>> getAllFridges() {
-        return fridgeService.getAllFridges();
+        List<FridgeDTO> fridges = fridgeService.getAllFridges();
+        return ResponseEntity.ok(fridges);
     }
 
 }

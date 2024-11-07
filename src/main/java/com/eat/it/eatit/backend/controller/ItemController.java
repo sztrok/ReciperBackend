@@ -26,7 +26,7 @@ public class ItemController {
     @GetMapping("/get/id/{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         ItemDTO item = itemService.getItemById(id);
-        if(item == null) {
+        if (item == null) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(item);
@@ -41,7 +41,7 @@ public class ItemController {
     @GetMapping("/get/name/{name}")
     public ResponseEntity<ItemDTO> getItemByName(@PathVariable String name) {
         ItemDTO item = itemService.getItemByName(name);
-        if(item == null) {
+        if (item == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(item);
@@ -70,7 +70,7 @@ public class ItemController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
         boolean res = itemService.deleteItemById(id);
-        if(res) {
+        if (res) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.noContent().build();
@@ -79,7 +79,7 @@ public class ItemController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         ItemDTO updatedItem = itemService.updateItem(id, itemDTO);
-        if(updatedItem == null) {
+        if (updatedItem == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(updatedItem);

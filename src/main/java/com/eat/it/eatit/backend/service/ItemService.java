@@ -210,11 +210,11 @@ public class ItemService {
         Set<Item> items = itemRepository.findAllByItemTypeIn(types);
         return ItemMapper.toDTOSet(items);
     }
-    
+
     /**
      * Filters items based on their calorie content according to the specified comparator.
      *
-     * @param value The calorie value to compare against.
+     * @param value      The calorie value to compare against.
      * @param comparator The comparator to use for filtering items (e.g., GREATER_THAN_OR_EQUAL or LESS_THAN_OR_EQUAL).
      * @return A set of ItemDTOs that match the filtering criteria.
      */
@@ -231,7 +231,7 @@ public class ItemService {
     /**
      * Filters items by their carbohydrate content based on the provided comparator.
      *
-     * @param value The value to compare against the carbohydrate content of the items.
+     * @param value      The value to compare against the carbohydrate content of the items.
      * @param comparator The comparator to determine the filter condition (greater than or equal to, less than or equal to).
      * @return A set of ItemDTOs that match the specified carbohydrate filter criteria.
      */
@@ -247,7 +247,7 @@ public class ItemService {
     /**
      * Filters items based on their protein content using the specified comparator.
      *
-     * @param value the protein value to be used for filtering items.
+     * @param value      the protein value to be used for filtering items.
      * @param comparator the comparator to determine whether to filter items with proteins
      *                   greater than or equal to, or less than or equal to the given value.
      * @return a set of ItemDTOs filtered by the specified protein value and comparator.
@@ -264,7 +264,7 @@ public class ItemService {
     /**
      * Retrieves a set of items filtered based on their fat content per 100 grams.
      *
-     * @param value The fat content value to filter the items by.
+     * @param value      The fat content value to filter the items by.
      * @param comparator The comparison operation to apply (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL).
      * @return A set of items that match the specified fat content criteria, converted into ItemDTO objects.
      */
@@ -288,14 +288,14 @@ public class ItemService {
     }
 
 
-
     /**
      * Filters a set of items based on the percentage of a specific macronutrient (FATS, PROTEINS, or CARBS) within a given range.
      *
-     * @param items The set of ItemDTO objects to filter.
+     * @param items         The set of ItemDTO objects to filter.
      * @param minPercentage The minimum percentage of the specified macronutrient.
      * @param maxPercentage The maximum percentage of the specified macronutrient.
-     * @param macros The macronutr*/
+     * @param macros        The macronutr
+     */
     private Set<ItemDTO> filterItemsByMacrosPercentage(Set<ItemDTO> items, Double minPercentage, Double maxPercentage, Macros macros) {
         return items.stream().filter(item -> {
             double perc;
