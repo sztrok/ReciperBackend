@@ -1,6 +1,7 @@
 package com.eat.it.eatit.backend.repository;
 
 import com.eat.it.eatit.backend.data.Item;
+import com.eat.it.eatit.backend.enums.ItemType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Item findByNameIgnoreCase(String name);
 
     Item findByBarcode(Long barcode);
+
+    Set<Item> findAllByCaloriesPer100gNotNull();
+
+    Set<Item> findAllByItemTypeIn(Set<ItemType> types);
 
     Set<Item> findAllByNameContainsIgnoreCase(String name);
 

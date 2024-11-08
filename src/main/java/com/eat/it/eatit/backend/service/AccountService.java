@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,7 @@ public class AccountService {
      * @param accountDTO the data transfer object containing account details to be added
      * @return a ResponseEntity containing the AccountDTO of the newly created account
      */
+    @Transactional
     public ResponseEntity<AccountDTO> addNewAccount(AccountDTO accountDTO) {
         String encryptedPassword = passwordEncoder.encode(accountDTO.getPassword());
         accountDTO.setPassword(encryptedPassword);
@@ -99,6 +101,7 @@ public class AccountService {
      * @return a ResponseEntity containing an OK response if the account is found and deleted,
      *         or a 404 Not Found response if the account is not found
      */
+    @Transactional
     public ResponseEntity<AccountDTO> deleteAccountById(Long id) {
         Account account = findAccount(id);
         if (account == null) {
@@ -116,6 +119,7 @@ public class AccountService {
      * @return a ResponseEntity containing the updated AccountDTO if the update is successful,
      *         or a 404 Not Found response if the account is not found
      */
+    @Transactional
     public ResponseEntity<AccountDTO> updateAccountById(Long id, AccountDTO accountDTO) {
         Account account = findAccount(id);
         if (account == null) {
@@ -139,6 +143,7 @@ public class AccountService {
      * @return a ResponseEntity containing the updated set of RecipeDTO objects associated with the account,
      *         or a 404 Not Found response if the account is not found
      */
+    @Transactional
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(Long id, Set<RecipeDTO> recipes) {
         Account account = findAccount(id);
         if (account == null) {

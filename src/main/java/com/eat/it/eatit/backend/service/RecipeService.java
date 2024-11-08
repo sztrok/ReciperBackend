@@ -7,6 +7,7 @@ import com.eat.it.eatit.backend.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ public class RecipeService {
      * @param recipeDTO the RecipeDTO object containing the details of the new recipe to be added
      * @return a ResponseEntity containing the added RecipeDTO object
      */
+    @Transactional
     public ResponseEntity<RecipeDTO> addNewRecipe(RecipeDTO recipeDTO) {
         Recipe recipe = RecipeMapper.toEntity(recipeDTO);
         recipe = recipeRepository.save(recipe);

@@ -22,19 +22,61 @@ public class FridgeController {
         this.fridgeService = fridgeService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Success";
-    }
-
     @GetMapping("/get/id/{id}")
     public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
-        return fridgeService.getFridgeById(id);
+        FridgeDTO fridge = fridgeService.getFridgeById(id);
+        if (fridge == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(fridge);
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<FridgeDTO>> getAllFridges() {
-        return fridgeService.getAllFridges();
+        List<FridgeDTO> fridges = fridgeService.getAllFridges();
+        return ResponseEntity.ok(fridges);
     }
+
+    @PostMapping("/add_item")
+    public ResponseEntity<FridgeDTO> addItemToFridge(
+            @RequestParam Long itemId,
+            @RequestParam Long fridgeId,
+            @RequestParam Double amount
+    ) {
+        FridgeDTO fridgeDTO = fridgeService.addItemToFridge(itemId, fridgeId, amount);
+        if (fridgeDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(fridgeDTO);
+    }
+
+    @PatchMapping("/reduce_item_amount")
+    public ResponseEntity<FridgeDTO> reduceItemAmount(
+            @RequestParam Long itemId,
+            @RequestParam Long fridgeId,
+            @RequestParam Double amount
+    ) {
+
+        FridgeDTO fridgeDTO = fridgeService.reduceItemAmount(itemId, fridgeId, amount);
+        if (fridgeDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(fridgeDTO);
+    }
+
+    @PatchMapping("/increase_item_amount")
+    public ResponseEntity<FridgeDTO> increaseItemAmount(
+            @RequestParam Long itemId,
+            @RequestParam Long fridgeId,
+            @RequestParam Double amount
+    ) {
+
+        FridgeDTO fridgeDTO = fridgeService.increaseItemAmount(itemId, fridgeId, amount);
+        if (fridgeDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(fridgeDTO);
+    }
+
 
 }
