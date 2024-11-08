@@ -9,6 +9,7 @@ import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 
@@ -103,6 +104,7 @@ public class ItemService {
      * @param item the ItemDTO object containing item details to be added
      * @return the saved ItemDTO
      */
+    @Transactional
     public ItemDTO addNewItem(ItemDTO item) {
         Item newItem = ItemMapper.toEntity(item);
         Item savedItem = itemRepository.save(newItem);
@@ -117,6 +119,7 @@ public class ItemService {
      * @param id      the unique identifier of the item to be updated
      * @param itemDTO the data transfer object containing the updated values
      **/
+    @Transactional
     public ItemDTO updateItem(Long id, ItemDTO itemDTO) {
         Item item = findItem(id);
         if (item == null) {
@@ -140,6 +143,7 @@ public class ItemService {
      * @return a boolean indicating the result of the delete operation;
      * true if the item is deleted successfully, false if the item is not found
      */
+    @Transactional
     public boolean deleteItemById(Long id) {
         Item item = findItem(id);
         if (item == null) {
