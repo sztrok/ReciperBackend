@@ -23,7 +23,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/get/id/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         ItemDTO item = itemService.getItemById(id);
         if (item == null) {
@@ -38,8 +38,8 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/name/{name}")
-    public ResponseEntity<ItemDTO> getItemByName(@PathVariable String name) {
+    @GetMapping("/get/name")
+    public ResponseEntity<ItemDTO> getItemByName(@RequestParam String name) {
         ItemDTO item = itemService.getItemByName(name);
         if (item == null) {
             return ResponseEntity.badRequest().build();
@@ -47,13 +47,13 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @GetMapping("/get_all/name/{name}")
-    public Set<ItemDTO> getAllItemsContainingName(@PathVariable String name) {
+    @GetMapping("/get_all/name")
+    public Set<ItemDTO> getAllItemsContainingName(@RequestParam String name) {
         return itemService.getAllItemsContainingName(name);
     }
 
-    @GetMapping("/get/barcode/{barcode}")
-    public ResponseEntity<ItemDTO> getItemByBarcode(@PathVariable Long barcode) {
+    @GetMapping("/get/barcode")
+    public ResponseEntity<ItemDTO> getItemByBarcode(@RequestParam Long barcode) {
         ItemDTO item = itemService.getItemByBarcode(barcode);
         if (item == null) {
             return ResponseEntity.badRequest().build();
@@ -85,29 +85,61 @@ public class ItemController {
         return ResponseEntity.ok(updatedItem);
     }
 
+    @PatchMapping("/update_info")
+    public ResponseEntity<ItemDTO> updateItemInfo(
+            @RequestParam Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long barcode,
+            @RequestParam(required = false) ItemType itemType
+    ) {
+        boolean updatedItem = itemService.updateItemInfo(id, name, barcode, itemType);
+        if (!updatedItem) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/update_nutrition")
+    public ResponseEntity<ItemDTO> updateItemNutrition(
+            @RequestParam Long id,
+            @RequestParam(required = false) Double calories,
+            @RequestParam(required = false) Double proteins,
+            @RequestParam(required = false) Double fats,
+            @RequestParam(required = false) Double carbs
+    ) {
+        boolean updatedItem = itemService.updateItemNutrition(id, calories, proteins, fats, carbs);
+        if (!updatedItem) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/get/macro")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
             @RequestParam Double value,
             @RequestParam Macros macros,
-            @RequestParam Comparator comparator) {
+            @RequestParam Comparator comparator
+    ) {
         Set<ItemDTO> items = itemService.getItemsFilteredByMacros(value, macros, comparator);
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/macro/range")
+    @GetMapping("/get/macro_range")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosInRange(
             @RequestParam Double minValue,
             @RequestParam Double maxValue,
-            @RequestParam Macros macros) {
+            @RequestParam Macros macros
+    ) {
         Set<ItemDTO> items = itemService.getItemsFilteredByMacrosInRange(minValue, maxValue, macros);
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/macro/percentage")
+    @GetMapping("/get/macro_percentage")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosPercentage(
             @RequestParam Double minPercentage,
             @RequestParam Double maxPercentage,
-            @RequestParam Macros macros) {
+            @RequestParam Macros macros
+    ) {
         Set<ItemDTO> items = itemService.getItemsFilteredByMacrosPercentage(minPercentage, maxPercentage, macros);
         return ResponseEntity.ok(items);
     }

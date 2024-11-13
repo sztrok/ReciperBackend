@@ -19,7 +19,7 @@ public class CookwareController {
         this.cookwareService = cookwareService;
     }
 
-    @GetMapping("/get/id/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<CookwareDTO> getCookwareById(@PathVariable Long id) {
         return cookwareService.getCookwareById(id);
     }
