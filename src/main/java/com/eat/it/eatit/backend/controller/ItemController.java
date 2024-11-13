@@ -85,11 +85,41 @@ public class ItemController {
         return ResponseEntity.ok(updatedItem);
     }
 
+    @PatchMapping("/update_info")
+    public ResponseEntity<ItemDTO> updateItemInfo(
+            @RequestParam Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long barcode,
+            @RequestParam(required = false) ItemType itemType
+    ) {
+        boolean updatedItem = itemService.updateItemInfo(id, name, barcode, itemType);
+        if (!updatedItem) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/update_nutrition")
+    public ResponseEntity<ItemDTO> updateItemNutrition(
+            @RequestParam Long id,
+            @RequestParam(required = false) Double calories,
+            @RequestParam(required = false) Double proteins,
+            @RequestParam(required = false) Double fats,
+            @RequestParam(required = false) Double carbs
+    ) {
+        boolean updatedItem = itemService.updateItemNutrition(id, calories, proteins, fats, carbs);
+        if (!updatedItem) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/get/macro")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
             @RequestParam Double value,
             @RequestParam Macros macros,
-            @RequestParam Comparator comparator) {
+            @RequestParam Comparator comparator
+    ) {
         Set<ItemDTO> items = itemService.getItemsFilteredByMacros(value, macros, comparator);
         return ResponseEntity.ok(items);
     }
@@ -98,7 +128,8 @@ public class ItemController {
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosInRange(
             @RequestParam Double minValue,
             @RequestParam Double maxValue,
-            @RequestParam Macros macros) {
+            @RequestParam Macros macros
+    ) {
         Set<ItemDTO> items = itemService.getItemsFilteredByMacrosInRange(minValue, maxValue, macros);
         return ResponseEntity.ok(items);
     }
@@ -107,7 +138,8 @@ public class ItemController {
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosPercentage(
             @RequestParam Double minPercentage,
             @RequestParam Double maxPercentage,
-            @RequestParam Macros macros) {
+            @RequestParam Macros macros
+    ) {
         Set<ItemDTO> items = itemService.getItemsFilteredByMacrosPercentage(minPercentage, maxPercentage, macros);
         return ResponseEntity.ok(items);
     }

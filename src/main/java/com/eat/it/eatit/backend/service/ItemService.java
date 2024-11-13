@@ -136,6 +136,33 @@ public class ItemService {
         return ItemMapper.toDTO(item);
     }
 
+    @Transactional
+    public boolean updateItemInfo(Long id, String name, Long barcode, ItemType itemType) {
+        Item item = findItem(id);
+        if (item == null) {
+            return false;
+        }
+        updateField(name, item::setName);
+        updateField(barcode, item::setBarcode);
+        updateField(itemType, item::setItemType);
+        itemRepository.save(item);
+        return true;
+    }
+
+    @Transactional
+    public boolean updateItemNutrition(Long id, Double calories, Double proteins, Double fats, Double carbs) {
+        Item item = findItem(id);
+        if (item == null) {
+            return false;
+        }
+        updateField(calories, item::setCaloriesPer100g);
+        updateField(proteins, item::setProteins);
+        updateField(fats, item::setFatPer100G);
+        updateField(carbs, item::setCarbsPer100G);
+        itemRepository.save(item);
+        return true;
+    }
+
     /**
      * Deletes an item by its ID.
      *
@@ -298,7 +325,7 @@ public class ItemService {
      * @param items         The set of ItemDTO objects to filter.
      * @param minPercentage The minimum percentage of the specified macronutrient.
      * @param maxPercentage The maximum percentage of the specified macronutrient.
-     * @param macros        The macronutr
+     * @param macros        The macronutriment
      */
     private Set<ItemDTO> filterItemsByMacrosPercentage(Set<ItemDTO> items, Double minPercentage, Double maxPercentage, Macros macros) {
         return items.stream().filter(item -> {
