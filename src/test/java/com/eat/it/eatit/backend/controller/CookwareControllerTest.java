@@ -51,7 +51,6 @@ class CookwareControllerTest {
     void shouldCreateCookware() throws Exception {
         CookwareDTO newCookware = new CookwareDTO();
         newCookware.setName("New Pan");
-        // Perform the post request and validate the response
         String newCookwareJson = objectMapper.writeValueAsString(newCookware);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cookware/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +69,7 @@ class CookwareControllerTest {
 
     @Test
     void shouldGetCookwareById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/get/id/" + testCookware.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/get/" + testCookware.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testCookware.getName()));
@@ -94,7 +93,7 @@ class CookwareControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/get/id/" + testCookware.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/get/" + testCookware.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }

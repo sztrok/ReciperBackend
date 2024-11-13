@@ -66,7 +66,7 @@ class ItemControllerTest {
 
     @Test
     void shouldGetItemById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get/id/{id}", testItem.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get/{id}", testItem.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test Item"));
@@ -106,7 +106,8 @@ class ItemControllerTest {
 
     @Test
     void shouldGetItemByName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get/name/{name}", "Test Item")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get/name")
+                        .param("name", "Test Item")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test Item"));
@@ -114,7 +115,8 @@ class ItemControllerTest {
 
     @Test
     void shouldGetAllItemsByName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get_all/name/{name}", "Test Item")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get_all/name")
+                        .param("name", "Test Item")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Test Item"));
@@ -125,7 +127,8 @@ class ItemControllerTest {
         testItem.setBarcode(123456L);
         itemRepository.save(testItem);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get/barcode/{barcode}", 123456L)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/get/barcode")
+                        .param("barcode", "123456")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.barcode").value(123456L));
@@ -133,14 +136,14 @@ class ItemControllerTest {
 
     @Test
     void shouldHandleNonExistentItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/items/{id}", Long.MAX_VALUE)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/items/get/{id}", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void shouldHandleInvalidItemId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/items/invalid-id")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/items/get/{invalid-id}", "invalid id")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -156,7 +159,7 @@ class ItemControllerTest {
         itemRepository.save(item2);
         itemRepository.save(item3);
 
-        String urlTemplate = "/api/v1/item/get/macro/range";
+        String urlTemplate = "/api/v1/item/get/macro_range";
 
         // Filter by proteins between 8 and 12
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -297,7 +300,7 @@ class ItemControllerTest {
         itemRepository.save(item2);
         itemRepository.save(item3);
 
-        String urlTemplate = "/api/v1/item/get/macro/percentage";
+        String urlTemplate = "/api/v1/item/get/macro_percentage";
 
         // Filter by proteins percentage between 8 and 12
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
