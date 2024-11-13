@@ -19,7 +19,7 @@ public class RecipeMapper {
                 recipe.getId(),
                 recipe.getName(),
                 recipe.getDescription(),
-                ItemMapper.toDTOSet(recipe.getItems()),
+                ItemInRecipeMapper.toDTOSet(recipe.getItems()),
                 CookwareMapper.toDTOSet(recipe.getCookware()),
                 recipe.getTotalCalories());
     }
@@ -31,7 +31,7 @@ public class RecipeMapper {
         return new Recipe(
                 recipeDTO.getName(),
                 recipeDTO.getDescription(),
-                ItemMapper.toEntitySet(recipeDTO.getItems()),
+                ItemInRecipeMapper.toEntitySet(recipeDTO.getItems()),
                 CookwareMapper.toEntitySet(recipeDTO.getCookware()),
                 recipeDTO.getTotalCalories());
     }
@@ -47,7 +47,7 @@ public class RecipeMapper {
                             recipe.getId(),
                             recipe.getName(),
                             recipe.getDescription(),
-                            ItemMapper.toDTOSet(recipe.getItems()),
+                            ItemInRecipeMapper.toDTOSet(recipe.getItems()),
                             CookwareMapper.toDTOSet(recipe.getCookware()),
                             recipe.getTotalCalories()));
         }
@@ -64,7 +64,7 @@ public class RecipeMapper {
                     new Recipe(
                             recipe.getName(),
                             recipe.getDescription(),
-                            ItemMapper.toEntitySet(recipe.getItems()),
+                            ItemInRecipeMapper.toEntitySet(recipe.getItems()),
                             CookwareMapper.toEntitySet(recipe.getCookware()),
                             recipe.getTotalCalories()));
         }

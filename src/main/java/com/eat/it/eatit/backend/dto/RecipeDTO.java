@@ -14,11 +14,11 @@ public class RecipeDTO {
     private Long id;
     private String name;
     private String description;
-    private Set<ItemDTO> items;
+    private Set<ItemInRecipeDTO> items;
     private Set<CookwareDTO> cookware;
     private Integer totalCalories;
 
-    public RecipeDTO(@Nullable Long id, String name, String description, Set<ItemDTO> items, Set<CookwareDTO> cookware, Integer totalCalories) {
+    public RecipeDTO(@Nullable Long id, String name, String description, Set<ItemInRecipeDTO> items, Set<CookwareDTO> cookware, Integer totalCalories) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -27,7 +27,7 @@ public class RecipeDTO {
         this.totalCalories = totalCalories;
     }
 
-    public RecipeDTO(String name, String description, Set<ItemDTO> items, Set<CookwareDTO> cookware, Integer totalCalories) {
+    public RecipeDTO(String name, String description, Set<ItemInRecipeDTO> items, Set<CookwareDTO> cookware, Integer totalCalories) {
         this.name = name;
         this.description = description;
         this.items = items;
