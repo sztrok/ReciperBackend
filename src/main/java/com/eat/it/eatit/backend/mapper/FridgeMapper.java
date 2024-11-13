@@ -16,6 +16,7 @@ public class FridgeMapper {
             return new FridgeDTO();
         }
         return new FridgeDTO(
+                fridge.getId(),
                 fridge.getOwnerId(),
                 ItemInFridgeMapper.toDTOSet(fridge.getItems()));
     }
@@ -37,6 +38,7 @@ public class FridgeMapper {
         for (Fridge fridge : fridges) {
             fridgeDTOSet.add(
                     new FridgeDTO(
+                            fridge.getId(),
                             fridge.getOwnerId(),
                             ItemInFridgeMapper.toDTOSet(fridge.getItems())
                     ));

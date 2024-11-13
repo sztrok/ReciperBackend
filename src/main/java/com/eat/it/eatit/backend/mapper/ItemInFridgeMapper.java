@@ -35,6 +35,7 @@ public class ItemInFridgeMapper {
         for (ItemInFridge item : items) {
             itemInFridgeDTOSet.add(
                     new ItemInFridgeDTO(
+                            item.getId(),
                             item.getFridgeId(),
                             ItemMapper.toDTO(item.getItem()),
                             item.getAmount()

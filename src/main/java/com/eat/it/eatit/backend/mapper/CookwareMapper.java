@@ -15,7 +15,9 @@ public class CookwareMapper {
         if(cookware == null) {
             return new CookwareDTO();
         }
-        return new CookwareDTO(cookware.getName());
+        return new CookwareDTO(
+                cookware.getId(),
+                cookware.getName());
     }
 
     public static Cookware toEntity(CookwareDTO cookwareDTO) {
@@ -31,7 +33,9 @@ public class CookwareMapper {
         }
         Set<CookwareDTO> cookwareDTOSet = new HashSet<>();
         for(Cookware cookware : cookwareSet) {
-            cookwareDTOSet.add(new CookwareDTO(cookware.getName()));
+            cookwareDTOSet.add(new CookwareDTO(
+                    cookware.getId(),
+                    cookware.getName()));
         }
         return cookwareDTOSet;
     }

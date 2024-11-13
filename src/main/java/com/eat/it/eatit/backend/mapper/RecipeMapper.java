@@ -16,6 +16,7 @@ public class RecipeMapper {
             return new RecipeDTO();
         }
         return new RecipeDTO(
+                recipe.getId(),
                 recipe.getName(),
                 recipe.getDescription(),
                 ItemMapper.toDTOSet(recipe.getItems()),
@@ -43,6 +44,7 @@ public class RecipeMapper {
         for(Recipe recipe: recipeSet) {
             recipeDTOSet.add(
                     new RecipeDTO(
+                            recipe.getId(),
                             recipe.getName(),
                             recipe.getDescription(),
                             ItemMapper.toDTOSet(recipe.getItems()),
