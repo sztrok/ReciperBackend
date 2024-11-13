@@ -16,4 +16,8 @@ public class CookwareDTO {
         this.id = id;
         this.name = name;
     }
+
+    public CookwareDTO(String name) {
+        this.name = name;
+    }
 }

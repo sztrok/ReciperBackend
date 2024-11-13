@@ -20,4 +20,10 @@ public class ItemInFridgeDTO {
         this.item = item;
         this.amount = amount;
     }
+
+    public ItemInFridgeDTO(Long fridgeId, ItemDTO item, Double amount) {
+        this.fridgeId = fridgeId;
+        this.item = item;
+        this.amount = amount;
+    }
 }

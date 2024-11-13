@@ -58,7 +58,7 @@ class RecipeControllerTest {
 
     @Test
     void testGetRecipeById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/recipe/get/id/{id}", testRecipe.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/recipe/get/{id}", testRecipe.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testRecipe.getName()))

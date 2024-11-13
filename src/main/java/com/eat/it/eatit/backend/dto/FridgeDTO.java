@@ -20,4 +20,9 @@ public class FridgeDTO {
         this.ownerId = ownerId;
         this.items = items;
     }
+
+    public FridgeDTO(Long ownerId, Set<ItemInFridgeDTO> items) {
+        this.ownerId = ownerId;
+        this.items = items;
+    }
 }
