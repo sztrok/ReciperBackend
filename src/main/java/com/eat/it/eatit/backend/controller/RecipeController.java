@@ -19,7 +19,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/get/id/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
         return recipeService.getRecipeById(id);
     }

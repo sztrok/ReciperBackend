@@ -26,7 +26,7 @@ public class AccountController {
         return "Success";
     }
 
-    @GetMapping(value = "/get/id/{id}")
+    @GetMapping(value = "/get/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
         return accountService.getAccountById(id);
     }
@@ -51,7 +51,7 @@ public class AccountController {
         return accountService.updateAccountById(id, accountDTO);
     }
 
-    @PutMapping(value = "/update/{id}/recipe")
+    @PutMapping(value = "/add_recipes/{id}/")
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
         return accountService.addRecipesToAccount(id, recipeDTOS);
     }

@@ -22,7 +22,7 @@ public class FridgeController {
         this.fridgeService = fridgeService;
     }
 
-    @GetMapping("/get/id/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
         FridgeDTO fridge = fridgeService.getFridgeById(id);
         if (fridge == null) {
@@ -77,6 +77,5 @@ public class FridgeController {
         }
         return ResponseEntity.ok(fridgeDTO);
     }
-
 
 }
