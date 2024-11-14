@@ -13,6 +13,7 @@ public class AccountMapper {
             return new AccountDTO();
         }
         return new AccountDTO(
+                account.getId(),
                 account.getUsername(),
                 account.getMail(),
                 account.getPassword(),

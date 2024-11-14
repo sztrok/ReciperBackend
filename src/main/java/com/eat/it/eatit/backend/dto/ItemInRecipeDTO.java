@@ -6,23 +6,23 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ItemInFridgeDTO {
+public class ItemInRecipeDTO {
 
     @Nullable
     private Long id;
-    private Long fridgeId;
+    private Long recipeId;
     private ItemDTO item;
     private Double amount;
 
-    public ItemInFridgeDTO(@Nullable Long id, Long fridgeId, ItemDTO item, Double amount) {
+    public ItemInRecipeDTO(@Nullable Long id, Long recipeId, ItemDTO item, Double amount) {
         this.id = id;
-        this.fridgeId = fridgeId;
+        this.recipeId = recipeId;
         this.item = item;
         this.amount = amount;
     }
 
-    public ItemInFridgeDTO(Long fridgeId, ItemDTO item, Double amount) {
-        this.fridgeId = fridgeId;
+    public ItemInRecipeDTO(Long recipeId, ItemDTO item, Double amount) {
+        this.recipeId = recipeId;
         this.item = item;
         this.amount = amount;
     }

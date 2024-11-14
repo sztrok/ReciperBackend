@@ -7,6 +7,7 @@ import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.ItemRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -328,16 +329,33 @@ public class ItemService {
      * @param macros        The macronutriment
      */
     private Set<ItemDTO> filterItemsByMacrosPercentage(Set<ItemDTO> items, Double minPercentage, Double maxPercentage, Macros macros) {
-        return items.stream().filter(item -> {
-            double perc;
-            switch (macros) {
-                case FATS -> perc = ((item.getFatPer100G() * 9) / item.getCaloriesPer100g()) * 100;
-                case PROTEINS -> perc = ((item.getProteins() * 4) / item.getCaloriesPer100g()) * 100;
-                case CARBS -> perc = ((item.getCarbsPer100G() * 4) / item.getCaloriesPer100g()) * 100;
-                default -> throw new IllegalStateException("Unexpected value: " + macros);
-            }
-            return perc >= minPercentage && perc <= maxPercentage;
-        }).collect(Collectors.toSet());
+        return items.stream()
+                .map(item -> new ItemWithMacrosPercentage(item, getMacrosPercentage(item, macros)))
+                .filter(item -> item.macrosPercentage >= minPercentage && item.macrosPercentage <= maxPercentage)
+                .map(ItemWithMacrosPercentage::getItem)
+                .collect(Collectors.toSet());
+    }
+
+    private Double getMacrosPercentage(ItemDTO item, Macros macros) {
+        double perc;
+        switch (macros) {
+            case FATS -> perc = ((item.getFatPer100G() * 9) / item.getCaloriesPer100g()) * 100;
+            case PROTEINS -> perc = ((item.getProteins() * 4) / item.getCaloriesPer100g()) * 100;
+            case CARBS -> perc = ((item.getCarbsPer100G() * 4) / item.getCaloriesPer100g()) * 100;
+            default -> throw new IllegalStateException("Unexpected value: " + macros);
+        }
+        return perc;
+    }
+
+    @Data
+    private static class ItemWithMacrosPercentage {
+        ItemDTO item;
+        Double macrosPercentage;
+
+        public ItemWithMacrosPercentage(ItemDTO item, Double macrosPercentage) {
+            this.item = item;
+            this.macrosPercentage = macrosPercentage;
+        }
     }
 
 }

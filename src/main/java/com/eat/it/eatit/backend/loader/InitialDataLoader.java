@@ -28,6 +28,7 @@ class InitialDataLoader {
     private final FridgeRepository fridgeRepository;
     private final CookwareRepository cookwareRepository;
     private final ItemInFridgeRepository itemInFridgeRepository;
+    private final ItemInRecipeRepository itemInRecipeRepository;
     private final PasswordEncoder passwordEncoder;
     private final Random random = new Random();
 
@@ -38,6 +39,7 @@ class InitialDataLoader {
                              FridgeRepository fridgeRepository,
                              CookwareRepository cookwareRepository,
                              ItemInFridgeRepository itemInFridgeRepository,
+                             ItemInRecipeRepository itemInRecipeRepository,
                              PasswordEncoder passwordEncoder
     ) {
         this.accountRepository = accountRepository;
@@ -46,6 +48,7 @@ class InitialDataLoader {
         this.fridgeRepository = fridgeRepository;
         this.cookwareRepository = cookwareRepository;
         this.itemInFridgeRepository = itemInFridgeRepository;
+        this.itemInRecipeRepository = itemInRecipeRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -195,20 +198,23 @@ class InitialDataLoader {
             itemInFridgeRepository.saveAll(addedItems);
             fridge.setItems(addedItems);
             fridgeRepository.save(fridge);
-
         }
-//        itemInFridgeRepository.saveAll(allItems);
+    }
 
-
-//        for(Fridge fridge : fridges) {
-//            Set<Item> addedItems = new HashSet<>();
-//            for(int i=0; i<7; i++) {
-//                addedItems.add(items.get(random.nextInt(items.size())));
-//            }
-//            fridge.setItems(addedItems);
-//            fridgeRepository.save(fridge);
-//        }
-//        itemRepository.saveAll(items);
+    private void linkRecipeAndItems(List<Recipe> recipes, List<Item> items) {
+        for (Recipe recipe : recipes) {
+            Set<ItemInRecipe> addedItems = new HashSet<>();
+            for (int i = 0; i < 7; i++) {
+                ItemInRecipe itemInRecipe = new ItemInRecipe();
+                itemInRecipe.setRecipeId(recipe.getId());
+                itemInRecipe.setAmount(random.nextDouble(10, 300));
+                itemInRecipe.setItem(items.get(random.nextInt(items.size())));
+                addedItems.add(itemInRecipe);
+            }
+            itemInRecipeRepository.saveAll(addedItems);
+            recipe.setItems(addedItems);
+            recipeRepository.save(recipe);
+        }
     }
 
     private void linkCookwareAndRecipes(List<Cookware> cookwares, List<Recipe> recipes) {
@@ -231,18 +237,6 @@ class InitialDataLoader {
         }
     }
 
-    private void linkRecipeAndItems(List<Recipe> recipes, List<Item> items) {
-        for (Recipe recipe : recipes) {
-            Set<Item> addedItems = new HashSet<>();
-            for (int i = 0; i < 7; i++) {
-                addedItems.add(items.get(random.nextInt(items.size())));
-            }
-            recipe.setItems(addedItems);
-            recipeRepository.save(recipe);
-        }
-        itemRepository.saveAll(items);
-    }
-
     private void linkAccountAndRecipes(List<Account> accounts, List<Recipe> recipes) {
 
         accounts.get(0).setRecipes(Set.of(recipes.get(0), recipes.get(1), recipes.get(2)));
@@ -250,11 +244,7 @@ class InitialDataLoader {
         accounts.get(5).setRecipes(Set.of(recipes.get(5), recipes.get(6)));
         accounts.get(6).setRecipes(Set.of(recipes.get(7)));
         accounts.get(9).setRecipes(Set.of(recipes.get(10), recipes.get(11), recipes.get(12), recipes.get(13), recipes.get(14), recipes.get(15)));
-
         recipeRepository.saveAll(recipes);
-
     }
-
-//    private void addItemsToFridge
 
 }

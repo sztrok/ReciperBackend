@@ -16,6 +16,7 @@ public class ItemMapper {
             return new ItemDTO();
         }
         return new ItemDTO(
+                item.getId(),
                 item.getName(),
                 item.getBarcode(),
                 item.getCaloriesPer100g(),
@@ -49,6 +50,7 @@ public class ItemMapper {
         for(Item item: items) {
             itemDTOSet.add(
                     new ItemDTO(
+                            item.getId(),
                             item.getName(),
                             item.getBarcode(),
                             item.getCaloriesPer100g(),
@@ -82,6 +84,4 @@ public class ItemMapper {
         }
         return itemEntitySet;
     }
-
-
 }

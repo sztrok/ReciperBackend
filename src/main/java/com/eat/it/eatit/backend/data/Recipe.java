@@ -24,14 +24,14 @@ public class Recipe {
     private String description;
 
     @ManyToMany
-    private Set<Item> items;
+    private Set<ItemInRecipe> items;
 
     @ManyToMany
     private Set<Cookware> cookware;
 
     private Integer totalCalories;
 
-    public Recipe(String name, String description, Set<Item> items, Set<Cookware> cookware, Integer totalCalories) {
+    public Recipe(String name, String description, Set<ItemInRecipe> items, Set<Cookware> cookware, Integer totalCalories) {
         this.name = name;
         this.description = description;
         this.items = items;
