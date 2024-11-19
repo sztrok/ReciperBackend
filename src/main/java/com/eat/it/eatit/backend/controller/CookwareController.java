@@ -19,28 +19,38 @@ public class CookwareController {
         this.cookwareService = cookwareService;
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CookwareDTO> getCookwareById(@PathVariable Long id) {
-        return cookwareService.getCookwareById(id);
+        CookwareDTO cookware = cookwareService.getCookwareById(id);
+        return cookware != null
+                ? ResponseEntity.ok(cookware)
+                : ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/all")
     public ResponseEntity<List<CookwareDTO>> getAllCookwares() {
-        return cookwareService.getAllCookwares();
+        List<CookwareDTO> cookwares = cookwareService.getAllCookwares();
+        return ResponseEntity.ok(cookwares);
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<CookwareDTO> addNewCookware(@RequestBody CookwareDTO cookwareDTO) {
-        return cookwareService.addNewCookware(cookwareDTO);
+        CookwareDTO cookware = cookwareService.addNewCookware(cookwareDTO);
+        return ResponseEntity.ok(cookware);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = "application/json")
-    public ResponseEntity<CookwareDTO> updateCookware(@PathVariable Long id, @RequestBody CookwareDTO cookwareDTO) {
-        return cookwareService.updateCookware(id, cookwareDTO);
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<CookwareDTO> updateCookware(@PathVariable Long id, @RequestParam String name) {
+        CookwareDTO cookware = cookwareService.updateCookware(id, name);
+        return cookware != null
+                ? ResponseEntity.ok(cookware)
+                : ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCookware(@PathVariable Long id) {
-        return cookwareService.deleteCookware(id);
+        return cookwareService.deleteCookware(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 }

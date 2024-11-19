@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.FridgeDTO;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FridgeMapper {
 
@@ -34,30 +35,13 @@ public class FridgeMapper {
         if (fridges == null) {
             return new HashSet<>();
         }
-        Set<FridgeDTO> fridgeDTOSet = new HashSet<>();
-        for (Fridge fridge : fridges) {
-            fridgeDTOSet.add(
-                    new FridgeDTO(
-                            fridge.getId(),
-                            fridge.getOwnerId(),
-                            ItemInFridgeMapper.toDTOSet(fridge.getItems())
-                    ));
-        }
-        return fridgeDTOSet;
+        return fridges.stream().map(FridgeMapper::toDTO).collect(Collectors.toSet());
     }
 
     public static Set<Fridge> toEntitySet(Set<FridgeDTO> fridgeDTOSet) {
         if (fridgeDTOSet == null) {
             return new HashSet<>();
         }
-        Set<Fridge> fridgeSet = new HashSet<>();
-        for (FridgeDTO fridgeDTO : fridgeDTOSet) {
-            fridgeSet.add(
-                    new Fridge(
-                            fridgeDTO.getOwnerId(),
-                            ItemInFridgeMapper.toEntitySet(fridgeDTO.getItems())
-                    ));
-        }
-        return fridgeSet;
+        return fridgeDTOSet.stream().map(FridgeMapper::toEntity).collect(Collectors.toSet());
     }
 }

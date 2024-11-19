@@ -22,22 +22,22 @@ public class FridgeController {
         this.fridgeService = fridgeService;
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
         FridgeDTO fridge = fridgeService.getFridgeById(id);
         if (fridge == null) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(fridge);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/all")
     public ResponseEntity<List<FridgeDTO>> getAllFridges() {
         List<FridgeDTO> fridges = fridgeService.getAllFridges();
         return ResponseEntity.ok(fridges);
     }
 
-    @PostMapping("/add_item")
+    @PostMapping("/new")
     public ResponseEntity<FridgeDTO> addItemToFridge(
             @RequestParam Long itemId,
             @RequestParam Long fridgeId,

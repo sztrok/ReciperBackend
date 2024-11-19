@@ -5,7 +5,6 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
-import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.ItemRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
+import static com.eat.it.eatit.backend.mapper.ItemMapper.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public class ItemService {
         if (item == null) {
             return null;
         }
-        return ItemMapper.toDTO(item);
+        return toDTO(item);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ItemService {
         List<Item> items = itemRepository.findAll();
         List<ItemDTO> itemDTOList = new ArrayList<>();
         for (Item i : items) {
-            itemDTOList.add(ItemMapper.toDTO(i));
+            itemDTOList.add(toDTO(i));
         }
         return itemDTOList;
     }
@@ -72,7 +72,7 @@ public class ItemService {
         if (item == null) {
             return null;
         }
-        return ItemMapper.toDTO(item);
+        return toDTO(item);
     }
 
     /**
@@ -82,7 +82,7 @@ public class ItemService {
      * @return a set of ItemDTO objects containing the specified name
      */
     public Set<ItemDTO> getAllItemsContainingName(String name) {
-        return ItemMapper.toDTOSet(itemRepository.findAllByNameContainsIgnoreCase(name));
+        return toDTOSet(itemRepository.findAllByNameContainsIgnoreCase(name));
     }
 
     /**
@@ -96,7 +96,7 @@ public class ItemService {
         if (item == null) {
             return null;
         }
-        return ItemMapper.toDTO(item);
+        return toDTO(item);
     }
 
     /**
@@ -107,9 +107,9 @@ public class ItemService {
      */
     @Transactional
     public ItemDTO addNewItem(ItemDTO item) {
-        Item newItem = ItemMapper.toEntity(item);
+        Item newItem = toEntity(item);
         Item savedItem = itemRepository.save(newItem);
-        return ItemMapper.toDTO(savedItem);
+        return toDTO(savedItem);
     }
 
     /**
@@ -133,8 +133,8 @@ public class ItemService {
         updateField(itemDTO.getFatPer100G(), item::setFatPer100G);
         updateField(itemDTO.getCarbsPer100G(), item::setCarbsPer100G);
         updateField(itemDTO.getItemType(), item::setItemType);
-        itemRepository.save(item);
-        return ItemMapper.toDTO(item);
+        Item saved = itemRepository.save(item);
+        return toDTO(saved);
     }
 
     @Transactional
@@ -191,10 +191,10 @@ public class ItemService {
      */
     public Set<ItemDTO> getItemsFilteredByMacrosInRange(Double minValue, Double maxValue, Macros macros) {
         return switch (macros) {
-            case CALORIES -> ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gBetween(minValue, maxValue));
-            case FATS -> ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GBetween(minValue, maxValue));
-            case PROTEINS -> ItemMapper.toDTOSet(itemRepository.findAllByProteinsBetween(minValue, maxValue));
-            case CARBS -> ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GBetween(minValue, maxValue));
+            case CALORIES -> toDTOSet(itemRepository.findAllByCaloriesPer100gBetween(minValue, maxValue));
+            case FATS -> toDTOSet(itemRepository.findAllByFatPer100GBetween(minValue, maxValue));
+            case PROTEINS -> toDTOSet(itemRepository.findAllByProteinsBetween(minValue, maxValue));
+            case CARBS -> toDTOSet(itemRepository.findAllByCarbsPer100GBetween(minValue, maxValue));
         };
     }
 
@@ -211,7 +211,7 @@ public class ItemService {
             return null;
         }
 
-        Set<ItemDTO> items = ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gNotNull());
+        Set<ItemDTO> items = toDTOSet(itemRepository.findAllByCaloriesPer100gNotNull());
         return filterItemsByMacrosPercentage(items, minPercentage, maxPercentage, macros);
     }
 
@@ -240,7 +240,7 @@ public class ItemService {
      */
     public Set<ItemDTO> getItemsByTypes(Set<ItemType> types) {
         Set<Item> items = itemRepository.findAllByItemTypeIn(types);
-        return ItemMapper.toDTOSet(items);
+        return toDTOSet(items);
     }
 
     /**
@@ -252,10 +252,8 @@ public class ItemService {
      */
     private Set<ItemDTO> getItemsFilteredByCalories(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL ->
-                    ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL ->
-                    ItemMapper.toDTOSet(itemRepository.findAllByCaloriesPer100gIsLessThanEqual(value));
+            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCaloriesPer100gIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCaloriesPer100gIsLessThanEqual(value));
             default -> new HashSet<>(); // Default case returns an empty set
         };
     }
@@ -269,9 +267,8 @@ public class ItemService {
      */
     private Set<ItemDTO> getItemsFilteredByCarbs(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL ->
-                    ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> ItemMapper.toDTOSet(itemRepository.findAllByCarbsPer100GIsLessThanEqual(value));
+            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCarbsPer100GIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCarbsPer100GIsLessThanEqual(value));
             default -> new HashSet<>(); // Default case returns an empty set
         };
     }
@@ -286,9 +283,8 @@ public class ItemService {
      */
     private Set<ItemDTO> getItemsFilteredByProteins(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL ->
-                    ItemMapper.toDTOSet(itemRepository.findAllByProteinsIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> ItemMapper.toDTOSet(itemRepository.findAllByProteinsIsLessThanEqual(value));
+            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByProteinsIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByProteinsIsLessThanEqual(value));
             default -> new HashSet<>(); // Default case returns an empty set
         };
     }
@@ -302,9 +298,8 @@ public class ItemService {
      */
     private Set<ItemDTO> getItemsFilteredByFats(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL ->
-                    ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> ItemMapper.toDTOSet(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
+            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByFatPer100GIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
             default -> new HashSet<>(); // Default case returns an empty set
         };
     }

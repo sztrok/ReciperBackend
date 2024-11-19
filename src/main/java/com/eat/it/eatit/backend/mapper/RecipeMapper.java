@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.RecipeDTO;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RecipeMapper {
 
@@ -40,34 +41,13 @@ public class RecipeMapper {
         if(recipeSet == null) {
             return new HashSet<>();
         }
-        Set<RecipeDTO> recipeDTOSet = new HashSet<>();
-        for(Recipe recipe: recipeSet) {
-            recipeDTOSet.add(
-                    new RecipeDTO(
-                            recipe.getId(),
-                            recipe.getName(),
-                            recipe.getDescription(),
-                            ItemInRecipeMapper.toDTOSet(recipe.getItems()),
-                            CookwareMapper.toDTOSet(recipe.getCookware()),
-                            recipe.getTotalCalories()));
-        }
-        return recipeDTOSet;
+        return recipeSet.stream().map(RecipeMapper::toDTO).collect(Collectors.toSet());
     }
 
     public static Set<Recipe> toEntitySet(Set<RecipeDTO> recipeDTOSet) {
         if(recipeDTOSet == null) {
             return new HashSet<>();
         }
-        Set<Recipe> recipeEntitySet = new HashSet<>();
-        for(RecipeDTO recipe: recipeDTOSet) {
-            recipeEntitySet.add(
-                    new Recipe(
-                            recipe.getName(),
-                            recipe.getDescription(),
-                            ItemInRecipeMapper.toEntitySet(recipe.getItems()),
-                            CookwareMapper.toEntitySet(recipe.getCookware()),
-                            recipe.getTotalCalories()));
-        }
-        return recipeEntitySet;
+        return recipeDTOSet.stream().map(RecipeMapper::toEntity).collect(Collectors.toSet());
     }
 }

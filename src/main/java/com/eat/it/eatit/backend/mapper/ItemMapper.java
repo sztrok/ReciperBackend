@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ItemMapper {
 
@@ -12,7 +13,7 @@ public class ItemMapper {
     }
 
     public static ItemDTO toDTO(Item item) {
-        if(item == null) {
+        if (item == null) {
             return new ItemDTO();
         }
         return new ItemDTO(
@@ -28,7 +29,7 @@ public class ItemMapper {
     }
 
     public static Item toEntity(ItemDTO itemDTO) {
-        if(itemDTO == null) {
+        if (itemDTO == null) {
             return new Item();
         }
         return new Item(
@@ -43,45 +44,16 @@ public class ItemMapper {
     }
 
     public static Set<ItemDTO> toDTOSet(Set<Item> items) {
-        if(items == null) {
+        if (items == null) {
             return new HashSet<>();
         }
-        Set<ItemDTO> itemDTOSet = new HashSet<>();
-        for(Item item: items) {
-            itemDTOSet.add(
-                    new ItemDTO(
-                            item.getId(),
-                            item.getName(),
-                            item.getBarcode(),
-                            item.getCaloriesPer100g(),
-                            item.getProteins(),
-                            item.getFatPer100G(),
-                            item.getCarbsPer100G(),
-                            item.getItemType()
-                    )
-            );
-        }
-        return itemDTOSet;
+        return items.stream().map(ItemMapper::toDTO).collect(Collectors.toSet());
     }
 
     public static Set<Item> toEntitySet(Set<ItemDTO> itemDTOSet) {
-        if(itemDTOSet == null) {
+        if (itemDTOSet == null) {
             return new HashSet<>();
         }
-        Set<Item> itemEntitySet = new HashSet<>();
-        for(ItemDTO item: itemDTOSet) {
-            itemEntitySet.add(
-                    new Item(
-                            item.getName(),
-                            item.getBarcode(),
-                            item.getCaloriesPer100g(),
-                            item.getProteins(),
-                            item.getFatPer100G(),
-                            item.getCarbsPer100G(),
-                            item.getItemType()
-                    )
-            );
-        }
-        return itemEntitySet;
+        return itemDTOSet.stream().map(ItemMapper::toEntity).collect(Collectors.toSet());
     }
 }
