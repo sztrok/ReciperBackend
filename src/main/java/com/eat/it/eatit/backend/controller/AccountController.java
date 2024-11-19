@@ -62,13 +62,11 @@ public class AccountController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping(value = "/recipe/{id}")
+    @PutMapping(value = "/recipes/{id}")
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
         Set<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
-
-        if (addedRecipes == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(addedRecipes);
+        return addedRecipes != null
+                ? ResponseEntity.ok(addedRecipes)
+                : ResponseEntity.badRequest().build();
     }
 }
