@@ -19,17 +19,17 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
         return recipeService.getRecipeById(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/all")
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<RecipeDTO> addNewRecipe(@RequestBody RecipeDTO recipeDTO) {
         return recipeService.addNewRecipe(recipeDTO);
     }

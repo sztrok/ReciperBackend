@@ -19,27 +19,27 @@ public class CookwareController {
         this.cookwareService = cookwareService;
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CookwareDTO> getCookwareById(@PathVariable Long id) {
         return cookwareService.getCookwareById(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/all")
     public ResponseEntity<List<CookwareDTO>> getAllCookwares() {
         return cookwareService.getAllCookwares();
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<CookwareDTO> addNewCookware(@RequestBody CookwareDTO cookwareDTO) {
         return cookwareService.addNewCookware(cookwareDTO);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = "application/json")
+    @PutMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<CookwareDTO> updateCookware(@PathVariable Long id, @RequestBody CookwareDTO cookwareDTO) {
         return cookwareService.updateCookware(id, cookwareDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCookware(@PathVariable Long id) {
         return cookwareService.deleteCookware(id);
     }

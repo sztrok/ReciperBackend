@@ -26,32 +26,32 @@ public class AccountController {
         return "Success";
     }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
         return accountService.getAccountById(id);
     }
 
-    @GetMapping(value = "/get_all")
+    @GetMapping(value = "all")
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         return accountService.getAllAccounts();
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<AccountDTO> addNewAccount(@RequestBody AccountDTO accountDTO) {
         return accountService.addNewAccount(accountDTO);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> deleteAccount(@PathVariable Long id) {
         return accountService.deleteAccountById(id);
     }
 
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
         return accountService.updateAccountById(id, accountDTO);
     }
 
-    @PutMapping(value = "/add_recipes/{id}/")
+    @PutMapping(value = "/recipe/{id}")
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
         return accountService.addRecipesToAccount(id, recipeDTOS);
     }

@@ -23,7 +23,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         ItemDTO item = itemService.getItemById(id);
         if (item == null) {
@@ -32,13 +32,13 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/all")
     public ResponseEntity<List<ItemDTO>> getAllItems() {
         List<ItemDTO> items = itemService.getAllItems();
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/name")
+    @GetMapping("/name")
     public ResponseEntity<ItemDTO> getItemByName(@RequestParam String name) {
         ItemDTO item = itemService.getItemByName(name);
         if (item == null) {
@@ -47,12 +47,12 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @GetMapping("/get_all/name")
+    @GetMapping("/all/name")
     public Set<ItemDTO> getAllItemsContainingName(@RequestParam String name) {
         return itemService.getAllItemsContainingName(name);
     }
 
-    @GetMapping("/get/barcode")
+    @GetMapping("/barcode")
     public ResponseEntity<ItemDTO> getItemByBarcode(@RequestParam Long barcode) {
         ItemDTO item = itemService.getItemByBarcode(barcode);
         if (item == null) {
@@ -61,13 +61,13 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
         ItemDTO addedItem = itemService.addNewItem(item);
         return ResponseEntity.ok(addedItem);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
         boolean res = itemService.deleteItemById(id);
         if (res) {
@@ -76,7 +76,7 @@ public class ItemController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         ItemDTO updatedItem = itemService.updateItem(id, itemDTO);
         if (updatedItem == null) {
@@ -85,7 +85,7 @@ public class ItemController {
         return ResponseEntity.ok(updatedItem);
     }
 
-    @PatchMapping("/update_info")
+    @PatchMapping("/info")
     public ResponseEntity<ItemDTO> updateItemInfo(
             @RequestParam Long id,
             @RequestParam(required = false) String name,
@@ -99,7 +99,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/update_nutrition")
+    @PatchMapping("/nutrition")
     public ResponseEntity<ItemDTO> updateItemNutrition(
             @RequestParam Long id,
             @RequestParam(required = false) Double calories,
@@ -114,7 +114,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/get/macro")
+    @GetMapping("/macro")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
             @RequestParam Double value,
             @RequestParam Macros macros,
@@ -124,7 +124,7 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/macro_range")
+    @GetMapping("/macro_range")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosInRange(
             @RequestParam Double minValue,
             @RequestParam Double maxValue,
@@ -134,7 +134,7 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/macro_percentage")
+    @GetMapping("/macro_percentage")
     public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosPercentage(
             @RequestParam Double minPercentage,
             @RequestParam Double maxPercentage,
@@ -144,7 +144,7 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }
 
-    @GetMapping("/get/types")
+    @GetMapping("/types")
     public ResponseEntity<Set<ItemDTO>> getItemsByTypes(@RequestBody Set<ItemType> types) {
         Set<ItemDTO> items = itemService.getItemsByTypes(types);
         return ResponseEntity.ok(items);
