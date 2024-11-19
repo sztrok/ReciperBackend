@@ -77,25 +77,24 @@ class CookwareControllerTest {
 
     @Test
     void shouldUpdateCookware() throws Exception {
-        testCookware.setName("Updated Pan");
+        String newName = "Updated Pan";
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cookware/" + testCookware.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testCookware)))
+                        .param("name", newName)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Pan"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(newName));
     }
-
 
     @Test
     void shouldDeleteCookware() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/cookware/" + testCookware.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/" + testCookware.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 }

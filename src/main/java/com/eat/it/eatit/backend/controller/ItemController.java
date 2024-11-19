@@ -69,8 +69,8 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
-        boolean res = itemService.deleteItemById(id);
-        if (res) {
+        boolean deleted = itemService.deleteItemById(id);
+        if (deleted) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.noContent().build();
@@ -79,10 +79,9 @@ public class ItemController {
     @PutMapping("/{id}")
     public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         ItemDTO updatedItem = itemService.updateItem(id, itemDTO);
-        if (updatedItem == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(updatedItem);
+        return updatedItem != null
+                ? ResponseEntity.ok(updatedItem)
+                : ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/info")
@@ -93,10 +92,10 @@ public class ItemController {
             @RequestParam(required = false) ItemType itemType
     ) {
         boolean updatedItem = itemService.updateItemInfo(id, name, barcode, itemType);
-        if (!updatedItem) {
-            return ResponseEntity.badRequest().build();
+        if (updatedItem) {
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/nutrition")

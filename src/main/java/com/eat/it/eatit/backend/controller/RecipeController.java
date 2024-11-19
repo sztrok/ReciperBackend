@@ -21,18 +21,25 @@ public class RecipeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
-        return recipeService.getRecipeById(id);
+        RecipeDTO recipe = recipeService.getRecipeById(id);
+        if (recipe == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(recipe);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
-        return recipeService.getAllRecipes();
+        List<RecipeDTO> recipes = recipeService.getAllRecipes();
+        return ResponseEntity.ok(recipes);
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<RecipeDTO> addNewRecipe(@RequestBody RecipeDTO recipeDTO) {
-        return recipeService.addNewRecipe(recipeDTO);
+        RecipeDTO added = recipeService.addNewRecipe(recipeDTO);
+        return ResponseEntity.ok(added);
     }
+
     // TODO: delete,
     //  update wybranych pól,
     //  zmiana cookware,

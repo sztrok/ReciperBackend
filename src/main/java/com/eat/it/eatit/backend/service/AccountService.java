@@ -3,7 +3,6 @@ package com.eat.it.eatit.backend.service;
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.mapper.AccountMapper;
 import com.eat.it.eatit.backend.mapper.FridgeMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
@@ -12,7 +11,6 @@ import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
+import static com.eat.it.eatit.backend.mapper.AccountMapper.*;
 
 /**
  * Service class that handles operations related to user accounts.
@@ -53,12 +52,12 @@ public class AccountService {
      * @param id the ID of the account to retrieve
      * @return a ResponseEntity containing the AccountDTO if found, or a 404 Not Found response if not found
      */
-    public ResponseEntity<AccountDTO> getAccountById(Long id) {
+    public AccountDTO getAccountById(Long id) {
         Account account = findAccount(id);
         if (account == null) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
-        return ResponseEntity.ok(AccountMapper.toDTO(account));
+        return toDTO(account);
     }
 
     /**
@@ -66,13 +65,13 @@ public class AccountService {
      *
      * @return a ResponseEntity containing a list of AccountDTO objects representing all accounts.
      */
-    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
+    public List<AccountDTO> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
         List<AccountDTO> accountDTOList = new ArrayList<>();
         for (Account account : accounts) {
-            accountDTOList.add(AccountMapper.toDTO(account));
+            accountDTOList.add(toDTO(account));
         }
-        return ResponseEntity.ok(accountDTOList);
+        return accountDTOList;
     }
 
     /**
@@ -83,15 +82,15 @@ public class AccountService {
      * @return a ResponseEntity containing the AccountDTO of the newly created account
      */
     @Transactional
-    public ResponseEntity<AccountDTO> addNewAccount(AccountDTO accountDTO) {
+    public AccountDTO addNewAccount(AccountDTO accountDTO) {
         String encryptedPassword = passwordEncoder.encode(accountDTO.getPassword());
         accountDTO.setPassword(encryptedPassword);
-        Account account = AccountMapper.toEntity(accountDTO);
+        Account account = toEntity(accountDTO);
         Fridge fridge = new Fridge();
         Account savedAccount = accountRepository.save(account);
         fridge.setOwnerId(savedAccount.getId());
         fridgeRepository.save(fridge);
-        return ResponseEntity.ok(AccountMapper.toDTO(savedAccount));
+        return toDTO(savedAccount);
     }
 
     /**
@@ -99,31 +98,31 @@ public class AccountService {
      *
      * @param id the ID of the account to be deleted
      * @return a ResponseEntity containing an OK response if the account is found and deleted,
-     *         or a 404 Not Found response if the account is not found
+     * or a 404 Not Found response if the account is not found
      */
     @Transactional
-    public ResponseEntity<AccountDTO> deleteAccountById(Long id) {
+    public boolean deleteAccountById(Long id) {
         Account account = findAccount(id);
         if (account == null) {
-            return ResponseEntity.notFound().build();
+            return false;
         }
         accountRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return true;
     }
 
     /**
      * Updates the account with the specified ID using the provided AccountDTO.
      *
-     * @param id the ID of the account to update
+     * @param id         the ID of the account to update
      * @param accountDTO the data transfer object containing account details to be updated
      * @return a ResponseEntity containing the updated AccountDTO if the update is successful,
-     *         or a 404 Not Found response if the account is not found
+     * or a 404 Not Found response if the account is not found
      */
     @Transactional
-    public ResponseEntity<AccountDTO> updateAccountById(Long id, AccountDTO accountDTO) {
+    public AccountDTO updateAccountById(Long id, AccountDTO accountDTO) {
         Account account = findAccount(id);
         if (account == null) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
         updateField(accountDTO.getUsername(), account::setUsername);
         updateField(accountDTO.getMail(), account::setMail);
@@ -131,30 +130,30 @@ public class AccountService {
         updateField(accountDTO.getFridge(), f -> account.setFridge(FridgeMapper.toEntity(f))); // Uncomment this if fridge is supposed to be changed
         updateField(accountDTO.getRecipes(), r -> account.setRecipes(RecipeMapper.toEntitySet(r)));
         updateField(accountDTO.getPremium(), account::setPremium);
-        accountRepository.save(account);
-        return ResponseEntity.ok(AccountMapper.toDTO(account));
+        Account saved = accountRepository.save(account);
+        return toDTO(saved);
     }
 
     /**
      * Adds a set of recipes to an account identified by its ID.
      *
-     * @param id the ID of the account to which the recipes will be added
+     * @param id      the ID of the account to which the recipes will be added
      * @param recipes the set of RecipeDTO objects to be added to the account
      * @return a ResponseEntity containing the updated set of RecipeDTO objects associated with the account,
-     *         or a 404 Not Found response if the account is not found
+     * or a 404 Not Found response if the account is not found
      */
     @Transactional
-    public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(Long id, Set<RecipeDTO> recipes) {
+    public Set<RecipeDTO> addRecipesToAccount(Long id, Set<RecipeDTO> recipes) {
         Account account = findAccount(id);
         if (account == null) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
         Set<Recipe> accountRecipes = account.getRecipes();
         accountRecipes.addAll(RecipeMapper.toEntitySet(recipes));
         account.setRecipes(accountRecipes);
         recipeRepository.saveAll(accountRecipes);
         accountRepository.save(account);
-        return ResponseEntity.ok(RecipeMapper.toDTOSet(account.getRecipes()));
+        return RecipeMapper.toDTOSet(account.getRecipes());
     }
 
     /**

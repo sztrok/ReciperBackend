@@ -28,32 +28,50 @@ public class AccountController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
-        return accountService.getAccountById(id);
+        AccountDTO accountDTO = accountService.getAccountById(id);
+        if (accountDTO == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(accountDTO);
     }
 
     @GetMapping(value = "all")
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
-        return accountService.getAllAccounts();
+        List<AccountDTO> accounts = accountService.getAllAccounts();
+        return ResponseEntity.ok(accounts);
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
     public ResponseEntity<AccountDTO> addNewAccount(@RequestBody AccountDTO accountDTO) {
-        return accountService.addNewAccount(accountDTO);
+        AccountDTO account = accountService.addNewAccount(accountDTO);
+        return ResponseEntity.ok(account);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<AccountDTO> deleteAccount(@PathVariable Long id) {
-        return accountService.deleteAccountById(id);
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+        boolean deleted = accountService.deleteAccountById(id);
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
-        return accountService.updateAccountById(id, accountDTO);
+        AccountDTO account = accountService.updateAccountById(id, accountDTO);
+        return account != null
+                ? ResponseEntity.ok(account)
+                : ResponseEntity.badRequest().build();
     }
 
     @PutMapping(value = "/recipe/{id}")
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
-        return accountService.addRecipesToAccount(id, recipeDTOS);
+        Set<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
+        if (addedRecipes == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(addedRecipes);
     }
+
 
 }

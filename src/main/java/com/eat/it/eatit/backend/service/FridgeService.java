@@ -5,13 +5,14 @@ import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.enums.Operation;
-import com.eat.it.eatit.backend.mapper.FridgeMapper;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
 import com.eat.it.eatit.backend.repository.ItemInFridgeRepository;
 import com.eat.it.eatit.backend.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.eat.it.eatit.backend.mapper.FridgeMapper.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class FridgeService {
         if (fridge == null) {
             return null;
         }
-        return FridgeMapper.toDTO(fridge);
+        return toDTO(fridge);
     }
 
     /**
@@ -57,7 +58,7 @@ public class FridgeService {
         List<Fridge> fridgeList = fridgeRepository.findAll();
         List<FridgeDTO> fridgeDTOList = new ArrayList<>();
         for (Fridge fridge : fridgeList) {
-            fridgeDTOList.add(FridgeMapper.toDTO(fridge));
+            fridgeDTOList.add(toDTO(fridge));
         }
         return fridgeDTOList;
     }
@@ -87,7 +88,7 @@ public class FridgeService {
             addNewItemToFridge(fridge, item, amount);
         }
 
-        return FridgeMapper.toDTO(fridge);
+        return toDTO(fridge);
     }
 
     /**
@@ -158,7 +159,7 @@ public class FridgeService {
 
         fridge.setItems(itemsInFridge);
         fridgeRepository.save(fridge);
-        return FridgeMapper.toDTO(fridge);
+        return toDTO(fridge);
     }
 
     /**
@@ -220,7 +221,6 @@ public class FridgeService {
         return itemsInFridge.stream()
                 .map(ItemInFridge::getItem)
                 .anyMatch(item -> item.getId().equals(itemId));
-
     }
 
 }
