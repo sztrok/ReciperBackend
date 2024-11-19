@@ -26,10 +26,9 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
         ItemDTO item = itemService.getItemById(id);
-        if (item == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(item);
+        return item != null
+                ? ResponseEntity.ok(item)
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/all")
@@ -41,10 +40,9 @@ public class ItemController {
     @GetMapping("/name")
     public ResponseEntity<ItemDTO> getItemByName(@RequestParam String name) {
         ItemDTO item = itemService.getItemByName(name);
-        if (item == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(item);
+        return item != null
+                ? ResponseEntity.ok(item)
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/all/name")
@@ -55,10 +53,9 @@ public class ItemController {
     @GetMapping("/barcode")
     public ResponseEntity<ItemDTO> getItemByBarcode(@RequestParam Long barcode) {
         ItemDTO item = itemService.getItemByBarcode(barcode);
-        if (item == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(item);
+        return item != null
+                ? ResponseEntity.ok(item)
+                : ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
@@ -69,11 +66,9 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
-        boolean deleted = itemService.deleteItemById(id);
-        if (deleted) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.noContent().build();
+        return itemService.deleteItemById(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{id}")
@@ -91,11 +86,9 @@ public class ItemController {
             @RequestParam(required = false) Long barcode,
             @RequestParam(required = false) ItemType itemType
     ) {
-        boolean updatedItem = itemService.updateItemInfo(id, name, barcode, itemType);
-        if (updatedItem) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        return itemService.updateItemInfo(id, name, barcode, itemType)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/nutrition")
@@ -106,11 +99,9 @@ public class ItemController {
             @RequestParam(required = false) Double fats,
             @RequestParam(required = false) Double carbs
     ) {
-        boolean updatedItem = itemService.updateItemNutrition(id, calories, proteins, fats, carbs);
-        if (!updatedItem) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+        return itemService.updateItemNutrition(id, calories, proteins, fats, carbs)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/macro")

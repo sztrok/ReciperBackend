@@ -22,10 +22,9 @@ public class CookwareController {
     @GetMapping("/{id}")
     public ResponseEntity<CookwareDTO> getCookwareById(@PathVariable Long id) {
         CookwareDTO cookware = cookwareService.getCookwareById(id);
-        if (cookware == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(cookware);
+        return cookware != null
+                ? ResponseEntity.ok(cookware)
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/all")

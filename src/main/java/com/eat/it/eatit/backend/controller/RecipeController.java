@@ -22,10 +22,9 @@ public class RecipeController {
     @GetMapping("/{id}")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
         RecipeDTO recipe = recipeService.getRecipeById(id);
-        if (recipe == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(recipe);
+        return recipe != null
+                ? ResponseEntity.ok(recipe)
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/all")

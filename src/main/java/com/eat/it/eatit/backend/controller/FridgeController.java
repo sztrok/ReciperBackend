@@ -26,7 +26,7 @@ public class FridgeController {
     public ResponseEntity<FridgeDTO> getFridgeById(@PathVariable Long id) {
         FridgeDTO fridge = fridgeService.getFridgeById(id);
         if (fridge == null) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(fridge);
     }

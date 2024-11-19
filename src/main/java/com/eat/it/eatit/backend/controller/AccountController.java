@@ -28,11 +28,11 @@ public class AccountController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
-        AccountDTO accountDTO = accountService.getAccountById(id);
-        if (accountDTO == null) {
+        AccountDTO account = accountService.getAccountById(id);
+        if (account == null) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(accountDTO);
+        return ResponseEntity.ok(account);
     }
 
     @GetMapping(value = "all")
@@ -49,11 +49,9 @@ public class AccountController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
-        boolean deleted = accountService.deleteAccountById(id);
-        if (deleted) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.noContent().build();
+        return accountService.deleteAccountById(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     @PutMapping(value = "/{id}")
@@ -67,11 +65,10 @@ public class AccountController {
     @PutMapping(value = "/recipe/{id}")
     public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
         Set<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
+
         if (addedRecipes == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(addedRecipes);
     }
-
-
 }
