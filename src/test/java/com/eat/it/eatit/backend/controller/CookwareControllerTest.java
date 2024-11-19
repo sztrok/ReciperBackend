@@ -94,7 +94,7 @@ class CookwareControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/" + testCookware.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 }
