@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.ItemInFridgeDTO;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ItemInFridgeMapper {
 
@@ -32,34 +33,13 @@ public class ItemInFridgeMapper {
         if (items == null) {
             return new HashSet<>();
         }
-        Set<ItemInFridgeDTO> itemInFridgeDTOSet = new HashSet<>();
-        for (ItemInFridge item : items) {
-            itemInFridgeDTOSet.add(
-                    new ItemInFridgeDTO(
-                            item.getId(),
-                            item.getFridgeId(),
-                            ItemMapper.toDTO(item.getItem()),
-                            item.getAmount()
-                    )
-            );
-        }
-        return itemInFridgeDTOSet;
+        return items.stream().map(ItemInFridgeMapper::toDTO).collect(Collectors.toSet());
     }
 
     public static Set<ItemInFridge> toEntitySet(Set<ItemInFridgeDTO> itemDTOSet) {
         if (itemDTOSet == null) {
             return new HashSet<>();
         }
-        Set<ItemInFridge> itemEntitySet = new HashSet<>();
-        for (ItemInFridgeDTO item : itemDTOSet) {
-            itemEntitySet.add(
-                    new ItemInFridge(
-                            item.getFridgeId(),
-                            ItemMapper.toEntity(item.getItem()),
-                            item.getAmount()
-                    )
-            );
-        }
-        return itemEntitySet;
+        return itemDTOSet.stream().map(ItemInFridgeMapper::toEntity).collect(Collectors.toSet());
     }
 }

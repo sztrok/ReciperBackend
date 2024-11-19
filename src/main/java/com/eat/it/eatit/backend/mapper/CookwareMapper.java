@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.CookwareDTO;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CookwareMapper {
 
@@ -31,23 +32,15 @@ public class CookwareMapper {
         if(cookwareSet == null) {
             return new HashSet<>();
         }
-        Set<CookwareDTO> cookwareDTOSet = new HashSet<>();
-        for(Cookware cookware : cookwareSet) {
-            cookwareDTOSet.add(new CookwareDTO(
-                    cookware.getId(),
-                    cookware.getName()));
-        }
-        return cookwareDTOSet;
+        return cookwareSet.stream()
+                .map(CookwareMapper::toDTO)
+                .collect(Collectors.toSet());
     }
 
     public static Set<Cookware> toEntitySet(Set<CookwareDTO> cookwareDTOSet) {
         if(cookwareDTOSet == null) {
             return new HashSet<>();
         }
-        Set<Cookware> cookwareEntitySet = new HashSet<>();
-        for(CookwareDTO cookwareDTO : cookwareDTOSet) {
-            cookwareEntitySet.add(new Cookware(cookwareDTO.getName()));
-        }
-        return cookwareEntitySet;
+        return cookwareDTOSet.stream().map(CookwareMapper::toEntity).collect(Collectors.toSet());
     }
 }
