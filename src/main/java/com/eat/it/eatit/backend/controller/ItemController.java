@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @GetMapping("/all/name")
-    public Set<ItemDTO> getAllItemsContainingName(@RequestParam String name) {
+    public List<ItemDTO> getAllItemsContainingName(@RequestParam String name) {
         return itemService.getAllItemsContainingName(name);
     }
 
@@ -105,38 +105,38 @@ public class ItemController {
     }
 
     @GetMapping("/macro")
-    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacros(
+    public ResponseEntity<List<ItemDTO>> getItemsFilteredByMacros(
             @RequestParam Double value,
             @RequestParam Macros macros,
             @RequestParam Comparator comparator
     ) {
-        Set<ItemDTO> items = itemService.getItemsFilteredByMacros(value, macros, comparator);
+        List<ItemDTO> items = itemService.getItemsFilteredByMacros(value, macros, comparator);
         return ResponseEntity.ok(items);
     }
 
     @GetMapping("/macro_range")
-    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosInRange(
+    public ResponseEntity<List<ItemDTO>> getItemsFilteredByMacrosInRange(
             @RequestParam Double minValue,
             @RequestParam Double maxValue,
             @RequestParam Macros macros
     ) {
-        Set<ItemDTO> items = itemService.getItemsFilteredByMacrosInRange(minValue, maxValue, macros);
+        List<ItemDTO> items = itemService.getItemsFilteredByMacrosInRange(minValue, maxValue, macros);
         return ResponseEntity.ok(items);
     }
 
     @GetMapping("/macro_percentage")
-    public ResponseEntity<Set<ItemDTO>> getItemsFilteredByMacrosPercentage(
+    public ResponseEntity<List<ItemDTO>> getItemsFilteredByMacrosPercentage(
             @RequestParam Double minPercentage,
             @RequestParam Double maxPercentage,
             @RequestParam Macros macros
     ) {
-        Set<ItemDTO> items = itemService.getItemsFilteredByMacrosPercentage(minPercentage, maxPercentage, macros);
+        List<ItemDTO> items = itemService.getItemsFilteredByMacrosPercentage(minPercentage, maxPercentage, macros);
         return ResponseEntity.ok(items);
     }
 
     @GetMapping("/types")
-    public ResponseEntity<Set<ItemDTO>> getItemsByTypes(@RequestBody Set<ItemType> types) {
-        Set<ItemDTO> items = itemService.getItemsByTypes(types);
+    public ResponseEntity<List<ItemDTO>> getItemsByTypes(@RequestBody Set<ItemType> types) {
+        List<ItemDTO> items = itemService.getItemsByTypes(types);
         return ResponseEntity.ok(items);
     }
 

@@ -16,7 +16,6 @@ import static com.eat.it.eatit.backend.mapper.FridgeMapper.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Service class for handling fridge-related operations.
@@ -81,7 +80,7 @@ public class FridgeService {
             return null;
         }
 
-        Set<ItemInFridge> itemsInFridge = fridge.getItems();
+        List<ItemInFridge> itemsInFridge = fridge.getItems();
         if (isItemAlreadyInFridge(itemsInFridge, itemId)) {
             changeItemAmountInFridge(itemId, fridgeId, amount, Operation.ADD);
         } else {
@@ -134,7 +133,7 @@ public class FridgeService {
             return null;
         }
 
-        Set<ItemInFridge> itemsInFridge = fridge.getItems();
+        List<ItemInFridge> itemsInFridge = fridge.getItems();
         ItemInFridge itemInFridge = getItemInFridgeOrNull(itemsInFridge, itemId);
 
         if (itemInFridge == null) {
@@ -203,7 +202,7 @@ public class FridgeService {
      * @param itemId        the unique identifier of the item to find
      * @return the item in the fridge with the specified ID, or null if no such item is found
      */
-    private ItemInFridge getItemInFridgeOrNull(Set<ItemInFridge> itemsInFridge, Long itemId) {
+    private ItemInFridge getItemInFridgeOrNull(List<ItemInFridge> itemsInFridge, Long itemId) {
         return itemsInFridge.stream()
                 .filter(i -> i.getItem().getId().equals(itemId))
                 .findFirst()
@@ -217,7 +216,7 @@ public class FridgeService {
      * @param itemId        the unique identifier of the item to check
      * @return true if the item is already in the fridge, false otherwise
      */
-    private boolean isItemAlreadyInFridge(Set<ItemInFridge> itemsInFridge, Long itemId) {
+    private boolean isItemAlreadyInFridge(List<ItemInFridge> itemsInFridge, Long itemId) {
         return itemsInFridge.stream()
                 .map(ItemInFridge::getItem)
                 .anyMatch(item -> item.getId().equals(itemId));

@@ -11,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,9 +75,9 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         accountRepository.save(secondAccount);
         String partOfUsername = "kamil";
-        Optional<Set<Account>> accountList = Optional.ofNullable(accountRepository.findAllByUsernameContaining(partOfUsername));
+        Optional<List<Account>> accountList = Optional.ofNullable(accountRepository.findAllByUsernameContaining(partOfUsername));
         System.out.println(accountList);
-        assertThat(accountList).contains(Set.of(account, secondAccount));
+        assertThat(accountList).contains(List.of(account, secondAccount));
     }
 
     @Test
@@ -86,8 +86,8 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         accountRepository.save(secondAccount);
         account.setPremium(true);
-        Optional<Set<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsTrue());
-        assertThat(allPremiumAccounts).contains(Set.of(account));
+        Optional<List<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsTrue());
+        assertThat(allPremiumAccounts).contains(List.of(account));
     }
 
     @Test
@@ -96,8 +96,8 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         accountRepository.save(secondAccount);
         account.setPremium(true);
-        Optional<Set<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsFalse());
-        assertThat(allPremiumAccounts).contains(Set.of(secondAccount));
+        Optional<List<Account>> allPremiumAccounts = Optional.ofNullable(accountRepository.findAllByPremiumIsFalse());
+        assertThat(allPremiumAccounts).contains(List.of(secondAccount));
     }
 
     @Test
@@ -112,7 +112,7 @@ class AccountRepositoryTest {
     @Test
     void testAttachingRecipes() {
         accountRepository.save(account);
-        Set<Recipe> recipes = Set.of(
+        List<Recipe> recipes = List.of(
                 new Recipe("test", "recipe for test purposes"),
                 new Recipe("test2", "recipe for test purposes")
         );

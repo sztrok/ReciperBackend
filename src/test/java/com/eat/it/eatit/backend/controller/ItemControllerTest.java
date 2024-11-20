@@ -168,8 +168,8 @@ class ItemControllerTest {
                         .param("macros", "PROTEINS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 1"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 3"));
 
         // Filter by fats between 2 and 5
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -178,7 +178,8 @@ class ItemControllerTest {
                         .param("macros", "FATS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"));
 
         // Filter by carbs between 10 and 25
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -187,9 +188,9 @@ class ItemControllerTest {
                         .param("macros", "CARBS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 1"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
 
         // Filter by calories between 100 and 300
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -198,9 +199,9 @@ class ItemControllerTest {
                         .param("macros", "CALORIES")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 1"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
     }
 
     @Test
@@ -329,8 +330,50 @@ class ItemControllerTest {
                         .param("macros", "CARBS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 3"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 3"));
 
     }
+
+    @Test
+    void shouldReturnBadRequest_whenItemWithIdDoesNotExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/{id}", Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenGettingItemWithNoMathingName() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/name")
+                        .param("name", "ŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹ TEST")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenItemWithBarcodeDoesNotExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/barcode")
+                        .param("barcode", String.valueOf(Long.MAX_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingNonExistentItem() throws Exception {
+        testItem.setName("Updated Test Item");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/item/{id}", Long.MAX_VALUE)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(testItem)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenDeletingNonExistentItem() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/item/{id}", Long.MAX_VALUE)
+                        .contentType("application/json"))
+                .andExpect(status().isBadRequest());
+    }
+
+    //TODO: dodać testy żeby pokrywały cały controller
 }

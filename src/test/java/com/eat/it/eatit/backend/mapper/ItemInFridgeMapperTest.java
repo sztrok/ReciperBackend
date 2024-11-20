@@ -6,12 +6,12 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.ItemInFridgeDTO;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static com.eat.it.eatit.backend.mapper.ItemInFridgeMapper.toDTO;
 import static com.eat.it.eatit.backend.mapper.ItemInFridgeMapper.toEntity;
-import static com.eat.it.eatit.backend.mapper.ItemInFridgeMapper.toDTOSet;
-import static com.eat.it.eatit.backend.mapper.ItemInFridgeMapper.toEntitySet;
+import static com.eat.it.eatit.backend.mapper.ItemInFridgeMapper.toDTOList;
+import static com.eat.it.eatit.backend.mapper.ItemInFridgeMapper.toEntityList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -45,34 +45,34 @@ class ItemInFridgeMapperTest {
     }
 
     @Test
-    void testToDTOSetConversion() {
-        Set<ItemInFridge> items = Set.of(
+    void testToDTOListConversion() {
+        List<ItemInFridge> items = List.of(
                 new ItemInFridge(101L, new Item(), 1101D),
                 new ItemInFridge(102L, new Item(), 1102D),
                 new ItemInFridge(103L, new Item(), 1103D)
         );
-        Set<ItemInFridgeDTO> expectedItems = Set.of(
+        List<ItemInFridgeDTO> expectedItems = List.of(
                 new ItemInFridgeDTO(101L, new ItemDTO(), 1101D),
                 new ItemInFridgeDTO(102L, new ItemDTO(), 1102D),
                 new ItemInFridgeDTO(103L, new ItemDTO(), 1103D)
         );
-        Set<ItemInFridgeDTO> itemDTOSet = toDTOSet(items);
+        List<ItemInFridgeDTO> itemDTOSet = toDTOList(items);
         assertEquals(expectedItems, itemDTOSet);
     }
 
     @Test
-    void testToEntitySetConversion() {
-        Set<ItemInFridgeDTO> items = Set.of(
+    void testToEntityListConversion() {
+        List<ItemInFridgeDTO> items = List.of(
                 new ItemInFridgeDTO(101L, new ItemDTO(), 1101D),
                 new ItemInFridgeDTO(102L, new ItemDTO(), 1102D),
                 new ItemInFridgeDTO(103L, new ItemDTO(), 1103D)
         );
-        Set<ItemInFridge> expectedItems = Set.of(
+        List<ItemInFridge> expectedItems = List.of(
                 new ItemInFridge(101L, new Item(), 1101D),
                 new ItemInFridge(102L, new Item(), 1102D),
                 new ItemInFridge(103L, new Item(), 1103D)
         );
-        Set<ItemInFridge> itemEntitySet = toEntitySet(items);
+        List<ItemInFridge> itemEntitySet = toEntityList(items);
         assertEquals(expectedItems, itemEntitySet);
     }
 

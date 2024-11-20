@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/account")
@@ -21,18 +20,12 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "Success";
-    }
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
         AccountDTO account = accountService.getAccountById(id);
-        if (account == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(account);
+        return account != null
+                ? ResponseEntity.ok(account)
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "all")
@@ -62,13 +55,11 @@ public class AccountController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping(value = "/recipe/{id}")
-    public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
-        Set<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
-
-        if (addedRecipes == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(addedRecipes);
+    @PutMapping(value = "/recipes/{id}")
+    public ResponseEntity<List<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody List<RecipeDTO> recipeDTOS) {
+        List<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
+        return addedRecipes != null
+                ? ResponseEntity.ok(addedRecipes)
+                : ResponseEntity.badRequest().build();
     }
 }

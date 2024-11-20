@@ -5,7 +5,9 @@ import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -18,11 +20,11 @@ public class AccountDTO {
     private String mail;
     private String password;
     private FridgeDTO fridge;
-    private Set<RecipeDTO> recipes = new HashSet<>();
+    private List<RecipeDTO> recipes = new ArrayList<>();
     private Boolean premium;
     private Set<AccountRole> accountRoles = new HashSet<>();
 
-    public AccountDTO(@Nullable Long id, String username, String mail, String password, FridgeDTO fridge, Set<RecipeDTO> recipes, Boolean premium, Set<AccountRole> accountRoles) {
+    public AccountDTO(@Nullable Long id, String username, String mail, String password, FridgeDTO fridge, List<RecipeDTO> recipes, Boolean premium, Set<AccountRole> accountRoles) {
         this.id = id;
         this.username = username;
         this.mail = mail;
@@ -33,13 +35,4 @@ public class AccountDTO {
         this.accountRoles = accountRoles;
     }
 
-    public AccountDTO(String username, String mail, String password, FridgeDTO fridge, Set<RecipeDTO> recipes, Boolean premium, Set<AccountRole> accountRoles) {
-        this.username = username;
-        this.mail = mail;
-        this.password = password;
-        this.fridge = fridge;
-        this.recipes = recipes;
-        this.premium = premium;
-        this.accountRoles = accountRoles;
-    }
 }

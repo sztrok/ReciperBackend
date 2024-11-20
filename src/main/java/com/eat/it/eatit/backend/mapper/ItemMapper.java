@@ -3,8 +3,8 @@ package com.eat.it.eatit.backend.mapper;
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.dto.ItemDTO;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ItemMapper {
@@ -43,17 +43,17 @@ public class ItemMapper {
         );
     }
 
-    public static Set<ItemDTO> toDTOSet(Set<Item> items) {
+    public static List<ItemDTO> toDTOList(List<Item> items) {
         if (items == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return items.stream().map(ItemMapper::toDTO).collect(Collectors.toSet());
+        return items.stream().map(ItemMapper::toDTO).collect(Collectors.toList());
     }
 
-    public static Set<Item> toEntitySet(Set<ItemDTO> itemDTOSet) {
+    public static List<Item> toEntityList(List<ItemDTO> itemDTOSet) {
         if (itemDTOSet == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return itemDTOSet.stream().map(ItemMapper::toEntity).collect(Collectors.toSet());
+        return itemDTOSet.stream().map(ItemMapper::toEntity).collect(Collectors.toList());
     }
 }

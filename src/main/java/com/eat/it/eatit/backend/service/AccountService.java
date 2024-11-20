@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 import static com.eat.it.eatit.backend.mapper.AccountMapper.*;
@@ -128,7 +128,7 @@ public class AccountService {
         updateField(accountDTO.getMail(), account::setMail);
         updateField(accountDTO.getPassword(), account::setPassword);
         updateField(accountDTO.getFridge(), f -> account.setFridge(FridgeMapper.toEntity(f))); // Uncomment this if fridge is supposed to be changed
-        updateField(accountDTO.getRecipes(), r -> account.setRecipes(RecipeMapper.toEntitySet(r)));
+        updateField(accountDTO.getRecipes(), r -> account.setRecipes(RecipeMapper.toEntityList(r)));
         updateField(accountDTO.getPremium(), account::setPremium);
         Account saved = accountRepository.save(account);
         return toDTO(saved);
@@ -143,17 +143,17 @@ public class AccountService {
      * or a 404 Not Found response if the account is not found
      */
     @Transactional
-    public Set<RecipeDTO> addRecipesToAccount(Long id, Set<RecipeDTO> recipes) {
+    public List<RecipeDTO> addRecipesToAccount(Long id, List<RecipeDTO> recipes) {
         Account account = findAccount(id);
         if (account == null) {
             return null;
         }
-        Set<Recipe> accountRecipes = account.getRecipes();
-        accountRecipes.addAll(RecipeMapper.toEntitySet(recipes));
+        List<Recipe> accountRecipes = account.getRecipes().stream().sorted().collect(Collectors.toList());
+        accountRecipes.addAll(RecipeMapper.toEntityList(recipes));
         account.setRecipes(accountRecipes);
         recipeRepository.saveAll(accountRecipes);
         accountRepository.save(account);
-        return RecipeMapper.toDTOSet(account.getRecipes());
+        return RecipeMapper.toDTOList(account.getRecipes());
     }
 
     /**

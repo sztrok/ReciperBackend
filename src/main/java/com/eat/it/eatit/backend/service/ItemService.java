@@ -15,7 +15,6 @@ import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 import static com.eat.it.eatit.backend.mapper.ItemMapper.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,7 +57,7 @@ public class ItemService {
         for (Item i : items) {
             itemDTOList.add(toDTO(i));
         }
-        return itemDTOList;
+        return itemDTOList.stream().sorted().toList();
     }
 
     /**
@@ -76,13 +75,13 @@ public class ItemService {
     }
 
     /**
-     * Retrieves a set of items where the item names contain the given name, ignoring case.
+     * Retrieves a list of items where the item names contain the given name, ignoring case.
      *
      * @param name the name to search for within item names
-     * @return a set of ItemDTO objects containing the specified name
+     * @return a list of ItemDTO objects containing the specified name
      */
-    public Set<ItemDTO> getAllItemsContainingName(String name) {
-        return toDTOSet(itemRepository.findAllByNameContainsIgnoreCase(name));
+    public List<ItemDTO> getAllItemsContainingName(String name) {
+        return toDTOList(itemRepository.findAllByNameContainsIgnoreCase(name)).stream().sorted().toList();
     }
 
     /**
@@ -182,19 +181,19 @@ public class ItemService {
     }
 
     /**
-     * Retrieves a set of items filtered by a specified range of macronutrient values.
+     * Retrieves a list of items filtered by a specified range of macronutrient values.
      *
      * @param minValue The minimum value of the macronutrient range.
      * @param maxValue The maximum value of the macronutrient range.
      * @param macros   The macronutrient
-     * @return a set of ItemDTOs that fall within the specified range of macronutrient values
+     * @return a list of ItemDTOs that fall within the specified range of macronutrient values
      */
-    public Set<ItemDTO> getItemsFilteredByMacrosInRange(Double minValue, Double maxValue, Macros macros) {
+    public List<ItemDTO> getItemsFilteredByMacrosInRange(Double minValue, Double maxValue, Macros macros) {
         return switch (macros) {
-            case CALORIES -> toDTOSet(itemRepository.findAllByCaloriesPer100gBetween(minValue, maxValue));
-            case FATS -> toDTOSet(itemRepository.findAllByFatPer100GBetween(minValue, maxValue));
-            case PROTEINS -> toDTOSet(itemRepository.findAllByProteinsBetween(minValue, maxValue));
-            case CARBS -> toDTOSet(itemRepository.findAllByCarbsPer100GBetween(minValue, maxValue));
+            case CALORIES -> toDTOList(itemRepository.findAllByCaloriesPer100gBetween(minValue, maxValue));
+            case FATS -> toDTOList(itemRepository.findAllByFatPer100GBetween(minValue, maxValue));
+            case PROTEINS -> toDTOList(itemRepository.findAllByProteinsBetween(minValue, maxValue));
+            case CARBS -> toDTOList(itemRepository.findAllByCarbsPer100GBetween(minValue, maxValue));
         };
     }
 
@@ -204,14 +203,14 @@ public class ItemService {
      * @param minPercentage the minimum percentage of the specific macronutrient.
      * @param maxPercentage the maximum percentage of the specific macronutrient.
      * @param macros        the type of macronutrient to filter by (FATS, PROTEINS, CARBS).
-     * @return a set of ItemDTOs that fall within the specified percentage range for the macronutrient
+     * @return a list of ItemDTOs that fall within the specified percentage range for the macronutrient
      */
-    public Set<ItemDTO> getItemsFilteredByMacrosPercentage(Double minPercentage, Double maxPercentage, Macros macros) {
+    public List<ItemDTO> getItemsFilteredByMacrosPercentage(Double minPercentage, Double maxPercentage, Macros macros) {
         if (minPercentage > 100 || maxPercentage > 100 || macros == Macros.CALORIES) {
             return null;
         }
 
-        Set<ItemDTO> items = toDTOSet(itemRepository.findAllByCaloriesPer100gNotNull());
+        List<ItemDTO> items = toDTOList(itemRepository.findAllByCaloriesPer100gNotNull());
         return filterItemsByMacrosPercentage(items, minPercentage, maxPercentage, macros);
     }
 
@@ -221,9 +220,9 @@ public class ItemService {
      * @param value      The value to filter the items by.
      * @param macros     The macronutrient to filter the items on (e.g., CALORIES, FATS, PROTEINS, CARBS).
      * @param comparator The comparison method to apply (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL).
-     * @return a set of ItemDTOs that match the specified macronutrient criteria
+     * @return a list of ItemDTOs that match the specified macronutrient criteria
      */
-    public Set<ItemDTO> getItemsFilteredByMacros(Double value, Macros macros, Comparator comparator) {
+    public List<ItemDTO> getItemsFilteredByMacros(Double value, Macros macros, Comparator comparator) {
         return switch (macros) {
             case CALORIES -> getItemsFilteredByCalories(value, comparator);
             case FATS -> getItemsFilteredByFats(value, comparator);
@@ -233,14 +232,14 @@ public class ItemService {
     }
 
     /**
-     * Retrieves a set of items filtered by the given item types.
+     * Retrieves a list of items filtered by the given item types.
      *
-     * @param types the set of item types to filter by
-     * @return a set of ItemDTOs matching the given item types
+     * @param types the list of item types to filter by
+     * @return a list of ItemDTOs matching the given item types
      */
-    public Set<ItemDTO> getItemsByTypes(Set<ItemType> types) {
-        Set<Item> items = itemRepository.findAllByItemTypeIn(types);
-        return toDTOSet(items);
+    public List<ItemDTO> getItemsByTypes(Set<ItemType> types) {
+        List<Item> items = itemRepository.findAllByItemTypeIn(types).stream().sorted().toList();
+        return toDTOList(items);
     }
 
     /**
@@ -250,11 +249,11 @@ public class ItemService {
      * @param comparator The comparator to use for filtering items (e.g., GREATER_THAN_OR_EQUAL or LESS_THAN_OR_EQUAL).
      * @return A set of ItemDTOs that match the filtering criteria.
      */
-    private Set<ItemDTO> getItemsFilteredByCalories(Double value, Comparator comparator) {
+    private List<ItemDTO> getItemsFilteredByCalories(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCaloriesPer100gIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCaloriesPer100gIsLessThanEqual(value));
-            default -> new HashSet<>(); // Default case returns an empty set
+            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCaloriesPer100gIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCaloriesPer100gIsLessThanEqual(value));
+            default -> new ArrayList<>(); // Default case returns an empty list
         };
     }
 
@@ -263,13 +262,13 @@ public class ItemService {
      *
      * @param value      The value to compare against the carbohydrate content of the items.
      * @param comparator The comparator to determine the filter condition (greater than or equal to, less than or equal to).
-     * @return A set of ItemDTOs that match the specified carbohydrate filter criteria.
+     * @return A list of ItemDTOs that match the specified carbohydrate filter criteria.
      */
-    private Set<ItemDTO> getItemsFilteredByCarbs(Double value, Comparator comparator) {
+    private List<ItemDTO> getItemsFilteredByCarbs(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCarbsPer100GIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByCarbsPer100GIsLessThanEqual(value));
-            default -> new HashSet<>(); // Default case returns an empty set
+            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCarbsPer100GIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCarbsPer100GIsLessThanEqual(value));
+            default -> new ArrayList<>(); // Default case returns an empty list
         };
     }
 
@@ -279,28 +278,28 @@ public class ItemService {
      * @param value      the protein value to be used for filtering items.
      * @param comparator the comparator to determine whether to filter items with proteins
      *                   greater than or equal to, or less than or equal to the given value.
-     * @return a set of ItemDTOs filtered by the specified protein value and comparator.
+     * @return a list of ItemDTOs filtered by the specified protein value and comparator.
      */
-    private Set<ItemDTO> getItemsFilteredByProteins(Double value, Comparator comparator) {
+    private List<ItemDTO> getItemsFilteredByProteins(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByProteinsIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByProteinsIsLessThanEqual(value));
-            default -> new HashSet<>(); // Default case returns an empty set
+            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByProteinsIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByProteinsIsLessThanEqual(value));
+            default -> new ArrayList<>(); // Default case returns an empty list
         };
     }
 
     /**
-     * Retrieves a set of items filtered based on their fat content per 100 grams.
+     * Retrieves a list of items filtered based on their fat content per 100 grams.
      *
      * @param value      The fat content value to filter the items by.
      * @param comparator The comparison operation to apply (e.g., GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL).
-     * @return A set of items that match the specified fat content criteria, converted into ItemDTO objects.
+     * @return A list of items that match the specified fat content criteria, converted into ItemDTO objects.
      */
-    private Set<ItemDTO> getItemsFilteredByFats(Double value, Comparator comparator) {
+    private List<ItemDTO> getItemsFilteredByFats(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByFatPer100GIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> toDTOSet(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
-            default -> new HashSet<>(); // Default case returns an empty set
+            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatPer100GIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
+            default -> new ArrayList<>(); // Default case returns an empty list
         };
     }
 
@@ -316,19 +315,19 @@ public class ItemService {
 
 
     /**
-     * Filters a set of items based on the percentage of a specific macronutrient (FATS, PROTEINS, or CARBS) within a given range.
+     * Filters a list of items based on the percentage of a specific macronutrient (FATS, PROTEINS, or CARBS) within a given range.
      *
-     * @param items         The set of ItemDTO objects to filter.
+     * @param items         The list of ItemDTO objects to filter.
      * @param minPercentage The minimum percentage of the specified macronutrient.
      * @param maxPercentage The maximum percentage of the specified macronutrient.
      * @param macros        The macronutriment
      */
-    private Set<ItemDTO> filterItemsByMacrosPercentage(Set<ItemDTO> items, Double minPercentage, Double maxPercentage, Macros macros) {
+    private List<ItemDTO> filterItemsByMacrosPercentage(List<ItemDTO> items, Double minPercentage, Double maxPercentage, Macros macros) {
         return items.stream()
                 .map(item -> new ItemWithMacrosPercentage(item, getMacrosPercentage(item, macros)))
                 .filter(item -> item.macrosPercentage >= minPercentage && item.macrosPercentage <= maxPercentage)
                 .map(ItemWithMacrosPercentage::getItem)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     private Double getMacrosPercentage(ItemDTO item, Macros macros) {

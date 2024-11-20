@@ -3,8 +3,8 @@ package com.eat.it.eatit.backend.mapper;
 import com.eat.it.eatit.backend.data.Cookware;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CookwareMapper {
@@ -28,19 +28,19 @@ public class CookwareMapper {
         return new Cookware(cookwareDTO.getName());
     }
 
-    public static Set<CookwareDTO> toDTOSet(Set<Cookware> cookwareSet) {
+    public static List<CookwareDTO> toDTOList(List<Cookware> cookwareSet) {
         if(cookwareSet == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
         return cookwareSet.stream()
                 .map(CookwareMapper::toDTO)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    public static Set<Cookware> toEntitySet(Set<CookwareDTO> cookwareDTOSet) {
+    public static List<Cookware> toEntityList(List<CookwareDTO> cookwareDTOSet) {
         if(cookwareDTOSet == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return cookwareDTOSet.stream().map(CookwareMapper::toEntity).collect(Collectors.toSet());
+        return cookwareDTOSet.stream().map(CookwareMapper::toEntity).collect(Collectors.toList());
     }
 }

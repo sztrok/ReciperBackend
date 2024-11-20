@@ -18,7 +18,7 @@ public class AccountMapper {
                 account.getMail(),
                 account.getPassword(),
                 FridgeMapper.toDTO(account.getFridge()),
-                RecipeMapper.toDTOSet(account.getRecipes()),
+                RecipeMapper.toDTOList(account.getRecipes()),
                 account.getPremium(),
                 account.getAccountRoles());
     }
@@ -32,7 +32,7 @@ public class AccountMapper {
                 accountDTO.getMail(),
                 accountDTO.getPassword(),
                 FridgeMapper.toEntity(accountDTO.getFridge()),
-                RecipeMapper.toEntitySet(accountDTO.getRecipes()),
+                RecipeMapper.toEntityList(accountDTO.getRecipes()),
                 accountDTO.getAccountRoles(),
                 accountDTO.getPremium());
     }

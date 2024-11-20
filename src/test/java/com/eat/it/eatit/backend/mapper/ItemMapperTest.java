@@ -5,7 +5,7 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -58,34 +58,34 @@ class ItemMapperTest {
     }
 
     @Test
-    void testToDTOSetConversion() {
-        Set<Item> itemSet = Set.of(
+    void testToDTOListConversion() {
+        List<Item> itemSet = List.of(
                 new Item("test item 1", 100.0, 20d, 30d, 50d),
                 new Item("test item 2", 100.0, 20d, 30d, 50d),
                 new Item("test item 3", 100.0, 20d, 30d, 50d)
         );
-        Set<ItemDTO> itemDTOExpectedSet = Set.of(
+        List<ItemDTO> itemDTOExpectedSet = List.of(
                 new ItemDTO("test item 1", null, 100.0, 20d, 30d, 50d),
                 new ItemDTO("test item 2", null, 100.0, 20d, 30d, 50d),
                 new ItemDTO("test item 3", null, 100.0, 20d, 30d, 50d)
         );
-        Set<ItemDTO> itemDTOSet = ItemMapper.toDTOSet(itemSet);
+        List<ItemDTO> itemDTOSet = ItemMapper.toDTOList(itemSet);
         assertEquals(itemDTOExpectedSet, itemDTOSet);
     }
 
     @Test
-    void testToEntitySetConversion() {
-        Set<ItemDTO> itemDTOSet = Set.of(
+    void testToEntityListConversion() {
+        List<ItemDTO> itemDTOSet = List.of(
                 new ItemDTO("test item 1", 0L, 100.0, 20d, 30d, 50d),
                 new ItemDTO("test item 2", 0L, 100.0, 20d, 30d, 50d),
                 new ItemDTO("test item 3", 0L, 100.0, 20d, 30d, 50d)
         );
-        Set<Item> itemExpectedSet = Set.of(
+        List<Item> itemExpectedSet = List.of(
                 new Item("test item 1", 0L, 100.0, 20d, 30d, 50d),
                 new Item("test item 2", 0L, 100.0, 20d, 30d, 50d),
                 new Item("test item 3", 0L, 100.0, 20d, 30d, 50d)
         );
-        Set<Item> itemSet = ItemMapper.toEntitySet(itemDTOSet);
+        List<Item> itemSet = ItemMapper.toEntityList(itemDTOSet);
         assertEquals(itemExpectedSet, itemSet);
     }
 
@@ -103,14 +103,14 @@ class ItemMapperTest {
 
     @Test
     void testConversionForNullEntitySet() {
-        Set<ItemDTO> itemDTOSet = ItemMapper.toDTOSet(null);
+        List<ItemDTO> itemDTOSet = ItemMapper.toDTOList(null);
         assertNotNull(itemDTOSet);
         assertTrue(itemDTOSet.isEmpty());
     }
 
     @Test
     void testConversionForDTOSet() {
-        Set<Item> itemSet = ItemMapper.toEntitySet(null);
+        List<Item> itemSet = ItemMapper.toEntityList(null);
         assertNotNull(itemSet);
         assertTrue(itemSet.isEmpty());
     }
