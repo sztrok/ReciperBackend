@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/account")
@@ -57,8 +56,8 @@ public class AccountController {
     }
 
     @PutMapping(value = "/recipes/{id}")
-    public ResponseEntity<Set<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody Set<RecipeDTO> recipeDTOS) {
-        Set<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
+    public ResponseEntity<List<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody List<RecipeDTO> recipeDTOS) {
+        List<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
         return addedRecipes != null
                 ? ResponseEntity.ok(addedRecipes)
                 : ResponseEntity.badRequest().build();

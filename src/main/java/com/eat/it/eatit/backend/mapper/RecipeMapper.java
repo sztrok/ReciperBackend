@@ -3,8 +3,8 @@ package com.eat.it.eatit.backend.mapper;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class RecipeMapper {
@@ -20,8 +20,8 @@ public class RecipeMapper {
                 recipe.getId(),
                 recipe.getName(),
                 recipe.getDescription(),
-                ItemInRecipeMapper.toDTOSet(recipe.getItems()),
-                CookwareMapper.toDTOSet(recipe.getCookware()),
+                ItemInRecipeMapper.toDTOList(recipe.getItems()),
+                CookwareMapper.toDTOList(recipe.getCookware()),
                 recipe.getTotalCalories());
     }
 
@@ -32,22 +32,22 @@ public class RecipeMapper {
         return new Recipe(
                 recipeDTO.getName(),
                 recipeDTO.getDescription(),
-                ItemInRecipeMapper.toEntitySet(recipeDTO.getItems()),
-                CookwareMapper.toEntitySet(recipeDTO.getCookware()),
+                ItemInRecipeMapper.toEntityList(recipeDTO.getItems()),
+                CookwareMapper.toEntityList(recipeDTO.getCookware()),
                 recipeDTO.getTotalCalories());
     }
 
-    public static Set<RecipeDTO> toDTOSet(Set<Recipe> recipeSet) {
+    public static List<RecipeDTO> toDTOList(List<Recipe> recipeSet) {
         if(recipeSet == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return recipeSet.stream().map(RecipeMapper::toDTO).collect(Collectors.toSet());
+        return recipeSet.stream().map(RecipeMapper::toDTO).collect(Collectors.toList());
     }
 
-    public static Set<Recipe> toEntitySet(Set<RecipeDTO> recipeDTOSet) {
+    public static List<Recipe> toEntityList(List<RecipeDTO> recipeDTOSet) {
         if(recipeDTOSet == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return recipeDTOSet.stream().map(RecipeMapper::toEntity).collect(Collectors.toSet());
+        return recipeDTOSet.stream().map(RecipeMapper::toEntity).collect(Collectors.toList());
     }
 }

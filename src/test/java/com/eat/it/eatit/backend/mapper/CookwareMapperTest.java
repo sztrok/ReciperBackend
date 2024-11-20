@@ -4,7 +4,7 @@ import com.eat.it.eatit.backend.data.Cookware;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,34 +31,34 @@ class CookwareMapperTest {
     }
 
     @Test
-    void testToDTOSetConversion() {
-        Set<Cookware> cookwareSet = Set.of(
+    void testToDTOListConversion() {
+        List<Cookware> cookwareSet = List.of(
                 new Cookware("test 1"),
                 new Cookware("test 2"),
                 new Cookware("test 3")
         );
-        Set<CookwareDTO> cookwareDTOExpectedSet = Set.of(
+        List<CookwareDTO> cookwareDTOExpectedSet = List.of(
                 new CookwareDTO("test 1"),
                 new CookwareDTO("test 2"),
                 new CookwareDTO("test 3")
         );
-        Set<CookwareDTO> cookwareDTOSet = CookwareMapper.toDTOSet(cookwareSet);
+        List<CookwareDTO> cookwareDTOSet = CookwareMapper.toDTOList(cookwareSet);
         assertEquals(cookwareDTOExpectedSet, cookwareDTOSet);
     }
 
     @Test
-    void testToEntitySetConversion() {
-        Set<CookwareDTO> cookwareDTOSet = Set.of(
+    void testToEntityListConversion() {
+        List<CookwareDTO> cookwareDTOSet = List.of(
                 new CookwareDTO("test dto 1"),
                 new CookwareDTO("test dto 2"),
                 new CookwareDTO("test dto 3")
         );
-        Set<Cookware> cookwareExpectedSet = Set.of(
+        List<Cookware> cookwareExpectedSet = List.of(
                 new Cookware("test dto 1"),
                 new Cookware("test dto 2"),
                 new Cookware("test dto 3")
         );
-        Set<Cookware> cookwareSet = CookwareMapper.toEntitySet(cookwareDTOSet);
+        List<Cookware> cookwareSet = CookwareMapper.toEntityList(cookwareDTOSet);
         assertEquals(cookwareExpectedSet, cookwareSet);
     }
 
@@ -76,14 +76,14 @@ class CookwareMapperTest {
 
     @Test
     void testConversionForNullEntitySet() {
-        Set<CookwareDTO> cookwareDTOSet = CookwareMapper.toDTOSet(null);
+        List<CookwareDTO> cookwareDTOSet = CookwareMapper.toDTOList(null);
         assertNotNull(cookwareDTOSet);
         assertTrue(cookwareDTOSet.isEmpty());
     }
 
     @Test
     void testConversionForDTOSet() {
-        Set<Cookware> cookwareSet = CookwareMapper.toEntitySet(null);
+        List<Cookware> cookwareSet = CookwareMapper.toEntityList(null);
         assertNotNull(cookwareSet);
         assertTrue(cookwareSet.isEmpty());
     }

@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,7 +77,7 @@ public class ItemServiceTest {
     void testGetItemsByTypes() {
         Item item = new Item();
         item.setItemType(ItemType.DAIRY);
-        when(itemRepository.findAllByItemTypeIn(Collections.singleton(ItemType.DAIRY))).thenReturn(Collections.singleton(item));
+        when(itemRepository.findAllByItemTypeIn(Collections.singleton(ItemType.DAIRY))).thenReturn(List.of(item));
 
         assertNotNull(itemService.getItemsByTypes(Collections.singleton(ItemType.DAIRY)));
     }
@@ -85,7 +86,7 @@ public class ItemServiceTest {
     void testGetItemsFilteredByMacrosInRange() {
         Item item = new Item();
         item.setCaloriesPer100g(50.0);
-        when(itemRepository.findAllByCaloriesPer100gBetween(0.0, 100.0)).thenReturn(Collections.singleton(item));
+        when(itemRepository.findAllByCaloriesPer100gBetween(0.0, 100.0)).thenReturn(List.of(item));
 
         assertNotNull(itemService.getItemsFilteredByMacrosInRange(0.0, 100.0, Macros.CALORIES));
     }

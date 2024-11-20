@@ -3,8 +3,8 @@ package com.eat.it.eatit.backend.mapper;
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class FridgeMapper {
@@ -19,7 +19,7 @@ public class FridgeMapper {
         return new FridgeDTO(
                 fridge.getId(),
                 fridge.getOwnerId(),
-                ItemInFridgeMapper.toDTOSet(fridge.getItems()));
+                ItemInFridgeMapper.toDTOList(fridge.getItems()));
     }
 
     public static Fridge toEntity(FridgeDTO fridgeDTO) {
@@ -28,20 +28,20 @@ public class FridgeMapper {
         }
         return new Fridge(
                 fridgeDTO.getOwnerId(),
-                ItemInFridgeMapper.toEntitySet(fridgeDTO.getItems()));
+                ItemInFridgeMapper.toEntityList(fridgeDTO.getItems()));
     }
 
-    public static Set<FridgeDTO> toDTOSet(Set<Fridge> fridges) {
+    public static List<FridgeDTO> toDTOList(List<Fridge> fridges) {
         if (fridges == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return fridges.stream().map(FridgeMapper::toDTO).collect(Collectors.toSet());
+        return fridges.stream().map(FridgeMapper::toDTO).collect(Collectors.toList());
     }
 
-    public static Set<Fridge> toEntitySet(Set<FridgeDTO> fridgeDTOSet) {
+    public static List<Fridge> toEntityList(List<FridgeDTO> fridgeDTOSet) {
         if (fridgeDTOSet == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return fridgeDTOSet.stream().map(FridgeMapper::toEntity).collect(Collectors.toSet());
+        return fridgeDTOSet.stream().map(FridgeMapper::toEntity).collect(Collectors.toList());
     }
 }

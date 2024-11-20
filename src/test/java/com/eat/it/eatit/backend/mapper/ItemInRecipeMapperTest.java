@@ -6,10 +6,10 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static com.eat.it.eatit.backend.mapper.ItemInRecipeMapper.*;
-import static com.eat.it.eatit.backend.mapper.ItemInRecipeMapper.toEntitySet;
+import static com.eat.it.eatit.backend.mapper.ItemInRecipeMapper.toEntityList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemInRecipeMapperTest {
@@ -42,34 +42,34 @@ class ItemInRecipeMapperTest {
     }
 
     @Test
-    void testToDTOSetConversion() {
-        Set<ItemInRecipe> items = Set.of(
+    void testToDTOListConversion() {
+        List<ItemInRecipe> items = List.of(
                 new ItemInRecipe(101L, new Item(), 1101D),
                 new ItemInRecipe(102L, new Item(), 1102D),
                 new ItemInRecipe(103L, new Item(), 1103D)
         );
-        Set<ItemInRecipeDTO> expectedItems = Set.of(
+        List<ItemInRecipeDTO> expectedItems = List.of(
                 new ItemInRecipeDTO(101L, new ItemDTO(), 1101D),
                 new ItemInRecipeDTO(102L, new ItemDTO(), 1102D),
                 new ItemInRecipeDTO(103L, new ItemDTO(), 1103D)
         );
-        Set<ItemInRecipeDTO> itemDTOSet = toDTOSet(items);
+        List<ItemInRecipeDTO> itemDTOSet = toDTOList(items);
         assertEquals(expectedItems, itemDTOSet);
     }
 
     @Test
-    void testToEntitySetConversion() {
-        Set<ItemInRecipeDTO> items = Set.of(
+    void testToEntityListConversion() {
+        List<ItemInRecipeDTO> items = List.of(
                 new ItemInRecipeDTO(101L, new ItemDTO(), 1101D),
                 new ItemInRecipeDTO(102L, new ItemDTO(), 1102D),
                 new ItemInRecipeDTO(103L, new ItemDTO(), 1103D)
         );
-        Set<ItemInRecipe> expectedItems = Set.of(
+        List<ItemInRecipe> expectedItems = List.of(
                 new ItemInRecipe(101L, new Item(), 1101D),
                 new ItemInRecipe(102L, new Item(), 1102D),
                 new ItemInRecipe(103L, new Item(), 1103D)
         );
-        Set<ItemInRecipe> itemEntitySet = toEntitySet(items);
+        List<ItemInRecipe> itemEntitySet = toEntityList(items);
         assertEquals(expectedItems, itemEntitySet);
     }
 

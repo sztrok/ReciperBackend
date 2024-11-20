@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "recipe")
@@ -24,14 +23,14 @@ public class Recipe {
     private String description;
 
     @ManyToMany
-    private Set<ItemInRecipe> items;
+    private List<ItemInRecipe> items = new ArrayList<>();
 
     @ManyToMany
-    private Set<Cookware> cookware;
+    private List<Cookware> cookware = new ArrayList<>();
 
     private Integer totalCalories;
 
-    public Recipe(String name, String description, Set<ItemInRecipe> items, Set<Cookware> cookware, Integer totalCalories) {
+    public Recipe(String name, String description, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories) {
         this.name = name;
         this.description = description;
         this.items = items;
@@ -42,6 +41,14 @@ public class Recipe {
     public Recipe(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public void setItems(List<ItemInRecipe> items) {
+        this.items = new ArrayList<>(items);
+    }
+
+    public void setCookware(List<Cookware> cookware) {
+        this.cookware = new ArrayList<>(cookware);
     }
 
     @Override

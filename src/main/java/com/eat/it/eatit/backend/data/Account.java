@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="account")
@@ -40,7 +38,7 @@ public class Account {
 
     @OneToMany
     @JoinColumn(name = "owner_id")
-    private Set<Recipe> recipes = new HashSet<>();
+    private List<Recipe> recipes = new ArrayList<>();
 
     @ElementCollection(targetClass = AccountRole.class)
     @Enumerated(EnumType.STRING)
@@ -55,7 +53,7 @@ public class Account {
         this.premium = premium;
     }
 
-    public Account(String username, String mail, String password, Fridge fridge, Set<Recipe> recipes, Set<AccountRole> accountRoles, Boolean premium) {
+    public Account(String username, String mail, String password, Fridge fridge, List<Recipe> recipes, Set<AccountRole> accountRoles, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.password = password;
@@ -65,8 +63,8 @@ public class Account {
         this.premium = premium;
     }
 
-    public void setRecipes(Set<Recipe> recipes) {
-        this.recipes = new HashSet<>(recipes);
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = new ArrayList<>(recipes);
     }
 
     public void setAccountRoles(Set<AccountRole> accountRoles) {

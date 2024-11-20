@@ -187,7 +187,7 @@ class InitialDataLoader {
 
     private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
         for (Fridge fridge : fridges) {
-            Set<ItemInFridge> addedItems = new HashSet<>();
+            List<ItemInFridge> addedItems = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
                 ItemInFridge itemInFridge = new ItemInFridge();
                 itemInFridge.setFridgeId(fridge.getId());
@@ -203,7 +203,7 @@ class InitialDataLoader {
 
     private void linkRecipeAndItems(List<Recipe> recipes, List<Item> items) {
         for (Recipe recipe : recipes) {
-            Set<ItemInRecipe> addedItems = new HashSet<>();
+            List<ItemInRecipe> addedItems = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
                 ItemInRecipe itemInRecipe = new ItemInRecipe();
                 itemInRecipe.setRecipeId(recipe.getId());
@@ -219,7 +219,7 @@ class InitialDataLoader {
 
     private void linkCookwareAndRecipes(List<Cookware> cookwares, List<Recipe> recipes) {
         for (Recipe recipe : recipes) {
-            Set<Cookware> addedCookwares = new HashSet<>();
+            List<Cookware> addedCookwares = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
                 addedCookwares.add(cookwares.get(random.nextInt(cookwares.size())));
             }
@@ -239,11 +239,11 @@ class InitialDataLoader {
 
     private void linkAccountAndRecipes(List<Account> accounts, List<Recipe> recipes) {
 
-        accounts.get(0).setRecipes(Set.of(recipes.get(0), recipes.get(1), recipes.get(2)));
-        accounts.get(2).setRecipes(Set.of(recipes.get(3), recipes.get(4)));
-        accounts.get(5).setRecipes(Set.of(recipes.get(5), recipes.get(6)));
-        accounts.get(6).setRecipes(Set.of(recipes.get(7)));
-        accounts.get(9).setRecipes(Set.of(recipes.get(10), recipes.get(11), recipes.get(12), recipes.get(13), recipes.get(14), recipes.get(15)));
+        accounts.get(0).setRecipes(List.of(recipes.get(0), recipes.get(1), recipes.get(2)));
+        accounts.get(2).setRecipes(List.of(recipes.get(3), recipes.get(4)));
+        accounts.get(5).setRecipes(List.of(recipes.get(5), recipes.get(6)));
+        accounts.get(6).setRecipes(List.of(recipes.get(7)));
+        accounts.get(9).setRecipes(List.of(recipes.get(10), recipes.get(11), recipes.get(12), recipes.get(13), recipes.get(14), recipes.get(15)));
         recipeRepository.saveAll(recipes);
     }
 

@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,7 +121,7 @@ class AccountControllerTest {
         recipe2.setName("Test recipe 2");
         recipe2.setDescription("Recipe 2 for testing purposes");
 
-        Set<RecipeDTO> recipes = Set.of(recipe1, recipe2);
+        List<RecipeDTO> recipes = List.of(recipe1, recipe2);
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/recipes/{id}", testAccount.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recipes)))

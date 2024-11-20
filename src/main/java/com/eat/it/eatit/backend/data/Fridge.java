@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "fridge")
@@ -27,15 +25,15 @@ public class Fridge {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<ItemInFridge> items = new HashSet<>();
+    private List<ItemInFridge> items = new ArrayList<>();
 
-    public Fridge(Long ownerId, Set<ItemInFridge> items) {
+    public Fridge(Long ownerId, List<ItemInFridge> items) {
         this.ownerId = ownerId;
         this.items = items;
     }
 
-    public void setItems(Set<ItemInFridge> items) {
-        this.items = new HashSet<>(items);
+    public void setItems(List<ItemInFridge> items) {
+        this.items = new ArrayList<>(items);
     }
 
     @Override
