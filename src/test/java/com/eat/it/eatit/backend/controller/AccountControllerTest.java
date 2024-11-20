@@ -130,4 +130,45 @@ class AccountControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Test recipe 2"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].description").value("Recipe 2 for testing purposes"));
     }
+
+    @Test
+    void shouldReturnBadRequest_whenAccountWithIdDoesNotExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/account/{id}", 101010101L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenDeletingNonExistentAccount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/account/{id}", 101010101L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingNonExistentAccount() throws Exception {
+        AccountDTO updatedAcc = new AccountDTO();
+        updatedAcc.setMail("updated@mail.com");
+        updatedAcc.setUsername("new uSername");
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}", 101010101L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedAcc)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenAddingRecipesToNonExistendAccount() throws Exception {
+        RecipeDTO recipe1 = new RecipeDTO();
+        recipe1.setName("Test recipe 1");
+        recipe1.setDescription("Recipe 1 for testing purposes");
+        RecipeDTO recipe2 = new RecipeDTO();
+        recipe2.setName("Test recipe 2");
+        recipe2.setDescription("Recipe 2 for testing purposes");
+
+        Set<RecipeDTO> recipes = Set.of(recipe1, recipe2);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/recipes/{id}", 101010101L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recipes)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }

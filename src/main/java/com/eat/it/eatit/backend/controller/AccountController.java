@@ -21,18 +21,12 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "Success";
-    }
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
         AccountDTO account = accountService.getAccountById(id);
-        if (account == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(account);
+        return account != null
+                ? ResponseEntity.ok(account)
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "all")
