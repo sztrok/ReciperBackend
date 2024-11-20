@@ -78,7 +78,6 @@ class CookwareControllerTest {
     @Test
     void shouldUpdateCookware() throws Exception {
         String newName = "Updated Pan";
-
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cookware/" + testCookware.getId())
                         .param("name", newName)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -93,6 +92,29 @@ class CookwareControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/" + testCookware.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenCookwareWithIdDoesNotExist() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cookware/" + Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingNonExistentCookware() throws Exception {
+        String newName = "Updated Pan";
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cookware/" + Long.MAX_VALUE)
+                        .param("name", newName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenDeletingNonExistentCookware() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/cookware/" + Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }

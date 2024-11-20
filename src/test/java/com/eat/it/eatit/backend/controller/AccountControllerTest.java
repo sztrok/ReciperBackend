@@ -133,14 +133,14 @@ class AccountControllerTest {
 
     @Test
     void shouldReturnBadRequest_whenAccountWithIdDoesNotExist() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/account/{id}", 101010101L)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/account/{id}", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
     void shouldReturnBadRequest_whenDeletingNonExistentAccount() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/account/{id}", 101010101L)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/account/{id}", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -150,7 +150,7 @@ class AccountControllerTest {
         AccountDTO updatedAcc = new AccountDTO();
         updatedAcc.setMail("updated@mail.com");
         updatedAcc.setUsername("new uSername");
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}", 101010101L)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedAcc)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -166,7 +166,7 @@ class AccountControllerTest {
         recipe2.setDescription("Recipe 2 for testing purposes");
 
         Set<RecipeDTO> recipes = Set.of(recipe1, recipe2);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/recipes/{id}", 101010101L)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/recipes/{id}", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recipes)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
