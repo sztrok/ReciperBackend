@@ -121,7 +121,7 @@ public class ItemService {
      **/
     @Transactional
     public ItemDTO updateItem(Long id, ItemDTO itemDTO) {
-        Item item = findItem(id);
+        Item item = findItemById(id);
         if (item == null) {
             return null;
         }
@@ -138,7 +138,7 @@ public class ItemService {
 
     @Transactional
     public boolean updateItemInfo(Long id, String name, Long barcode, ItemType itemType) {
-        Item item = findItem(id);
+        Item item = findItemById(id);
         if (item == null) {
             return false;
         }
@@ -151,7 +151,7 @@ public class ItemService {
 
     @Transactional
     public boolean updateItemNutrition(Long id, Double calories, Double proteins, Double fats, Double carbs) {
-        Item item = findItem(id);
+        Item item = findItemById(id);
         if (item == null) {
             return false;
         }
@@ -172,7 +172,7 @@ public class ItemService {
      */
     @Transactional
     public boolean deleteItemById(Long id) {
-        Item item = findItem(id);
+        Item item = findItemById(id);
         if (item == null) {
             return false;
         }
@@ -243,6 +243,16 @@ public class ItemService {
     }
 
     /**
+     * Finds an item based on its ID.
+     *
+     * @param id the ID of the item to be found
+     * @return the item if found, otherwise null
+     */
+    protected Item findItemById(Long id) {
+        return itemRepository.findById(id).orElse(null);
+    }
+
+    /**
      * Filters items based on their calorie content according to the specified comparator.
      *
      * @param value      The calorie value to compare against.
@@ -301,16 +311,6 @@ public class ItemService {
             case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
             default -> new ArrayList<>(); // Default case returns an empty list
         };
-    }
-
-    /**
-     * Finds an item based on its ID.
-     *
-     * @param id the ID of the item to be found
-     * @return the item if found, otherwise null
-     */
-    private Item findItem(Long id) {
-        return itemRepository.findById(id).orElse(null);
     }
 
 

@@ -6,8 +6,6 @@ import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.enums.Operation;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
-import com.eat.it.eatit.backend.repository.ItemInFridgeRepository;
-import com.eat.it.eatit.backend.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,15 +21,15 @@ import java.util.List;
 @Service
 public class FridgeService {
 
-    FridgeRepository fridgeRepository;
-    ItemRepository itemRepository;
-    ItemInFridgeRepository itemInFridgeRepository;
+    private final FridgeRepository fridgeRepository;
+    private final ItemService itemService;
+    private final ItemInFridgeService itemInFridgeService;
 
     @Autowired
-    public FridgeService(FridgeRepository fridgeRepository, ItemRepository itemRepository, ItemInFridgeRepository itemInFridgeRepository) {
+    public FridgeService(FridgeRepository fridgeRepository, ItemService itemService, ItemInFridgeService itemInFridgeService) {
         this.fridgeRepository = fridgeRepository;
-        this.itemRepository = itemRepository;
-        this.itemInFridgeRepository = itemInFridgeRepository;
+        this.itemService = itemService;
+        this.itemInFridgeService = itemInFridgeService;
     }
 
     /**
@@ -73,7 +71,7 @@ public class FridgeService {
      */
     @Transactional
     public FridgeDTO addItemToFridge(Long itemId, Long fridgeId, Double amount) {
-        Item item = findItemById(itemId);
+        Item item = itemService.findItemById(itemId);
         Fridge fridge = findFridgeById(fridgeId);
 
         if (item == null || fridge == null) {
@@ -150,25 +148,15 @@ public class FridgeService {
 
         if (newAmount <= 0) {
             itemsInFridge.remove(itemInFridge);
-            itemInFridgeRepository.delete(itemInFridge);
+            itemInFridgeService.removeItemFromFridge(itemInFridge);
         } else {
             itemInFridge.setAmount(newAmount);
-            itemInFridgeRepository.save(itemInFridge);
+            itemInFridgeService.saveItemInFridge(itemInFridge);
         }
 
         fridge.setItems(itemsInFridge);
         fridgeRepository.save(fridge);
         return toDTO(fridge);
-    }
-
-    /**
-     * Retrieves an Item from the repository by its unique identifier.
-     *
-     * @param itemId the unique identifier of the item
-     * @return the Item if found, otherwise null
-     */
-    private Item findItemById(Long itemId) {
-        return itemRepository.findById(itemId).orElse(null);
     }
 
     /**
