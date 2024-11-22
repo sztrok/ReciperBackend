@@ -79,13 +79,13 @@ public class RecipeService {
     @Transactional
     public RecipeDTO addItemsToRecipe(Long recipeId, Map<Long, Double> itemsWithAmounts) {
         Recipe recipe = findRecipeById(recipeId);
-        if(recipe == null) {
+        if (recipe == null) {
             return null;
         }
         List<ItemInRecipe> addedItems = new ArrayList<>();
-        for(Long id : itemsWithAmounts.keySet()) {
+        for (Long id : itemsWithAmounts.keySet()) {
             Item item = itemService.findItemById(id);
-            if(item == null) {
+            if (item == null) {
                 return null;
             }
             ItemInRecipe newItem = new ItemInRecipe(recipeId, item, itemsWithAmounts.get(id));
@@ -94,6 +94,16 @@ public class RecipeService {
         itemInRecipeService.saveItemsInRecipe(addedItems);
         Recipe addedRecipe = recipeRepository.save(recipe);
         return toDTO(addedRecipe);
+    }
+
+    @Transactional
+    public boolean deleteRecipeById(Long id) {
+        Recipe recipe = findRecipeById(id);
+        if (recipe == null) {
+            return false;
+        }
+        recipeRepository.delete(recipe);
+        return true;
     }
 
     private Recipe findRecipeById(Long recipeId) {

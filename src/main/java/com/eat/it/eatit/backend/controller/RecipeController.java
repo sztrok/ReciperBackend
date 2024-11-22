@@ -39,7 +39,14 @@ public class RecipeController {
         return ResponseEntity.ok(added);
     }
 
-    // TODO: delete,
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable Long id) {
+        return recipeService.deleteRecipeById(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    // TODO:
     //  update wybranych pól,
     //  zmiana cookware,
     //  zmiana itemów (musze zrobic ItemInRecipe????)
