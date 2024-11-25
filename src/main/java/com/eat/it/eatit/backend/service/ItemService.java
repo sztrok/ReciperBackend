@@ -57,7 +57,7 @@ public class ItemService {
         for (Item i : items) {
             itemDTOList.add(toDTO(i));
         }
-        return itemDTOList.stream().sorted().toList();
+        return itemDTOList;
     }
 
     /**
@@ -81,7 +81,7 @@ public class ItemService {
      * @return a list of ItemDTO objects containing the specified name
      */
     public List<ItemDTO> getAllItemsContainingName(String name) {
-        return toDTOList(itemRepository.findAllByNameContainsIgnoreCase(name)).stream().sorted().toList();
+        return toDTOList(itemRepository.findAllByNameContainsIgnoreCase(name));
     }
 
     /**
@@ -238,7 +238,7 @@ public class ItemService {
      * @return a list of ItemDTOs matching the given item types
      */
     public List<ItemDTO> getItemsByTypes(Set<ItemType> types) {
-        List<Item> items = itemRepository.findAllByItemTypeIn(types).stream().sorted().toList();
+        List<Item> items = itemRepository.findAllByItemTypeIn(types);
         return toDTOList(items);
     }
 

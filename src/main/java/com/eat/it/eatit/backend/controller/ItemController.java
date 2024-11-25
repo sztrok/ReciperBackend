@@ -58,12 +58,13 @@ public class ItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PostMapping(value = "/new", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
         ItemDTO addedItem = itemService.addNewItem(item);
         return ResponseEntity.ok(addedItem);
     }
 
+    //TODO: poprawić, bo jest jako klucz obcy w fridge i recipe, więc z tamtąd też by tzeba usunąć
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
         return itemService.deleteItemById(id)
