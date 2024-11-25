@@ -79,7 +79,7 @@ class AccountControllerTest {
         newAccount.setUsername("New account username");
         newAccount.setPassword("test password");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/account/new")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/account")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newAccount)))
                 .andExpect(MockMvcResultMatchers.status().isOk())

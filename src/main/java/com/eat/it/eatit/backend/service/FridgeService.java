@@ -125,22 +125,18 @@ public class FridgeService {
      * @return a FridgeDTO containing the updated details of the fridge if the operation is successful, otherwise null
      */
     private FridgeDTO changeItemAmountInFridge(Long itemId, Long fridgeId, Double amount, Operation operation) {
-        Fridge fridge = fridgeRepository.findById(fridgeId).orElse(null);
-
+        Fridge fridge = findFridgeById(fridgeId);
         if (fridge == null) {
             return null;
         }
-
         List<ItemInFridge> itemsInFridge = fridge.getItems();
         ItemInFridge itemInFridge = getItemInFridgeOrNull(itemsInFridge, itemId);
-
         if (itemInFridge == null) {
             return null;
         }
 
         double currentAmount = itemInFridge.getAmount();
         double newAmount = 0.0;
-
         switch (operation) {
             case SUBSTRACT -> newAmount = currentAmount - amount;
             case ADD -> newAmount = currentAmount + amount;
@@ -153,9 +149,6 @@ public class FridgeService {
             itemInFridge.setAmount(newAmount);
             itemInFridgeService.saveItemInFridge(itemInFridge);
         }
-
-        fridge.setItems(itemsInFridge);
-        fridgeRepository.save(fridge);
         return toDTO(fridge);
     }
 
@@ -178,7 +171,7 @@ public class FridgeService {
      */
     private void addNewItemToFridge(Fridge fridge, Item item, Double amount) {
         ItemInFridge newItemInFridge = new ItemInFridge(fridge.getId(), item, amount);
-        fridge.getItems().add(newItemInFridge);
+        fridge.addItem(newItemInFridge);
         fridgeRepository.save(fridge);
     }
 

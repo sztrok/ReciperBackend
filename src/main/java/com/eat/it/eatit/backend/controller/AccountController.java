@@ -39,7 +39,7 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
-    @PostMapping(value = "/new", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     public ResponseEntity<AccountDTO> addNewAccount(@RequestBody AccountDTO accountDTO) {
         AccountDTO account = accountService.addNewAccount(accountDTO);
         return ResponseEntity.ok(account);
