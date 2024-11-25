@@ -1,5 +1,7 @@
 package com.eat.it.eatit.backend.controller;
 
+import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
+import com.eat.it.eatit.backend.mapper.simple.AccountSimpleMapper;
 import com.eat.it.eatit.backend.service.AccountService;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -29,8 +31,11 @@ public class AccountController {
     }
 
     @GetMapping(value = "all")
-    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
-        List<AccountDTO> accounts = accountService.getAllAccounts();
+    public ResponseEntity<List<AccountSimpleDTO>> getAllAccounts() {
+        List<AccountSimpleDTO> accounts = accountService.getAllAccounts()
+                .stream()
+                .map(AccountSimpleMapper::toSimple)
+                .toList();
         return ResponseEntity.ok(accounts);
     }
 
@@ -55,7 +60,7 @@ public class AccountController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping(value = "/recipes/{id}")
+    @PutMapping(value = "/{id}/recipes")
     public ResponseEntity<List<RecipeDTO>> addRecipesToAccount(@PathVariable Long id, @RequestBody List<RecipeDTO> recipeDTOS) {
         List<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(id, recipeDTOS);
         return addedRecipes != null

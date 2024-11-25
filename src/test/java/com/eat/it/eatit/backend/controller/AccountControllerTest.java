@@ -122,7 +122,7 @@ class AccountControllerTest {
         recipe2.setDescription("Recipe 2 for testing purposes");
 
         List<RecipeDTO> recipes = List.of(recipe1, recipe2);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/recipes/{id}", testAccount.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}/recipes", testAccount.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recipes)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -167,7 +167,7 @@ class AccountControllerTest {
         recipe2.setDescription("Recipe 2 for testing purposes");
 
         Set<RecipeDTO> recipes = Set.of(recipe1, recipe2);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/recipes/{id}", Long.MAX_VALUE)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}/recipes", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recipes)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
