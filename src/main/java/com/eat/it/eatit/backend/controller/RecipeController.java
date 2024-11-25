@@ -1,5 +1,7 @@
 package com.eat.it.eatit.backend.controller;
 
+import com.eat.it.eatit.backend.dto.CookwareDTO;
+import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
 import com.eat.it.eatit.backend.service.RecipeService;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +48,38 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
+        RecipeDTO recipe = recipeService.updateRecipeById(id, recipeDTO);
+        return recipe != null
+                ? ResponseEntity.ok(recipe)
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/description")
+    public ResponseEntity<RecipeDTO> updateRecipeDescription(@PathVariable Long id, @RequestBody String description) {
+        RecipeDTO recipe = recipeService.updateDescription(id, description);
+        return recipe != null
+                ? ResponseEntity.ok(recipe)
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/cookware")
+    public ResponseEntity<RecipeDTO> updateRecipeCookware(@PathVariable Long id, @RequestBody List<CookwareDTO> cookware) {
+        RecipeDTO recipe = recipeService.updateCookware(id, cookware);
+        return recipe != null
+                ? ResponseEntity.ok(recipe)
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{id}/items")
+    public ResponseEntity<RecipeDTO> updateRecipeItems(@PathVariable Long id, @RequestBody List<ItemInRecipeDTO> items) {
+        RecipeDTO recipe = recipeService.updateItems(id, items);
+        return recipe != null
+                ? ResponseEntity.ok(recipe)
+                : ResponseEntity.badRequest().build();
+    }
+
     // TODO:
-    //  update wybranych pól,
-    //  zmiana cookware,
-    //  zmiana itemów (musze zrobic ItemInRecipe????)
+    //  liczenie total calories i update po zmianie itemów, dodać analogicznie dla macro? chyba tak
 }

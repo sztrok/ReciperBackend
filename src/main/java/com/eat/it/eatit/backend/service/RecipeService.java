@@ -3,13 +3,18 @@ package com.eat.it.eatit.backend.service;
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.data.Recipe;
+import com.eat.it.eatit.backend.dto.CookwareDTO;
+import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.mapper.CookwareMapper;
+import com.eat.it.eatit.backend.mapper.ItemInRecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.eat.it.eatit.backend.mapper.RecipeMapper.*;
+import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +109,53 @@ public class RecipeService {
         }
         recipeRepository.delete(recipe);
         return true;
+    }
+
+    @Transactional
+    public RecipeDTO updateRecipeById(Long id, RecipeDTO recipeDTO) {
+        Recipe recipe = findRecipeById(id);
+        if (recipe == null) {
+            return null;
+        }
+        updateField(recipeDTO.getName(), recipe::setName);
+        updateField(recipeDTO.getDescription(), recipe::setDescription);
+        updateField(recipeDTO.getCookware(), r -> recipe.setCookware(CookwareMapper.toEntityList(r)));
+        updateField(recipeDTO.getItems(), r -> recipe.setItems(ItemInRecipeMapper.toEntityList(r)));
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        return toDTO(savedRecipe);
+    }
+
+    @Transactional
+    public RecipeDTO updateDescription(Long id, String description) {
+        Recipe recipe = findRecipeById(id);
+        if (recipe == null) {
+            return null;
+        }
+        updateField(description, recipe::setDescription);
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        return toDTO(savedRecipe);
+    }
+
+    @Transactional
+    public RecipeDTO updateCookware(Long id, List<CookwareDTO> cookware) {
+        Recipe recipe = findRecipeById(id);
+        if (recipe == null) {
+            return null;
+        }
+        updateField(cookware, r -> recipe.setCookware(CookwareMapper.toEntityList(r)));
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        return toDTO(savedRecipe);
+    }
+
+    @Transactional
+    public RecipeDTO updateItems(Long id, List<ItemInRecipeDTO> items) {
+        Recipe recipe = findRecipeById(id);
+        if (recipe == null) {
+            return null;
+        }
+        updateField(items, r -> recipe.setItems(ItemInRecipeMapper.toEntityList(r)));
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        return toDTO(savedRecipe);
     }
 
     private Recipe findRecipeById(Long recipeId) {
