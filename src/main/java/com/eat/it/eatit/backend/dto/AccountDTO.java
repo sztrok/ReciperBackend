@@ -2,8 +2,7 @@ package com.eat.it.eatit.backend.dto;
 
 import com.eat.it.eatit.backend.enums.AccountRole;
 import jakarta.annotation.Nullable;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;

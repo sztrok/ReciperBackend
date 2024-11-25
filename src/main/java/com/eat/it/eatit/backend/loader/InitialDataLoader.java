@@ -188,11 +188,17 @@ class InitialDataLoader {
     private void linkFridgeAndItems(List<Fridge> fridges, List<Item> items) {
         for (Fridge fridge : fridges) {
             List<ItemInFridge> addedItems = new ArrayList<>();
+            Set<Integer> ids = new HashSet<>();
             for (int i = 0; i < 7; i++) {
+                int id = random.nextInt(items.size());
+                if(ids.contains(id)) {
+                    continue;
+                }
+                ids.add(id);
                 ItemInFridge itemInFridge = new ItemInFridge();
                 itemInFridge.setFridgeId(fridge.getId());
                 itemInFridge.setAmount(random.nextDouble(10, 300));
-                itemInFridge.setItem(items.get(random.nextInt(items.size())));
+                itemInFridge.setItem(items.get(id));
                 addedItems.add(itemInFridge);
             }
             itemInFridgeRepository.saveAll(addedItems);

@@ -36,6 +36,10 @@ public class Fridge {
         this.items = new ArrayList<>(items);
     }
 
+    public void addItem(ItemInFridge item) {
+        items.add(item);
+    }
+
     @Override
     public String toString() {
         return "Fridge{" +

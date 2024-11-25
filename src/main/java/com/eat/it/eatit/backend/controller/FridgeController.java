@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.controller;
 
+import com.eat.it.eatit.backend.enums.Operation;
 import com.eat.it.eatit.backend.service.FridgeService;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class FridgeController {
         return ResponseEntity.ok(fridges);
     }
 
-    @PostMapping("/new")
+    @PostMapping("/item")
     public ResponseEntity<FridgeDTO> addItemToFridge(
             @RequestParam Long itemId,
             @RequestParam Long fridgeId,
@@ -50,32 +51,23 @@ public class FridgeController {
         return ResponseEntity.ok(fridgeDTO);
     }
 
-    @PatchMapping("/reduce_item_amount")
-    public ResponseEntity<FridgeDTO> reduceItemAmount(
+    @PatchMapping("/item/amount")
+    public ResponseEntity<FridgeDTO> adjustItemAmount(
             @RequestParam Long itemId,
             @RequestParam Long fridgeId,
-            @RequestParam Double amount
+            @RequestParam Double amount,
+            @RequestParam Operation operation
     ) {
-
-        FridgeDTO fridgeDTO = fridgeService.reduceItemAmount(itemId, fridgeId, amount);
+        FridgeDTO fridgeDTO;
+        if (operation == Operation.ADD) {
+           fridgeDTO = fridgeService.increaseItemAmount(itemId, fridgeId, amount);
+        }
+        else {
+            fridgeDTO = fridgeService.reduceItemAmount(itemId, fridgeId, amount);
+        }
         if (fridgeDTO == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(fridgeDTO);
     }
-
-    @PatchMapping("/increase_item_amount")
-    public ResponseEntity<FridgeDTO> increaseItemAmount(
-            @RequestParam Long itemId,
-            @RequestParam Long fridgeId,
-            @RequestParam Double amount
-    ) {
-
-        FridgeDTO fridgeDTO = fridgeService.increaseItemAmount(itemId, fridgeId, amount);
-        if (fridgeDTO == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(fridgeDTO);
-    }
-
 }

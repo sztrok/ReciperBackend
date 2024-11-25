@@ -87,10 +87,11 @@ public class AccountService {
         accountDTO.setPassword(encryptedPassword);
         Account account = toEntity(accountDTO);
         Fridge fridge = new Fridge();
-        Account savedAccount = accountRepository.save(account);
-        fridge.setOwnerId(savedAccount.getId());
+        account.setFridge(fridge);
+        accountRepository.save(account);
+        fridge.setOwnerId(account.getId());
         fridgeRepository.save(fridge);
-        return toDTO(savedAccount);
+        return toDTO(account);
     }
 
     /**

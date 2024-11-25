@@ -54,7 +54,7 @@ class ItemControllerTest {
         Item newItem = new Item();
         newItem.setName("New Test Item");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/item/new")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/item")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newItem)))
                 .andExpect(MockMvcResultMatchers.status().isOk())

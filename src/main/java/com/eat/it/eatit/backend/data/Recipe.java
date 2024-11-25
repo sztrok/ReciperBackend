@@ -22,7 +22,10 @@ public class Recipe {
 
     private String description;
 
-    @ManyToMany
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<ItemInRecipe> items = new ArrayList<>();
 
     @ManyToMany
