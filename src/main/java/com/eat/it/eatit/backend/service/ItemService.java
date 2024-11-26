@@ -107,8 +107,8 @@ public class ItemService {
     @Transactional
     public ItemDTO addNewItem(ItemDTO item) {
         Item newItem = toEntity(item);
-        Item savedItem = itemRepository.save(newItem);
-        return toDTO(savedItem);
+        itemRepository.save(newItem);
+        return toDTO(newItem);
     }
 
     /**
@@ -129,8 +129,8 @@ public class ItemService {
         updateField(itemDTO.getBarcode(), item::setBarcode);
         updateField(itemDTO.getCaloriesPer100g(), item::setCaloriesPer100g);
         updateField(itemDTO.getProteins(), item::setProteins);
-        updateField(itemDTO.getFatPer100G(), item::setFatPer100G);
-        updateField(itemDTO.getCarbsPer100G(), item::setCarbsPer100G);
+        updateField(itemDTO.getFats(), item::setFats);
+        updateField(itemDTO.getCarbs(), item::setCarbs);
         updateField(itemDTO.getItemType(), item::setItemType);
         Item saved = itemRepository.save(item);
         return toDTO(saved);
@@ -157,8 +157,8 @@ public class ItemService {
         }
         updateField(calories, item::setCaloriesPer100g);
         updateField(proteins, item::setProteins);
-        updateField(fats, item::setFatPer100G);
-        updateField(carbs, item::setCarbsPer100G);
+        updateField(fats, item::setFats);
+        updateField(carbs, item::setCarbs);
         itemRepository.save(item);
         return true;
     }
@@ -191,9 +191,9 @@ public class ItemService {
     public List<ItemDTO> getItemsFilteredByMacrosInRange(Double minValue, Double maxValue, Macros macros) {
         return switch (macros) {
             case CALORIES -> toDTOList(itemRepository.findAllByCaloriesPer100gBetween(minValue, maxValue));
-            case FATS -> toDTOList(itemRepository.findAllByFatPer100GBetween(minValue, maxValue));
+            case FATS -> toDTOList(itemRepository.findAllByFatsBetween(minValue, maxValue));
             case PROTEINS -> toDTOList(itemRepository.findAllByProteinsBetween(minValue, maxValue));
-            case CARBS -> toDTOList(itemRepository.findAllByCarbsPer100GBetween(minValue, maxValue));
+            case CARBS -> toDTOList(itemRepository.findAllByCarbsBetween(minValue, maxValue));
         };
     }
 
@@ -276,8 +276,8 @@ public class ItemService {
      */
     private List<ItemDTO> getItemsFilteredByCarbs(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCarbsPer100GIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCarbsPer100GIsLessThanEqual(value));
+            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCarbsIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByCarbsIsLessThanEqual(value));
             default -> new ArrayList<>(); // Default case returns an empty list
         };
     }
@@ -307,8 +307,8 @@ public class ItemService {
      */
     private List<ItemDTO> getItemsFilteredByFats(Double value, Comparator comparator) {
         return switch (comparator) {
-            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatPer100GIsGreaterThanEqual(value));
-            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatPer100GIsLessThanEqual(value));
+            case GREATER_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatsIsGreaterThanEqual(value));
+            case LESS_THAN_OR_EQUAL -> toDTOList(itemRepository.findAllByFatsIsLessThanEqual(value));
             default -> new ArrayList<>(); // Default case returns an empty list
         };
     }
@@ -333,9 +333,9 @@ public class ItemService {
     private Double getMacrosPercentage(ItemDTO item, Macros macros) {
         double perc;
         switch (macros) {
-            case FATS -> perc = ((item.getFatPer100G() * 9) / item.getCaloriesPer100g()) * 100;
+            case FATS -> perc = ((item.getFats() * 9) / item.getCaloriesPer100g()) * 100;
             case PROTEINS -> perc = ((item.getProteins() * 4) / item.getCaloriesPer100g()) * 100;
-            case CARBS -> perc = ((item.getCarbsPer100G() * 4) / item.getCaloriesPer100g()) * 100;
+            case CARBS -> perc = ((item.getCarbs() * 4) / item.getCaloriesPer100g()) * 100;
             default -> throw new IllegalStateException("Unexpected value: " + macros);
         }
         return perc;

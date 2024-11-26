@@ -15,27 +15,27 @@ public class ItemDTO {
     private Long barcode;
     private Double caloriesPer100g;
     private Double proteins;
-    private Double fatPer100G;
-    private Double carbsPer100G;
+    private Double fats;
+    private Double carbs;
     private ItemType itemType;
 
-    public ItemDTO(@Nullable Long id, String name, Long barcode, Double caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G, ItemType itemType) {
+    public ItemDTO(@Nullable Long id, String name, Long barcode, Double caloriesPer100g, Double proteins, Double fats, Double carbs, ItemType itemType) {
         this.id = id;
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
         this.proteins = proteins;
-        this.fatPer100G = fatPer100G;
-        this.carbsPer100G = carbsPer100G;
+        this.fats = fats;
+        this.carbs = carbs;
         this.itemType = itemType;
     }
 
-    public ItemDTO(String name, Long barcode, Double caloriesPer100g, Double proteins, Double fatPer100G, Double carbsPer100G) {
+    public ItemDTO(String name, Long barcode, Double caloriesPer100g, Double proteins, Double fats, Double carbs) {
         this.name = name;
         this.barcode = barcode;
         this.caloriesPer100g = caloriesPer100g;
         this.proteins = proteins;
-        this.fatPer100G = fatPer100G;
-        this.carbsPer100G = carbsPer100G;
+        this.fats = fats;
+        this.carbs = carbs;
     }
 }

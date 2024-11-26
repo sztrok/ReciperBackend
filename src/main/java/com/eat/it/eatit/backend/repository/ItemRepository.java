@@ -28,20 +28,20 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByCaloriesPer100gIsLessThanEqual(Double amount);
 
-    List<Item> findAllByFatPer100GIsGreaterThanEqual(Double amount);
+    List<Item> findAllByFatsIsGreaterThanEqual(Double amount);
 
-    List<Item> findAllByFatPer100GIsLessThanEqual(Double amount);
+    List<Item> findAllByFatsIsLessThanEqual(Double amount);
 
-    List<Item> findAllByCarbsPer100GIsGreaterThanEqual(Double amount);
+    List<Item> findAllByCarbsIsGreaterThanEqual(Double amount);
 
-    List<Item> findAllByCarbsPer100GIsLessThanEqual(Double amount);
+    List<Item> findAllByCarbsIsLessThanEqual(Double amount);
 
     List<Item> findAllByProteinsBetween(Double min, Double max);
 
     List<Item> findAllByCaloriesPer100gBetween(Double min, Double max);
 
-    List<Item> findAllByFatPer100GBetween(Double min, Double max);
+    List<Item> findAllByFatsBetween(Double min, Double max);
 
-    List<Item> findAllByCarbsPer100GBetween(Double min, Double max);
+    List<Item> findAllByCarbsBetween(Double min, Double max);
 
 }
