@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app-service
+    ports:
+      - "8080:8080" # Mapa portów: host -> kontener
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-service:5432/eat_it_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_PROFILES_ACTIVE: loadInitialData
+      SPRING_SECURITY_USER_NAME: admin
+      SPRING_SECURITY_USER_PASSWORD: secret
+      SPRING_SECURITY_USER_ROLES: ADMIN
+      SPRINGDOC_API_DOCS_ENABLED: "true"
+      SPRINGDOC_SWAGGER_UI_ENABLED: "true"
+      SPRINGDOC_SWAGGER_UI_OPERATIONS_SORTER: alpha
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: db-service
+    ports:
+      - "5432:5432" # Mapa portów: host -> kontener
+    environment:
+      POSTGRES_DB: eat_it_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
