@@ -21,8 +21,8 @@ class ItemMapperTest {
         item.setName("test item");
         item.setBarcode(12283456L);
         item.setCaloriesPer100g(1111.0);
-        item.setCarbsPer100G(123d);
-        item.setFatPer100G(11d);
+        item.setCarbs(123d);
+        item.setFats(11d);
         item.setProteins(324d);
         item.setItemType(ItemType.FRUIT);
 
@@ -30,8 +30,8 @@ class ItemMapperTest {
         assertEquals(item.getName(), itemDTO.getName());
         assertEquals(item.getBarcode(), itemDTO.getBarcode());
         assertEquals(item.getCaloriesPer100g(), itemDTO.getCaloriesPer100g());
-        assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
-        assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
+        assertEquals(item.getCarbs(), itemDTO.getCarbs());
+        assertEquals(item.getFats(), itemDTO.getFats());
         assertEquals(item.getProteins(), itemDTO.getProteins());
         assertEquals(item.getItemType(), itemDTO.getItemType());
     }
@@ -42,8 +42,8 @@ class ItemMapperTest {
         itemDTO.setName("test dto item");
         itemDTO.setBarcode(122334356L);
         itemDTO.setCaloriesPer100g(1142311.0);
-        itemDTO.setCarbsPer100G(1253d);
-        itemDTO.setFatPer100G(121d);
+        itemDTO.setCarbs(1253d);
+        itemDTO.setFats(121d);
         itemDTO.setProteins(3224d);
         itemDTO.setItemType(ItemType.LEGUME);
 
@@ -51,8 +51,8 @@ class ItemMapperTest {
         assertEquals(item.getName(), itemDTO.getName());
         assertEquals(item.getBarcode(), itemDTO.getBarcode());
         assertEquals(item.getCaloriesPer100g(), itemDTO.getCaloriesPer100g());
-        assertEquals(item.getCarbsPer100G(), itemDTO.getCarbsPer100G());
-        assertEquals(item.getFatPer100G(), itemDTO.getFatPer100G());
+        assertEquals(item.getCarbs(), itemDTO.getCarbs());
+        assertEquals(item.getFats(), itemDTO.getFats());
         assertEquals(item.getProteins(), itemDTO.getProteins());
         assertEquals(item.getItemType(), itemDTO.getItemType());
     }

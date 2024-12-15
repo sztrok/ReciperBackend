@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.data;
 
+import com.eat.it.eatit.backend.listener.RecipeListener;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import java.util.*;
 
 @Entity
+@EntityListeners(RecipeListener.class)
 @Table(name = "recipe")
 @NoArgsConstructor
 @Getter

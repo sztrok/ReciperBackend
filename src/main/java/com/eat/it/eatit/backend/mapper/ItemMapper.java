@@ -22,8 +22,8 @@ public class ItemMapper {
                 item.getBarcode(),
                 item.getCaloriesPer100g(),
                 item.getProteins(),
-                item.getFatPer100G(),
-                item.getCarbsPer100G(),
+                item.getFats(),
+                item.getCarbs(),
                 item.getItemType()
         );
     }
@@ -37,8 +37,8 @@ public class ItemMapper {
                 itemDTO.getBarcode(),
                 itemDTO.getCaloriesPer100g(),
                 itemDTO.getProteins(),
-                itemDTO.getFatPer100G(),
-                itemDTO.getCarbsPer100G(),
+                itemDTO.getFats(),
+                itemDTO.getCarbs(),
                 itemDTO.getItemType()
         );
     }
