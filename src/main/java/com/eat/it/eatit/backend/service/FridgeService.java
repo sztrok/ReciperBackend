@@ -4,7 +4,7 @@ import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
-import com.eat.it.eatit.backend.enums.Operation;
+import com.eat.it.eatit.backend.enums.Operations;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +80,7 @@ public class FridgeService {
 
         List<ItemInFridge> itemsInFridge = fridge.getItems();
         if (isItemAlreadyInFridge(itemsInFridge, itemId)) {
-            changeItemAmountInFridge(itemId, fridgeId, amount, Operation.ADD);
+            changeItemAmountInFridge(itemId, fridgeId, amount, Operations.ADD);
         } else {
             addNewItemToFridge(fridge, item, amount);
         }
@@ -98,7 +98,7 @@ public class FridgeService {
      */
     @Transactional
     public FridgeDTO reduceItemAmount(Long itemId, Long fridgeId, Double amount) {
-        return changeItemAmountInFridge(itemId, fridgeId, amount, Operation.SUBSTRACT);
+        return changeItemAmountInFridge(itemId, fridgeId, amount, Operations.SUBSTRACT);
     }
 
     /**
@@ -111,7 +111,7 @@ public class FridgeService {
      */
     @Transactional
     public FridgeDTO increaseItemAmount(Long itemId, Long fridgeId, Double amount) {
-        return changeItemAmountInFridge(itemId, fridgeId, amount, Operation.ADD);
+        return changeItemAmountInFridge(itemId, fridgeId, amount, Operations.ADD);
     }
 
     /**
@@ -124,7 +124,7 @@ public class FridgeService {
      * @param operation the operation to perform, either ADD or SUBTRACT
      * @return a FridgeDTO containing the updated details of the fridge if the operation is successful, otherwise null
      */
-    private FridgeDTO changeItemAmountInFridge(Long itemId, Long fridgeId, Double amount, Operation operation) {
+    private FridgeDTO changeItemAmountInFridge(Long itemId, Long fridgeId, Double amount, Operations operation) {
         Fridge fridge = findFridgeById(fridgeId);
         if (fridge == null) {
             return null;
@@ -132,14 +132,19 @@ public class FridgeService {
         List<ItemInFridge> itemsInFridge = fridge.getItems();
         ItemInFridge itemInFridge = getItemInFridgeOrNull(itemsInFridge, itemId);
         if (itemInFridge == null) {
+            if (operation == Operations.ADD) {
+                addNewItemToFridge(fridge, itemService.findItemById(itemId), amount);
+                return toDTO(fridge);
+            }
             return null;
         }
 
         double currentAmount = itemInFridge.getAmount();
-        double newAmount = 0.0;
-        switch (operation) {
-            case SUBSTRACT -> newAmount = currentAmount - amount;
-            case ADD -> newAmount = currentAmount + amount;
+        double newAmount;
+        if (operation == Operations.ADD) {
+            newAmount = currentAmount + amount;
+        } else {
+            newAmount = currentAmount - amount;
         }
 
         if (newAmount <= 0) {
