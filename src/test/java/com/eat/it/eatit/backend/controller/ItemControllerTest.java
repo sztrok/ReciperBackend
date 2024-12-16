@@ -2,6 +2,7 @@ package com.eat.it.eatit.backend.controller;
 
 import com.eat.it.eatit.backend.IntegrationTest;
 import com.eat.it.eatit.backend.data.Item;
+import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -335,6 +338,136 @@ class ItemControllerTest {
 
     }
 
+
+    @Test
+    void shouldUpdateItemNutritionInformation() throws Exception {
+        Long itemId = testItem.getId();
+        testItem.setProteins(10D);
+        testItem.setCarbs(40D);
+        testItem.setFats(20D);
+
+        Double newProteins = 11D;
+        Double newCarbs = 44D;
+        Double newFats = 9D;
+        Double newCalories = 10000D;
+
+        String urlTemplate = "/api/v1/item/{id}/nutrition";
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("proteins", String.valueOf(newProteins))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newProteins, testItem.getProteins());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("carbs", String.valueOf(newCarbs))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newCarbs, testItem.getCarbs());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("fats", String.valueOf(newFats))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newFats, testItem.getFats());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("calories", String.valueOf(newCalories))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newCalories, testItem.getCaloriesPer100g());
+
+    }
+
+
+    @Test
+    void shouldUpdateItemGeneralInformation() throws Exception {
+        Long itemId = testItem.getId();
+        testItem.setBarcode(1188L);
+        testItem.setItemType(ItemType.VEGETABLE);
+
+        String newName = "changed Test Item";
+        Long newBarcode = 99977778888555L;
+        ItemType newItemType = ItemType.DAIRY;
+
+        String urlTemplate = "/api/v1/item/{id}/info";
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("name", newName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newName, testItem.getName());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("barcode", String.valueOf(newBarcode))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newBarcode, testItem.getBarcode());
+
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
+                        .param("itemType", String.valueOf(newItemType))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        assertEquals(newItemType, testItem.getItemType());
+
+    }
+
+
+    @Test
+    void shoudGetAllItemsForGivenTypes() throws Exception {
+        Item item1 = new Item("Item 1", 165D, 10.0, 5.0, 20.0);
+        Item item2 = new Item("Item 2", 118D, 15.0, 2.0, 10.0);
+        Item item3 = new Item("Item 3", 312D, 8.0, 20.0, 25.0);
+
+        item1.setItemType(ItemType.FISH);
+        item2.setItemType(ItemType.GRAIN);
+        item3.setItemType(ItemType.VEGETABLE);
+
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+
+        Set<ItemType> itemTypes1 = Set.of(ItemType.FISH, ItemType.GRAIN, ItemType.VEGETABLE);
+        Set<ItemType> itemTypes2 = Set.of(ItemType.FISH, ItemType.VEGETABLE);
+        Set<ItemType> itemTypes3 = Set.of(ItemType.GRAIN);
+        Set<ItemType> itemTypes4 = Set.of(ItemType.POULTRY);
+        Set<ItemType> itemTypes5 = Set.of(ItemType.POULTRY, ItemType.FISH);
+
+        String urlTemplate = "/api/v1/item/types";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(itemTypes1)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Item 3"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(itemTypes2)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Item 3"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(itemTypes3)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(itemTypes4)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(0));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(itemTypes5)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+    }
+
     @Test
     void shouldReturnBadRequest_whenItemWithIdDoesNotExist() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/{id}", Long.MAX_VALUE)
@@ -375,5 +508,22 @@ class ItemControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    //TODO: dodać testy żeby pokrywały cały controller
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingItemGeneralInformation_forNonExistentItem() throws Exception {
+        String newName = "changed Test Item";
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/item/{id}/info", Long.MAX_VALUE)
+                        .contentType("application/json")
+                        .param("name", newName))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingItemNutritionInformation_forNonExistentItem() throws Exception {
+        Double newFats = 11D;
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/item/{id}/nutrition", Long.MAX_VALUE)
+                        .contentType("application/json")
+                        .param("fats", String.valueOf(newFats)))
+                .andExpect(status().isBadRequest());
+    }
 }

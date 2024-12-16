@@ -103,12 +103,12 @@ public class ItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/info")
+    @PatchMapping("/{id}/info")
     @Operation(summary = "Update an item's general information")
     @ApiResponse(responseCode = "200", description = "Item information updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid update data")
     public ResponseEntity<ItemDTO> updateItemInfo(
-            @RequestParam Long id,
+            @PathVariable Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long barcode,
             @RequestParam(required = false) ItemType itemType
@@ -118,12 +118,12 @@ public class ItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/nutrition")
+    @PatchMapping("/{id}/nutrition")
     @Operation(summary = "Update an item's nutrition details")
     @ApiResponse(responseCode = "200", description = "Item nutrition details updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid nutrition data")
     public ResponseEntity<ItemDTO> updateItemNutrition(
-            @RequestParam Long id,
+            @PathVariable Long id,
             @RequestParam(required = false) Double calories,
             @RequestParam(required = false) Double proteins,
             @RequestParam(required = false) Double fats,
