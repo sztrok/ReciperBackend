@@ -28,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ItemControllerTest {
 
+    private static final String ITEM_API_PREFIX = "/api/v1/item/";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -57,7 +59,8 @@ class ItemControllerTest {
         Item newItem = new Item();
         newItem.setName("New Test Item");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/item")
+        String urlTemplate = "/api/v1/item";
+        mockMvc.perform(MockMvcRequestBuilders.post(urlTemplate)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newItem)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -69,7 +72,8 @@ class ItemControllerTest {
 
     @Test
     void shouldGetItemById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/{id}", testItem.getId())
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, testItem.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test Item"));
@@ -79,7 +83,8 @@ class ItemControllerTest {
     void shouldUpdateItem() throws Exception {
         testItem.setName("Updated Test Item");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/item/{id}", testItem.getId())
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.put(urlTemplate, testItem.getId())
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(testItem)))
                 .andExpect(status().isOk())
@@ -91,7 +96,8 @@ class ItemControllerTest {
 
     @Test
     void shouldDeleteItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/item/{id}", testItem.getId())
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.delete(urlTemplate, testItem.getId())
                         .contentType("application/json"))
                 .andExpect(status().isOk());
 
@@ -101,7 +107,8 @@ class ItemControllerTest {
 
     @Test
     void shouldGetAllItems() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/all")
+        String urlTemplate = ITEM_API_PREFIX + "all";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Test Item"));
@@ -109,7 +116,8 @@ class ItemControllerTest {
 
     @Test
     void shouldGetItemByName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/name")
+        String urlTemplate = ITEM_API_PREFIX + "name";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .param("name", "Test Item")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -118,7 +126,8 @@ class ItemControllerTest {
 
     @Test
     void shouldGetAllItemsByName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/all/name")
+        String urlTemplate = ITEM_API_PREFIX + "all/name";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .param("name", "Test Item")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -130,7 +139,8 @@ class ItemControllerTest {
         testItem.setBarcode(123456L);
         itemRepository.save(testItem);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/barcode")
+        String urlTemplate = ITEM_API_PREFIX + "barcode";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .param("barcode", "123456")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -139,14 +149,16 @@ class ItemControllerTest {
 
     @Test
     void shouldHandleNonExistentItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/items/{id}", Long.MAX_VALUE)
+        String urlTemplate = "/api/items/{id}";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void shouldHandleInvalidItemId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/items/{invalid-id}", "invalid id")
+        String urlTemplate = "/api/items/{invalid-id}";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, "invalid id")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -162,7 +174,7 @@ class ItemControllerTest {
         itemRepository.save(item2);
         itemRepository.save(item3);
 
-        String urlTemplate = "/api/v1/item/macro_range";
+        String urlTemplate = ITEM_API_PREFIX + "macro_range";
 
         // Filter by proteins between 8 and 12
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -215,7 +227,7 @@ class ItemControllerTest {
         itemRepository.save(item1);
         itemRepository.save(item2);
 
-        String urlTemplate = "/api/v1/item/macro";
+        String urlTemplate = ITEM_API_PREFIX + "macro";
 
         // Filter by proteins greater than or equal to 10
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -304,7 +316,7 @@ class ItemControllerTest {
         itemRepository.save(item2);
         itemRepository.save(item3);
 
-        String urlTemplate = "/api/v1/item/macro_percentage";
+        String urlTemplate = ITEM_API_PREFIX + "macro_percentage";
 
         // Filter by proteins percentage between 0 and 25
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -351,7 +363,7 @@ class ItemControllerTest {
         Double newFats = 9D;
         Double newCalories = 10000D;
 
-        String urlTemplate = "/api/v1/item/{id}/nutrition";
+        String urlTemplate = ITEM_API_PREFIX + "{id}/nutrition";
 
         mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
                         .param("proteins", String.valueOf(newProteins))
@@ -390,7 +402,7 @@ class ItemControllerTest {
         Long newBarcode = 99977778888555L;
         ItemType newItemType = ItemType.DAIRY;
 
-        String urlTemplate = "/api/v1/item/{id}/info";
+        String urlTemplate = ITEM_API_PREFIX + "{id}/info";
 
         mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, itemId)
                         .param("name", newName)
@@ -433,7 +445,7 @@ class ItemControllerTest {
         Set<ItemType> itemTypes4 = Set.of(ItemType.POULTRY);
         Set<ItemType> itemTypes5 = Set.of(ItemType.POULTRY, ItemType.FISH);
 
-        String urlTemplate = "/api/v1/item/types";
+        String urlTemplate = ITEM_API_PREFIX + "types";
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(itemTypes1)))
@@ -470,14 +482,16 @@ class ItemControllerTest {
 
     @Test
     void shouldReturnBadRequest_whenItemWithIdDoesNotExist() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/{id}", Long.MAX_VALUE)
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldReturnBadRequest_whenGettingItemWithNoMathingName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/name")
+        String urlTemplate = ITEM_API_PREFIX + "name";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .param("name", "ŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹŹ TEST")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -485,7 +499,8 @@ class ItemControllerTest {
 
     @Test
     void shouldReturnBadRequest_whenItemWithBarcodeDoesNotExist() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/item/barcode")
+        String urlTemplate = ITEM_API_PREFIX + "barcode";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate)
                         .param("barcode", String.valueOf(Long.MAX_VALUE))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -495,7 +510,8 @@ class ItemControllerTest {
     void shouldReturnBadRequest_whenUpdatingNonExistentItem() throws Exception {
         testItem.setName("Updated Test Item");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/item/{id}", Long.MAX_VALUE)
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.put(urlTemplate, Long.MAX_VALUE)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(testItem)))
                 .andExpect(status().isBadRequest());
@@ -503,7 +519,8 @@ class ItemControllerTest {
 
     @Test
     void shouldReturnBadRequest_whenDeletingNonExistentItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/item/{id}", Long.MAX_VALUE)
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.delete(urlTemplate, Long.MAX_VALUE)
                         .contentType("application/json"))
                 .andExpect(status().isBadRequest());
     }
@@ -512,7 +529,8 @@ class ItemControllerTest {
     @Test
     void shouldReturnBadRequest_whenUpdatingItemGeneralInformation_forNonExistentItem() throws Exception {
         String newName = "changed Test Item";
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/item/{id}/info", Long.MAX_VALUE)
+        String urlTemplate = ITEM_API_PREFIX + "{id}/info";
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, Long.MAX_VALUE)
                         .contentType("application/json")
                         .param("name", newName))
                 .andExpect(status().isBadRequest());
@@ -521,7 +539,8 @@ class ItemControllerTest {
     @Test
     void shouldReturnBadRequest_whenUpdatingItemNutritionInformation_forNonExistentItem() throws Exception {
         Double newFats = 11D;
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/item/{id}/nutrition", Long.MAX_VALUE)
+        String urlTemplate = ITEM_API_PREFIX + "{id}/nutrition";
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, Long.MAX_VALUE)
                         .contentType("application/json")
                         .param("fats", String.valueOf(newFats)))
                 .andExpect(status().isBadRequest());

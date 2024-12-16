@@ -102,4 +102,19 @@ public class CookwareService {
         cookwareRepository.delete(existingCookware);
         return true;
     }
+
+    @Transactional
+    protected Cookware getCookwareByName(String name) {
+        return cookwareRepository.findCookwareByNameIgnoreCase(name);
+    }
+
+    @Transactional
+    protected Cookware createNewCookware(String name) {
+        return cookwareRepository.save(new Cookware(name));
+    }
+
+    @Transactional
+    protected Cookware createNewCookware(CookwareDTO cookwareDTO) {
+        return cookwareRepository.save(toEntity(cookwareDTO));
+    }
 }

@@ -252,6 +252,21 @@ public class ItemService {
         return itemRepository.findById(id).orElse(null);
     }
 
+    protected Item findItemByName(String name) {
+        return itemRepository.findByNameIgnoreCase(name);
+    }
+
+    @Transactional
+    protected Item createNewItem(ItemDTO itemDTO) {
+        Item existingItem = findItemByName(itemDTO.getName());
+        if (existingItem != null) {
+            return existingItem;
+        }
+        Item item = toEntity(itemDTO);
+        itemRepository.save(item);
+        return item;
+    }
+
     /**
      * Filters items based on their calorie content according to the specified comparator.
      *
