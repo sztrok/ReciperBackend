@@ -104,9 +104,9 @@ public class RecipeController {
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
     public ResponseEntity<RecipeDTO> updateRecipeItems(
             @PathVariable Long recipeId,
-            @RequestBody Map<ItemDTO, Double> itemsWithAmounts
+            @RequestBody Map<Long, Double> itemsWithAmounts
     ) {
-        RecipeDTO recipe = recipeService.updateItems(recipeId, items);
+        RecipeDTO recipe = recipeService.updateItems(recipeId, itemsWithAmounts);
         return recipe != null
                 ? ResponseEntity.ok(recipe)
                 : ResponseEntity.badRequest().build();

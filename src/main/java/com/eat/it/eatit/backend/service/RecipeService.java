@@ -10,6 +10,7 @@ import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.mapper.CookwareMapper;
 import com.eat.it.eatit.backend.mapper.ItemInRecipeMapper;
+import com.eat.it.eatit.backend.repository.ItemInRecipeRepository;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.Map;
 @Service
 public class RecipeService {
 
+    private final ItemInRecipeRepository itemInRecipeRepository;
     RecipeRepository recipeRepository;
     ItemService itemService;
     ItemInRecipeService itemInRecipeService;
@@ -40,11 +42,12 @@ public class RecipeService {
             RecipeRepository recipeRepository,
             ItemService itemService,
             ItemInRecipeService itemInRecipeService,
-            CookwareService cookwareService) {
+            CookwareService cookwareService, ItemInRecipeRepository itemInRecipeRepository) {
         this.recipeRepository = recipeRepository;
         this.itemService = itemService;
         this.itemInRecipeService = itemInRecipeService;
         this.cookwareService = cookwareService;
+        this.itemInRecipeRepository = itemInRecipeRepository;
     }
 
     /**
@@ -89,25 +92,25 @@ public class RecipeService {
         return toDTO(recipe);
     }
 
-    @Transactional
-    public RecipeDTO addItemsToRecipe(Long recipeId, Map<Long, Double> itemsWithAmounts) {
-        Recipe recipe = findRecipeById(recipeId);
-        if (recipe == null) {
-            return null;
-        }
-        List<ItemInRecipe> addedItems = new ArrayList<>();
-        for (Long id : itemsWithAmounts.keySet()) {
-            Item item = itemService.findItemById(id);
-            if (item == null) {
-                return null;
-            }
-            ItemInRecipe newItem = new ItemInRecipe(recipeId, item, itemsWithAmounts.get(id));
-            addedItems.add(newItem);
-        }
-        itemInRecipeService.saveItemsInRecipe(addedItems);
-        Recipe addedRecipe = recipeRepository.save(recipe);
-        return toDTO(addedRecipe);
-    }
+//    @Transactional
+//    public RecipeDTO addItemsToRecipe(Long recipeId, Map<Long, Double> itemsWithAmounts) {
+//        Recipe recipe = findRecipeById(recipeId);
+//        if (recipe == null) {
+//            return null;
+//        }
+//        List<ItemInRecipe> addedItems = new ArrayList<>();
+//        for (Long id : itemsWithAmounts.keySet()) {
+//            Item item = itemService.findItemById(id);
+//            if (item == null) {
+//                return null;
+//            }
+//            ItemInRecipe newItem = new ItemInRecipe(recipeId, item, itemsWithAmounts.get(id));
+//            addedItems.add(newItem);
+//        }
+//        itemInRecipeService.saveItemsInRecipe(addedItems);
+//        Recipe addedRecipe = recipeRepository.save(recipe);
+//        return toDTO(addedRecipe);
+//    }
 
     @Transactional
     public boolean deleteRecipeById(Long id) {
@@ -166,16 +169,25 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeDTO updateItems(Long id, Map<ItemDTO, Double> items) {
+    public RecipeDTO updateItems(Long id, Map<Long, Double> items) {
         Recipe recipe = findRecipeById(id);
         if (recipe == null) {
             return null;
         }
 
+        List<ItemInRecipe> newRecipeItems = new ArrayList<>();
+        for (Long itemId : items.keySet()) {
+            Item item = itemService.findItemById(itemId);
+            if (item == null) {
+                return null;
+            }
+            ItemInRecipe newItem = new ItemInRecipe(id, item, items.get(itemId));
+            newRecipeItems.add(newItem);
+        }
 
-
-
-        updateField(items, r -> recipe.setItems(ItemInRecipeMapper.toEntityList(r)));
+        itemInRecipeService.saveItemsInRecipe(newRecipeItems);
+        itemInRecipeRepository.flush();
+        recipe.setItems(newRecipeItems);
         Recipe savedRecipe = recipeRepository.save(recipe);
         return toDTO(savedRecipe);
     }

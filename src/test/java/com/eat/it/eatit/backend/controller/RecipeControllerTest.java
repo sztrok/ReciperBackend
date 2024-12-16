@@ -6,7 +6,9 @@ import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
+import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.CookwareRepository;
 import com.eat.it.eatit.backend.repository.ItemInRecipeRepository;
 import com.eat.it.eatit.backend.repository.ItemRepository;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -190,27 +193,23 @@ class RecipeControllerTest {
 
     @Test
     void shouldUpdateRecipeItems() throws Exception {
-        List<Item> newItems = List.of(
-                new Item("Pepper"),
-                new Item("Olive oil")
-        );
-        itemRepository.saveAll(newItems);
+        Item newItem1 = new Item("Pepper");
+        Item newItem2 = new Item("Olive oil"); //DLACZEGO SIE W ZLEJ KOLEJNOSCI ROBIA
+        itemRepository.saveAll(List.of(newItem1, newItem2));
         itemRepository.flush();
 
-        List<ItemInRecipe> newRecipeItems = List.of(
-                new ItemInRecipe(testRecipe.getId(), newItems.get(0), 1D),
-                new ItemInRecipe(testRecipe.getId(), newItems.get(1), 2D)
+        Map<Long, Double> itemsWithAmounts = Map.of(
+                newItem1.getId(), 50.0,
+                newItem2.getId(), 100.0
         );
-        itemInRecipeRepository.saveAll(newRecipeItems);
-        itemInRecipeRepository.flush();
 
         String urlTemplate = RECIPE_API_PREFIX + "{id}/items";
         mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, testRecipe.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newRecipeItems)))
+                        .content(objectMapper.writeValueAsString(itemsWithAmounts)))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name").value("Pepper"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].name").value("Olive oil"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].item.name").value("Pepper"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].item.name").value("Olive oil"));
     }
 
 }
