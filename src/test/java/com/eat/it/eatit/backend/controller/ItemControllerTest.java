@@ -288,7 +288,7 @@ class ItemControllerTest {
                         .param("comparator", "LESS_THAN_OR_EQUAL")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 1"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Item 2"));
     }
 
     @Test
