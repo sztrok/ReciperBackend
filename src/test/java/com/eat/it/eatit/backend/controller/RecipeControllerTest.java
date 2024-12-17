@@ -6,14 +6,11 @@ import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
-import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.CookwareRepository;
 import com.eat.it.eatit.backend.repository.ItemInRecipeRepository;
 import com.eat.it.eatit.backend.repository.ItemRepository;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
-import com.eat.it.eatit.backend.service.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +56,6 @@ class RecipeControllerTest {
 
     @Autowired
     private ItemInRecipeRepository itemInRecipeRepository;
-
-    @Autowired
-    private ItemService itemService;
 
     private Recipe testRecipe;
 
@@ -192,24 +186,94 @@ class RecipeControllerTest {
     }
 
     @Test
-    void shouldUpdateRecipeItems() throws Exception {
-        Item newItem1 = new Item("Pepper");
-        Item newItem2 = new Item("Olive oil"); //DLACZEGO SIE W ZLEJ KOLEJNOSCI ROBIA
+    void
+    shouldUpdateRecipeItems() throws Exception {
+        Item newItem1 = new Item("Pepperoncino");
+        Item newItem2 = new Item("Olive oil");
         itemRepository.saveAll(List.of(newItem1, newItem2));
         itemRepository.flush();
 
-        Map<Long, Double> itemsWithAmounts = Map.of(
-                newItem1.getId(), 50.0,
-                newItem2.getId(), 100.0
-        );
+        Map<Long, Double> itemsWithAmounts = new LinkedHashMap<>();
+        itemsWithAmounts.put(newItem1.getId(), 50.0);
+        itemsWithAmounts.put(newItem2.getId(), 100.0);
 
         String urlTemplate = RECIPE_API_PREFIX + "{id}/items";
         mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, testRecipe.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(itemsWithAmounts)))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].item.name").value("Pepper"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].item.name").value("Pepperoncino"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].item.name").value("Olive oil"));
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenRecipeWithIdDoesNotExist() throws Exception {
+        String urlTemplate = RECIPE_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenDeletingNonExistentRecipe() throws Exception {
+        String urlTemplate = RECIPE_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.delete(urlTemplate, Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingNonExistentRecipe() throws Exception {
+        RecipeDTO updatedRecipe = new RecipeDTO();
+        updatedRecipe.setName("Updated Recipe");
+        updatedRecipe.setDescription("Updated Recipe Description");
+        String urlTemplate = RECIPE_API_PREFIX + "{id}";
+        mockMvc.perform(MockMvcRequestBuilders.put(urlTemplate, Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedRecipe)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingInfoForNonExistentRecipe() throws Exception {
+        String newName = "updated name";
+        String newDescription = "new description";
+        String urlTemplate = RECIPE_API_PREFIX + "{id}/info";
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("name", newName)
+                        .param("description", newDescription))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingCookwareForNonExistentRecipe() throws Exception {
+        List<CookwareDTO> newCookware = List.of(new CookwareDTO("Szynkowar"));
+        String urlTemplate = RECIPE_API_PREFIX + "{id}/cookware";
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newCookware)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingItemsForNonExistentRecipe() throws Exception {
+        Map<Long, Double> itemsWithAmounts = Map.of(0L, 20D);
+        String urlTemplate = RECIPE_API_PREFIX + "{id}/items";
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, Long.MAX_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(itemsWithAmounts)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequest_whenUpdatingWithNonExistentItems() throws Exception {
+        Map<Long, Double> itemsWithAmounts = Map.of(Long.MAX_VALUE, 20D);
+        String urlTemplate = RECIPE_API_PREFIX + "{id}/items";
+        mockMvc.perform(MockMvcRequestBuilders.patch(urlTemplate, 0)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(itemsWithAmounts)))
+                .andExpect(status().isBadRequest());
     }
 
 }

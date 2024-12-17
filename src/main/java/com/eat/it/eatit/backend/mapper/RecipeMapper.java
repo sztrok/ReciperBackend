@@ -5,7 +5,6 @@ import com.eat.it.eatit.backend.dto.RecipeDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RecipeMapper {
 
@@ -41,13 +40,13 @@ public class RecipeMapper {
         if(recipeSet == null) {
             return new ArrayList<>();
         }
-        return recipeSet.stream().map(RecipeMapper::toDTO).collect(Collectors.toList());
+        return recipeSet.stream().map(RecipeMapper::toDTO).toList();
     }
 
     public static List<Recipe> toEntityList(List<RecipeDTO> recipeDTOSet) {
         if(recipeDTOSet == null) {
             return new ArrayList<>();
         }
-        return recipeDTOSet.stream().map(RecipeMapper::toEntity).collect(Collectors.toList());
+        return recipeDTOSet.stream().map(RecipeMapper::toEntity).toList();
     }
 }
