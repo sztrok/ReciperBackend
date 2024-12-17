@@ -5,7 +5,6 @@ import com.eat.it.eatit.backend.dto.CookwareDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CookwareMapper {
 
@@ -34,13 +33,13 @@ public class CookwareMapper {
         }
         return cookwareSet.stream()
                 .map(CookwareMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static List<Cookware> toEntityList(List<CookwareDTO> cookwareDTOSet) {
         if(cookwareDTOSet == null) {
             return new ArrayList<>();
         }
-        return cookwareDTOSet.stream().map(CookwareMapper::toEntity).collect(Collectors.toList());
+        return cookwareDTOSet.stream().map(CookwareMapper::toEntity).toList();
     }
 }

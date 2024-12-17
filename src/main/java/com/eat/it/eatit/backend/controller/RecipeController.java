@@ -1,6 +1,7 @@
 package com.eat.it.eatit.backend.controller;
 
 import com.eat.it.eatit.backend.dto.CookwareDTO;
+import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
 import com.eat.it.eatit.backend.service.RecipeService;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/recipe")
@@ -24,7 +26,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Retrieve a recipe by ID", description = "Fetches a recipe based on its unique identifier")
+    @Operation(summary = "Get Recipe by ID", description = "Retrieve the details of a recipe by providing its unique ID.")
     @ApiResponse(responseCode = "200", description = "Recipe retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
     public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
@@ -35,7 +37,7 @@ public class RecipeController {
     }
 
     @GetMapping("/all")
-    @Operation(summary = "Retrieve all recipes", description = "Fetches all available recipes from the database")
+    @Operation(summary = "Get all Recipes", description = "Retrieve a list of all recipes available in the database.")
     @ApiResponse(responseCode = "200", description = "All recipes retrieved successfully")
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         List<RecipeDTO> recipes = recipeService.getAllRecipes();
@@ -43,7 +45,7 @@ public class RecipeController {
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
-    @Operation(summary = "Add a new recipe", description = "Creates a new recipe and saves it to the database")
+    @Operation(summary = "Create a new Recipe", description = "Add a new recipe to the system by providing its details in JSON format.")
     @ApiResponse(responseCode = "200", description = "Recipe added successfully")
     public ResponseEntity<RecipeDTO> addNewRecipe(@RequestBody RecipeDTO recipeDTO) {
         RecipeDTO added = recipeService.addNewRecipe(recipeDTO);
@@ -51,7 +53,7 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a recipe by ID", description = "Removes a recipe based on its unique identifier")
+    @Operation(summary = "Delete Recipe by ID", description = "Remove a recipe from the system by providing its unique ID.")
     @ApiResponse(responseCode = "200", description = "Recipe deleted successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable Long id) {
@@ -60,8 +62,8 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/{id}")
-    @Operation(summary = "Update a recipe", description = "Updates an existing recipe using its ID and provided details")
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a Recipe", description = "Update the details of an existing recipe by providing its ID and updated information.")
     @ApiResponse(responseCode = "200", description = "Recipe updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
     public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
@@ -71,19 +73,22 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/{id}/description")
-    @Operation(summary = "Update recipe description", description = "Updates the description of an existing recipe")
-    @ApiResponse(responseCode = "200", description = "Recipe description updated successfully")
+    @PatchMapping("/{id}/info")
+    @Operation(summary = "Update Recipe Information", description = "Modify general information of a recipe such as its name and description.")
+    @ApiResponse(responseCode = "200", description = "Recipe information updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
-    public ResponseEntity<RecipeDTO> updateRecipeDescription(@PathVariable Long id, @RequestBody String description) {
-        RecipeDTO recipe = recipeService.updateDescription(id, description);
+    public ResponseEntity<RecipeDTO> updateRecipeDescription(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description) {
+        RecipeDTO recipe = recipeService.updateDescription(id, name, description);
         return recipe != null
                 ? ResponseEntity.ok(recipe)
                 : ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/{id}/cookware")
-    @Operation(summary = "Update recipe cookware", description = "Updates the cookware associated with a recipe")
+    @Operation(summary = "Update Recipe Cookware", description = "Update the list of cookware required for preparing a specific recipe.")
     @ApiResponse(responseCode = "200", description = "Recipe cookware updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
     public ResponseEntity<RecipeDTO> updateRecipeCookware(@PathVariable Long id, @RequestBody List<CookwareDTO> cookware) {
@@ -93,12 +98,15 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/{id}/items")
-    @Operation(summary = "Update recipe items", description = "Updates the items associated with a recipe")
+    @PatchMapping("/{recipeId}/items")
+    @Operation(summary = "Update Items in Recipe", description = "Modify the list of ingredients included in a recipe.")
     @ApiResponse(responseCode = "200", description = "Recipe items updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
-    public ResponseEntity<RecipeDTO> updateRecipeItems(@PathVariable Long id, @RequestBody List<ItemInRecipeDTO> items) {
-        RecipeDTO recipe = recipeService.updateItems(id, items);
+    public ResponseEntity<RecipeDTO> updateRecipeItems(
+            @PathVariable Long recipeId,
+            @RequestBody Map<Long, Double> itemsWithAmounts
+    ) {
+        RecipeDTO recipe = recipeService.updateItems(recipeId, itemsWithAmounts);
         return recipe != null
                 ? ResponseEntity.ok(recipe)
                 : ResponseEntity.badRequest().build();

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CookwareRepository extends JpaRepository<Cookware, Long> {
-
+    Cookware findCookwareByNameIgnoreCase(String name);
 }

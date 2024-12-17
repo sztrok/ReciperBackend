@@ -17,6 +17,10 @@ public class ItemInRecipeService {
         this.itemInRecipeRepository = itemInRecipeRepository;
     }
 
+    protected ItemInRecipe createNewItemInRecipe(ItemInRecipe itemInRecipe) {
+        return itemInRecipeRepository.save(itemInRecipe);
+    }
+
     protected void saveItemsInRecipe(List<ItemInRecipe> items) {
         itemInRecipeRepository.saveAll(items);
     }

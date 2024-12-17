@@ -5,7 +5,6 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ItemMapper {
 
@@ -47,13 +46,13 @@ public class ItemMapper {
         if (items == null) {
             return new ArrayList<>();
         }
-        return items.stream().map(ItemMapper::toDTO).collect(Collectors.toList());
+        return items.stream().map(ItemMapper::toDTO).toList();
     }
 
     public static List<Item> toEntityList(List<ItemDTO> itemDTOSet) {
         if (itemDTOSet == null) {
             return new ArrayList<>();
         }
-        return itemDTOSet.stream().map(ItemMapper::toEntity).collect(Collectors.toList());
+        return itemDTOSet.stream().map(ItemMapper::toEntity).toList();
     }
 }
