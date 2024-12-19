@@ -1,5 +1,7 @@
 package com.eat.it.eatit.backend.data;
 
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.listener.RecipeListener;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,12 +37,37 @@ public class Recipe {
 
     private Integer totalCalories;
 
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
+
+    @Enumerated(EnumType.STRING)
+    private RecipeDifficulty difficulty;
+
     public Recipe(String name, String description, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories) {
         this.name = name;
         this.description = description;
         this.items = items;
         this.cookware = cookware;
         this.totalCalories = totalCalories;
+    }
+
+    public Recipe(String name, String description, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories, Visibility visibility) {
+        this.name = name;
+        this.description = description;
+        this.items = items;
+        this.cookware = cookware;
+        this.totalCalories = totalCalories;
+        this.visibility = visibility;
+    }
+
+    public Recipe(String name, String description, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
+        this.name = name;
+        this.description = description;
+        this.items = items;
+        this.cookware = cookware;
+        this.totalCalories = totalCalories;
+        this.visibility = visibility;
+        this.difficulty = difficulty;
     }
 
     public Recipe(String name, String description) {

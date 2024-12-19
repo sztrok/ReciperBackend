@@ -6,6 +6,9 @@ import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.enums.ItemType;
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.mapper.CookwareMapper;
 import com.eat.it.eatit.backend.mapper.ItemInRecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
@@ -72,6 +75,16 @@ public class RecipeService {
             recipeDTOList.add(toDTO(recipe));
         }
         return recipeDTOList;
+    }
+
+    public List<RecipeDTO> getRecipesForAccount(Long accountId, List<Visibility> visibilityList) {
+        return null;
+    }
+
+    public List<RecipeDTO> getRecipesByItemTypes(List<ItemType> itemTypes) {
+    }
+
+    public List<RecipeDTO> getRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
     }
 
     /**

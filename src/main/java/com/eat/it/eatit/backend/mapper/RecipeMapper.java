@@ -21,7 +21,9 @@ public class RecipeMapper {
                 recipe.getDescription(),
                 ItemInRecipeMapper.toDTOList(recipe.getItems()),
                 CookwareMapper.toDTOList(recipe.getCookware()),
-                recipe.getTotalCalories());
+                recipe.getTotalCalories(),
+                recipe.getVisibility(),
+                recipe.getDifficulty());
     }
 
     public static Recipe toEntity(RecipeDTO recipeDTO) {
@@ -33,7 +35,9 @@ public class RecipeMapper {
                 recipeDTO.getDescription(),
                 ItemInRecipeMapper.toEntityList(recipeDTO.getItems()),
                 CookwareMapper.toEntityList(recipeDTO.getCookware()),
-                recipeDTO.getTotalCalories());
+                recipeDTO.getTotalCalories(),
+                recipeDTO.getVisibility(),
+                recipeDTO.getDifficulty());
     }
 
     public static List<RecipeDTO> toDTOList(List<Recipe> recipeSet) {

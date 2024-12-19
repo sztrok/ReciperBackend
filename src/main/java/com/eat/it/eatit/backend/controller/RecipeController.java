@@ -3,6 +3,9 @@ package com.eat.it.eatit.backend.controller;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
+import com.eat.it.eatit.backend.enums.ItemType;
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.service.RecipeService;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +45,17 @@ public class RecipeController {
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         List<RecipeDTO> recipes = recipeService.getAllRecipes();
         return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping("/account/{accountId}")
+    @Operation(summary = "Get Recipes for Account", description = "Retrieve a list of all recipes associated with a specific account ID.")
+    @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid or non-existent account ID")
+    public ResponseEntity<List<RecipeDTO>> getAllRecipesForAccount(@PathVariable Long accountId, @RequestBody List<Visibility> visibilityList) {
+        List<RecipeDTO> recipes = recipeService.getRecipesForAccount(accountId, visibilityList);
+        return recipes != null && !recipes.isEmpty()
+                ? ResponseEntity.ok(recipes)
+                : ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
@@ -112,6 +126,31 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    // TODO:
+    @GetMapping("/items/item_types")
+    @Operation(summary = "Get Recipes by Item Types", description = "Retrieve a list of recipes that use specific item types.")
+    @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid or non-existent item types")
+    public ResponseEntity<List<RecipeDTO>> getRecipeByItemTypes(@RequestParam List<ItemType> itemTypes) {
+        List<RecipeDTO> recipes = recipeService.getRecipesByItemTypes(itemTypes);
+        return recipes != null && !recipes.isEmpty()
+                ? ResponseEntity.ok(recipes)
+                : ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/difficulty")
+    @Operation(summary = "Get Recipes by Difficulty", description = "Retrieve recipes based on selected difficulty levels such as 'EASY', 'MEDIUM', or 'HARD'.")
+    @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid or unsupported difficulty levels")
+    public ResponseEntity<List<RecipeDTO>> getRecipesByDifficulty(@RequestParam List<RecipeDifficulty> difficultyList) {
+        List<RecipeDTO> recipes = recipeService.getRecipesByDifficulty(difficultyList);
+        return recipes != null && !recipes.isEmpty()
+                ? ResponseEntity.ok(recipes)
+                : ResponseEntity.badRequest().build();
+    }
+
+    
+    // TODO: przemyśleć jak ma działać widoczność i dostęp do przepisów - póki co zrobić private i public z opcją udostępnienia,
+    //  pole z polubionymi przepisami,
+    //  więcej GETów - getByItemTypes, getByRecipeDifficulty
     //  liczenie total calories i update po zmianie itemów, dodać analogicznie dla macro? chyba tak
 }
