@@ -82,9 +82,11 @@ public class RecipeService {
     }
 
     public List<RecipeDTO> getRecipesByItemTypes(List<ItemType> itemTypes) {
+        return null;
     }
 
     public List<RecipeDTO> getRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
+        return null;
     }
 
     /**
