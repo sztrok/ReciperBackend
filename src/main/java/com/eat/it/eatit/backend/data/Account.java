@@ -39,6 +39,9 @@ public class Account {
     @OneToMany
     @JoinColumn(name = "owner_id")
     private List<Recipe> recipes = new ArrayList<>();
+    //TODO: zrobić privateRecipes i osobno savedRecipes, które już nie są private
+    // liste z ID polubionych przepisów
+    // może wszystko zamienić na liste ID?
 
     @ElementCollection(targetClass = AccountRole.class)
     @Enumerated(EnumType.STRING)

@@ -39,7 +39,7 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/all")
+    @GetMapping("/public/all")
     @Operation(summary = "Get all Recipes", description = "Retrieve a list of all recipes available in the database.")
     @ApiResponse(responseCode = "200", description = "All recipes retrieved successfully")
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
