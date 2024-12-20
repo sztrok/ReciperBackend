@@ -13,5 +13,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findAllByPremiumIsTrue();
     List<Account> findAllByPremiumIsFalse();
     Account findByUsername(String username);
+    boolean existsByMail(String mail);
 
 }

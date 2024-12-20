@@ -89,11 +89,24 @@ class InitialDataLoader {
         accounts.add(generateAccount("Noah", "Miller", false));
         accounts.add(generateAccount("Grace", "Anderson", true));
         accounts.add(generateAccount("Oliver", "Swift", false));
+
         Account adminAccount = new Account();
         adminAccount.setUsername("admin");
         adminAccount.setAccountRoles(Set.of(AccountRole.ROLE_ADMIN));
         adminAccount.setPassword("secret");
         accountRepository.save(adminAccount);
+
+        Account sakuAdmAccount = new Account();
+        sakuAdmAccount.setUsername("sakuadm");
+        sakuAdmAccount.setAccountRoles(Set.of(AccountRole.ROLE_ADMIN));
+        sakuAdmAccount.setPassword("1234");
+        accountRepository.save(sakuAdmAccount);
+
+        Account konioAdmAccount = new Account();
+        konioAdmAccount.setUsername("konioadm");
+        konioAdmAccount.setAccountRoles(Set.of(AccountRole.ROLE_ADMIN));
+        konioAdmAccount.setPassword("1234");
+        accountRepository.save(konioAdmAccount);
         return accounts;
     }
 

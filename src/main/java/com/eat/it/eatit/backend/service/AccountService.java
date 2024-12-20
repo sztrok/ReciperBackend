@@ -3,6 +3,8 @@ package com.eat.it.eatit.backend.service;
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.AccountDTO;
+import com.eat.it.eatit.backend.dto.simple.AccountCreationRequest;
+import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.mapper.FridgeMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +48,25 @@ public class AccountService {
         this.passwordEncoder = passwordEncoder;
         this.recipeRepository = recipeRepository;
     }
+
+
+    public AccountDTO createAccount(AccountCreationRequest request) {
+        // Sprawdzenie, czy użytkownik z podanym e-mailem już istnieje
+        if (accountRepository.existsByMail(request.getEmail())) {
+            throw new IllegalArgumentException("Konto z podanym adresem e-mail już istnieje");
+        }
+
+        // Tworzenie nowego konta
+        Account account = new Account();
+        account.setUsername(request.getUsername());
+        account.setMail(request.getEmail());
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        account.setAccountRoles(Collections.singleton(AccountRole.ROLE_USER));
+
+        // Zapis do bazy danych
+        return toDTO(accountRepository.save(account));
+    }
+
 
     /**
      * Retrieves an account by its ID and returns it as an AccountDTO.
