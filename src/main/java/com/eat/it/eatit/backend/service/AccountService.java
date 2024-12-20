@@ -129,7 +129,7 @@ public class AccountService {
         updateField(accountDTO.getMail(), account::setMail);
         updateField(accountDTO.getPassword(), account::setPassword);
         updateField(accountDTO.getFridge(), f -> account.setFridge(FridgeMapper.toEntity(f))); // Uncomment this if fridge is supposed to be changed
-        updateField(accountDTO.getRecipes(), r -> account.setRecipes(RecipeMapper.toEntityList(r)));
+        updateField(accountDTO.getRecipes(), r -> account.setAccountRecipes(RecipeMapper.toEntityList(r)));
         updateField(accountDTO.getPremium(), account::setPremium);
         Account saved = accountRepository.save(account);
         return toDTO(saved);
@@ -149,12 +149,12 @@ public class AccountService {
         if (account == null) {
             return null;
         }
-        List<Recipe> accountRecipes = account.getRecipes().stream().sorted().collect(Collectors.toList());
+        List<Recipe> accountRecipes = account.getAccountRecipes().stream().sorted().collect(Collectors.toList());
         accountRecipes.addAll(RecipeMapper.toEntityList(recipes));
-        account.setRecipes(accountRecipes);
+        account.setAccountRecipes(accountRecipes);
         recipeRepository.saveAll(accountRecipes);
         accountRepository.save(account);
-        return RecipeMapper.toDTOList(account.getRecipes());
+        return RecipeMapper.toDTOList(account.getAccountRecipes());
     }
 
     /**

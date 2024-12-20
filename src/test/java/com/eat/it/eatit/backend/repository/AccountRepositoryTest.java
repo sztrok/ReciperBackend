@@ -116,9 +116,9 @@ class AccountRepositoryTest {
                 new Recipe("test", "recipe for test purposes"),
                 new Recipe("test2", "recipe for test purposes")
         );
-        account.setRecipes(recipes);
-        System.out.println(testEntityManager.find(Account.class, account.getId()).getRecipes());
-        assertThat(testEntityManager.find(Account.class, account.getId()).getRecipes()).isEqualTo(recipes);
+        account.setAccountRecipes(recipes);
+        System.out.println(testEntityManager.find(Account.class, account.getId()).getAccountRecipes());
+        assertThat(testEntityManager.find(Account.class, account.getId()).getAccountRecipes()).isEqualTo(recipes);
     }
 
 }
