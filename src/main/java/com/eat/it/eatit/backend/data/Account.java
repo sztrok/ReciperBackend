@@ -42,9 +42,9 @@ public class Account {
 
     @ManyToMany
     @JoinTable(
-            name = "accounts_liked_recipes", // nazwa tabeli łącznikowej
-            joinColumns = @JoinColumn(name = "account_id"), // kolumna odnosząca się do encji Account
-            inverseJoinColumns = @JoinColumn(name = "recipe_id") // kolumna odnosząca się do encji Recipe
+            name = "accounts_liked_recipes",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
     private List<Recipe> likedRecipes = new ArrayList<>();
 

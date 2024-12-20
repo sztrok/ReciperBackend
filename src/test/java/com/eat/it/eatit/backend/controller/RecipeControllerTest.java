@@ -7,6 +7,7 @@ import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.repository.CookwareRepository;
 import com.eat.it.eatit.backend.repository.ItemInRecipeRepository;
 import com.eat.it.eatit.backend.repository.ItemRepository;
@@ -108,9 +109,31 @@ class RecipeControllerTest {
         Recipe testRecipe2 = new Recipe();
         testRecipe2.setName("Test Recipe 2");
         testRecipe2.setDescription("This is a test recipe 2");
-        recipeRepository.save(testRecipe2);
+        Recipe testRecipe3 = new Recipe();
+        testRecipe3.setName("Test Recipe 3");
+        testRecipe3.setDescription("This is a test recipe 3 - it's private");
+        testRecipe3.setVisibility(Visibility.PRIVATE);
+        recipeRepository.saveAll(List.of(testRecipe2, testRecipe3));
 
-        mockMvc.perform(MockMvcRequestBuilders.get(RECIPE_API_PREFIX + "all")
+        mockMvc.perform(MockMvcRequestBuilders.get(RECIPE_API_PREFIX + "/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Test Recipe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Test Recipe 2"));
+    }
+
+    @Test
+    void shouldGetAllPublicRecipes() throws Exception {
+        Recipe testRecipe2 = new Recipe();
+        testRecipe2.setName("Test Recipe 2");
+        testRecipe2.setDescription("This is a test recipe 2");
+        Recipe testRecipe3 = new Recipe();
+        testRecipe3.setName("Test Recipe 3");
+        testRecipe3.setDescription("This is a test recipe 3 - it's private");
+        testRecipe3.setVisibility(Visibility.PRIVATE);
+        recipeRepository.saveAll(List.of(testRecipe2, testRecipe3));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(RECIPE_API_PREFIX + "/public/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Test Recipe"))

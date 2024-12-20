@@ -4,6 +4,7 @@ import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.listener.RecipeListener;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,8 +38,9 @@ public class Recipe {
 
     private Integer totalCalories;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private Visibility visibility;
+    private Visibility visibility = Visibility.PUBLIC;
 
     @Enumerated(EnumType.STRING)
     private RecipeDifficulty difficulty;

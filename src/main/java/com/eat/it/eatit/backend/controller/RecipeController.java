@@ -1,8 +1,6 @@
 package com.eat.it.eatit.backend.controller;
 
 import com.eat.it.eatit.backend.dto.CookwareDTO;
-import com.eat.it.eatit.backend.dto.ItemDTO;
-import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
@@ -39,11 +37,19 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/public/all")
+    @GetMapping("/all")
     @Operation(summary = "Get all Recipes", description = "Retrieve a list of all recipes available in the database.")
     @ApiResponse(responseCode = "200", description = "All recipes retrieved successfully")
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         List<RecipeDTO> recipes = recipeService.getAllRecipes();
+        return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping("/public/all")
+    @Operation(summary = "Get all public Recipes", description = "Retrieve a list of all public recipes available in the database.")
+    @ApiResponse(responseCode = "200", description = "All public recipes retrieved successfully")
+    public ResponseEntity<List<RecipeDTO>> getAllPublicRecipes() {
+        List<RecipeDTO> recipes = recipeService.getAllPublicRecipes();
         return ResponseEntity.ok(recipes);
     }
 
@@ -148,7 +154,7 @@ public class RecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    
+
     // TODO: przemyśleć jak ma działać widoczność i dostęp do przepisów - póki co zrobić private i public z opcją udostępnienia,
     //  pole z polubionymi przepisami,
     //  więcej GETów - getByItemTypes, getByRecipeDifficulty

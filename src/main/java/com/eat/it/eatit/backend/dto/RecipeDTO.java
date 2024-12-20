@@ -19,7 +19,7 @@ public class RecipeDTO {
     private List<ItemInRecipeDTO> items;
     private List<CookwareDTO> cookware;
     private Integer totalCalories;
-    private Visibility visibility;
+    private Visibility visibility = Visibility.PUBLIC;
     private RecipeDifficulty difficulty;
 
     public RecipeDTO(@Nullable Long id, String name, String description, List<ItemInRecipeDTO> items, List<CookwareDTO> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {

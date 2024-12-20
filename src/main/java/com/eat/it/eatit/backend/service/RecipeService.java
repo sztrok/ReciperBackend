@@ -63,17 +63,17 @@ public class RecipeService {
         return toDTO(recipe);
     }
 
-    /**
-     * Retrieves all recipes from the database and maps them to RecipeDTO objects.
-     *
-     * @return A ResponseEntity containing a list of RecipeDTO objects representing all recipes.
-     */
     public List<RecipeDTO> getAllRecipes() {
         List<Recipe> recipes = recipeRepository.findAll();
         List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        for (Recipe recipe : recipes) {
-            recipeDTOList.add(toDTO(recipe));
-        }
+        recipes.forEach(recipe -> recipeDTOList.add(toDTO(recipe)));
+        return recipeDTOList;
+    }
+
+    public List<RecipeDTO> getAllPublicRecipes() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        List<RecipeDTO> recipeDTOList = new ArrayList<>();
+        recipes.stream().filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC).forEach(recipe -> recipeDTOList.add(toDTO(recipe)));
         return recipeDTOList;
     }
 
