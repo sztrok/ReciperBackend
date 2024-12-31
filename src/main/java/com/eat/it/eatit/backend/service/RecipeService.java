@@ -126,10 +126,13 @@ public class RecipeService {
         }
         updateField(recipeDTO.getName(), recipe::setName);
         updateField(recipeDTO.getDescription(), recipe::setDescription);
-        updateField(recipeDTO.getCookware(), r -> recipe.setCookware(CookwareMapper.toEntityList(r)));
+        updateField(recipeDTO.getSimpleSteps(), recipe::setSimpleSteps);
+        updateField(recipeDTO.getComplexSteps(), recipe::setComplexSteps);
         updateField(recipeDTO.getItems(), r -> recipe.setItems(ItemInRecipeMapper.toEntityList(r)));
-        Recipe savedRecipe = recipeRepository.save(recipe);
-        return toDTO(savedRecipe);
+        updateField(recipeDTO.getCookware(), r -> recipe.setCookware(CookwareMapper.toEntityList(r)));
+        updateField(recipeDTO.getVisibility(), recipe::setVisibility);
+        updateField(recipeDTO.getDifficulty(), recipe::setDifficulty);
+        return toDTO(recipe);
     }
 
     @Transactional
@@ -140,8 +143,7 @@ public class RecipeService {
         }
         updateField(name, recipe::setName);
         updateField(description, recipe::setDescription);
-        Recipe savedRecipe = recipeRepository.save(recipe);
-        return toDTO(savedRecipe);
+        return toDTO(recipe);
     }
 
     @Transactional
@@ -160,8 +162,7 @@ public class RecipeService {
             }
         }
         updateField(newCookware, recipe::setCookware);
-        Recipe savedRecipe = recipeRepository.save(recipe);
-        return toDTO(savedRecipe);
+        return toDTO(recipe);
     }
 
     @Transactional
@@ -193,9 +194,7 @@ public class RecipeService {
                 currentItems.add(new ItemInRecipe(id, item, amount));
             }
         }
-        Recipe savedRecipe = recipeRepository.save(recipe);
-
-        return toDTO(savedRecipe);
+        return toDTO(recipe);
     }
 
     private Recipe findRecipeById(Long recipeId) {

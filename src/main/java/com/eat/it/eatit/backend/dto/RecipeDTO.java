@@ -16,16 +16,20 @@ public class RecipeDTO {
     private Long id;
     private String name;
     private String description;
+    private List<String> simpleSteps;
+    private List<String> complexSteps;
     private List<ItemInRecipeDTO> items;
     private List<CookwareDTO> cookware;
     private Integer totalCalories;
     private Visibility visibility = Visibility.PUBLIC;
     private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
-    public RecipeDTO(@Nullable Long id, String name, String description, List<ItemInRecipeDTO> items, List<CookwareDTO> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
+    public RecipeDTO(@Nullable Long id, String name, String description, List<String> simpleSteps, List<String> complexSteps, List<ItemInRecipeDTO> items, List<CookwareDTO> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.simpleSteps = simpleSteps;
+        this.complexSteps = complexSteps;
         this.items = items;
         this.cookware = cookware;
         this.totalCalories = totalCalories;

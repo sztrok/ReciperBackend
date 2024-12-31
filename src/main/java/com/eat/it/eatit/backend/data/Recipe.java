@@ -3,6 +3,7 @@ package com.eat.it.eatit.backend.data;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.listener.RecipeListener;
+import com.eat.it.eatit.backend.utils.ListToStringConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -26,6 +27,12 @@ public class Recipe {
     private String name;
 
     private String description;
+
+    @Convert(converter = ListToStringConverter.class)
+    private List<String> simpleSteps;
+
+    @Convert(converter = ListToStringConverter.class)
+    private List<String> complexSteps;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -65,6 +72,18 @@ public class Recipe {
     public Recipe(String name, String description, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
         this.name = name;
         this.description = description;
+        this.items = items;
+        this.cookware = cookware;
+        this.totalCalories = totalCalories;
+        this.visibility = visibility;
+        this.difficulty = difficulty;
+    }
+
+    public Recipe(String name, String description, List<String> simpleSteps, List<String> complexSteps, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
+        this.name = name;
+        this.description = description;
+        this.simpleSteps = simpleSteps;
+        this.complexSteps = complexSteps;
         this.items = items;
         this.cookware = cookware;
         this.totalCalories = totalCalories;

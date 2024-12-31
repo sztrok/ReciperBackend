@@ -12,13 +12,15 @@ public class RecipeMapper {
     }
 
     public static RecipeDTO toDTO(Recipe recipe) {
-        if(recipe == null) {
+        if (recipe == null) {
             return new RecipeDTO();
         }
         return new RecipeDTO(
                 recipe.getId(),
                 recipe.getName(),
                 recipe.getDescription(),
+                recipe.getSimpleSteps(),
+                recipe.getComplexSteps(),
                 ItemInRecipeMapper.toDTOList(recipe.getItems()),
                 CookwareMapper.toDTOList(recipe.getCookware()),
                 recipe.getTotalCalories(),
@@ -27,12 +29,14 @@ public class RecipeMapper {
     }
 
     public static Recipe toEntity(RecipeDTO recipeDTO) {
-        if(recipeDTO == null) {
+        if (recipeDTO == null) {
             return new Recipe();
         }
         return new Recipe(
                 recipeDTO.getName(),
                 recipeDTO.getDescription(),
+                recipeDTO.getSimpleSteps(),
+                recipeDTO.getComplexSteps(),
                 ItemInRecipeMapper.toEntityList(recipeDTO.getItems()),
                 CookwareMapper.toEntityList(recipeDTO.getCookware()),
                 recipeDTO.getTotalCalories(),
@@ -41,14 +45,14 @@ public class RecipeMapper {
     }
 
     public static List<RecipeDTO> toDTOList(List<Recipe> recipeSet) {
-        if(recipeSet == null) {
+        if (recipeSet == null) {
             return new ArrayList<>();
         }
         return recipeSet.stream().map(RecipeMapper::toDTO).toList();
     }
 
     public static List<Recipe> toEntityList(List<RecipeDTO> recipeDTOSet) {
-        if(recipeDTOSet == null) {
+        if (recipeDTOSet == null) {
             return new ArrayList<>();
         }
         return recipeDTOSet.stream().map(RecipeMapper::toEntity).toList();
