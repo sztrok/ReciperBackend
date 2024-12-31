@@ -155,8 +155,6 @@ public class RecipeController {
     }
 
 
-    // TODO: przemyśleć jak ma działać widoczność i dostęp do przepisów - póki co zrobić private i public z opcją udostępnienia,
-    //  pole z polubionymi przepisami,
-    //  więcej GETów - getByItemTypes, getByRecipeDifficulty
+    // TODO: przemyśleć jak ma działać widoczność i dostęp do przepisów - użytkownik API ma dostęp tylko do jego informacji,
     //  liczenie total calories i update po zmianie itemów, dodać analogicznie dla macro? chyba tak
 }

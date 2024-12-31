@@ -43,7 +43,7 @@ public class Recipe {
     private Visibility visibility = Visibility.PUBLIC;
 
     @Enumerated(EnumType.STRING)
-    private RecipeDifficulty difficulty;
+    private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
     public Recipe(String name, String description, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories) {
         this.name = name;
