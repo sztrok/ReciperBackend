@@ -33,7 +33,7 @@ public class AccountMapper {
                 accountDTO.getMail(),
                 accountDTO.getPassword(),
                 FridgeMapper.toEntity(accountDTO.getFridge()),
-                RecipeMapper.toEntityList(accountDTO.getRecipes()),
+                RecipeMapper.toEntityList(accountDTO.getAccountRecipes()),
                 RecipeMapper.toEntityList(accountDTO.getLikedRecipes()),
                 accountDTO.getAccountRoles(),
                 accountDTO.getPremium());

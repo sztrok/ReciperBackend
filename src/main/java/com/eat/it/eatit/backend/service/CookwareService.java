@@ -104,17 +104,17 @@ public class CookwareService {
     }
 
     @Transactional
-    protected Cookware getCookwareByName(String name) {
+    public Cookware getCookwareByName(String name) {
         return cookwareRepository.findCookwareByNameIgnoreCase(name);
     }
 
     @Transactional
-    protected Cookware createNewCookware(String name) {
+    public Cookware createNewCookware(String name) {
         return cookwareRepository.save(new Cookware(name));
     }
 
     @Transactional
-    protected Cookware createNewCookware(CookwareDTO cookwareDTO) {
+    public Cookware createNewCookware(CookwareDTO cookwareDTO) {
         return cookwareRepository.save(toEntity(cookwareDTO));
     }
 }

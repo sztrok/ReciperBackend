@@ -1,9 +1,7 @@
 package com.eat.it.eatit.backend.service;
 
-import com.eat.it.eatit.backend.data.Cookware;
-import com.eat.it.eatit.backend.data.Item;
-import com.eat.it.eatit.backend.data.ItemInRecipe;
-import com.eat.it.eatit.backend.data.Recipe;
+import com.eat.it.eatit.backend.data.*;
+import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
@@ -11,6 +9,7 @@ import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.mapper.CookwareMapper;
 import com.eat.it.eatit.backend.mapper.ItemInRecipeMapper;
+import com.eat.it.eatit.backend.mapper.RecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.eat.it.eatit.backend.mapper.RecipeMapper.*;
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class that provides operations related to recipes.
@@ -31,6 +29,7 @@ import java.util.Map;
 @Service
 public class RecipeService {
 
+    private final AccountService accountService;
     RecipeRepository recipeRepository;
     ItemService itemService;
     ItemInRecipeService itemInRecipeService;
@@ -41,11 +40,12 @@ public class RecipeService {
             RecipeRepository recipeRepository,
             ItemService itemService,
             ItemInRecipeService itemInRecipeService,
-            CookwareService cookwareService) {
+            CookwareService cookwareService, AccountService accountService) {
         this.recipeRepository = recipeRepository;
         this.itemService = itemService;
         this.itemInRecipeService = itemInRecipeService;
         this.cookwareService = cookwareService;
+        this.accountService = accountService;
     }
 
     /**
@@ -64,29 +64,35 @@ public class RecipeService {
     }
 
     public List<RecipeDTO> getAllRecipes() {
-        List<Recipe> recipes = recipeRepository.findAll();
-        List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        recipes.forEach(recipe -> recipeDTOList.add(toDTO(recipe)));
-        return recipeDTOList;
+        return toDTOList(getAllRecipesFromDatabase());
     }
 
     public List<RecipeDTO> getAllPublicRecipes() {
-        List<Recipe> recipes = recipeRepository.findAll();
-        List<RecipeDTO> recipeDTOList = new ArrayList<>();
-        recipes.stream().filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC).forEach(recipe -> recipeDTOList.add(toDTO(recipe)));
-        return recipeDTOList;
+        return toDTOList(getAllRecipesFromDatabase()
+                .stream()
+                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
+                .toList());
     }
 
     public List<RecipeDTO> getRecipesForAccount(Long accountId, List<Visibility> visibilityList) {
-        return null;
+        return toDTOList(getAccountRecipes(accountId)
+                .stream()
+                .filter(recipe -> visibilityList.contains(recipe.getVisibility()))
+                .toList());
     }
 
     public List<RecipeDTO> getRecipesByItemTypes(List<ItemType> itemTypes) {
-        return null;
+        return toDTOList(getAllRecipesFromDatabase()
+                .stream()
+                .filter(recipe -> getRecipeItemTypes(recipe).containsAll(itemTypes))
+                .toList());
     }
 
     public List<RecipeDTO> getRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
-        return null;
+        return toDTOList(getAllRecipesFromDatabase()
+                .stream()
+                .filter(recipe -> difficultyList.contains(recipe.getDifficulty()))
+                .toList());
     }
 
     /**
@@ -195,4 +201,31 @@ public class RecipeService {
     private Recipe findRecipeById(Long recipeId) {
         return recipeRepository.findById(recipeId).orElse(null);
     }
+
+    private List<Recipe> getAllRecipesFromDatabase() {
+        return recipeRepository.findAll();
+    }
+
+    private List<Recipe> getAccountRecipes(Long accountId) {
+        AccountDTO account = accountService.getAccountById(accountId);
+        if (account == null) {
+            return new ArrayList<>();
+        }
+        return account.getAccountRecipes().stream().map(RecipeMapper::toEntity).toList();
+    }
+
+    private List<Item> getRecipeItems(Recipe recipe) {
+        if (recipe == null) {
+            return new ArrayList<>();
+        }
+        return recipe.getItems().stream().map(ItemInRecipe::getItem).toList();
+    }
+
+    private Set<ItemType> getRecipeItemTypes(Recipe recipe) {
+        if (recipe == null) {
+            return new HashSet<>();
+        }
+        return getRecipeItems(recipe).stream().map(Item::getItemType).collect(Collectors.toSet());
+    }
+
 }

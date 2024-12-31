@@ -151,7 +151,7 @@ public class AccountService {
         updateField(accountDTO.getMail(), account::setMail);
         updateField(accountDTO.getPassword(), account::setPassword);
         updateField(accountDTO.getFridge(), f -> account.setFridge(FridgeMapper.toEntity(f))); // Uncomment this if fridge is supposed to be changed
-        updateField(accountDTO.getRecipes(), r -> account.setAccountRecipes(RecipeMapper.toEntityList(r)));
+        updateField(accountDTO.getAccountRecipes(), r -> account.setAccountRecipes(RecipeMapper.toEntityList(r)));
         updateField(accountDTO.getPremium(), account::setPremium);
         Account saved = accountRepository.save(account);
         return toDTO(saved);
