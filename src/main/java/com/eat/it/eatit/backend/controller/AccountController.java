@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.controller;
 
+import com.eat.it.eatit.backend.dto.simple.AccountCreationRequest;
 import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
 import com.eat.it.eatit.backend.mapper.simple.AccountSimpleMapper;
 import com.eat.it.eatit.backend.service.AccountService;
@@ -7,9 +8,11 @@ import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +22,19 @@ import java.util.List;
 public class AccountController {
 
     AccountService accountService;
+
+
+    @PostMapping("/register")
+    public ResponseEntity<AccountDTO> registerAccount(@Valid @RequestBody AccountCreationRequest request) {
+        AccountDTO account = accountService.createAccount(request);
+        return new ResponseEntity<>(account, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<AccountDTO> getProfile(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(accountService.getAllAccounts().stream().filter(acc -> acc.getUsername().equals(username)).findFirst().orElse(null));
+    }
 
     @Autowired
     public AccountController(AccountService accountService) {

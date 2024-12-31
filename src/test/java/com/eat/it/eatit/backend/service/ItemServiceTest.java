@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class ItemServiceTest {
+class ItemServiceTest {
 
     @Autowired
     private ItemService itemService;
@@ -36,7 +36,6 @@ public class ItemServiceTest {
         ItemDTO itemDTO = itemService.getItemById(1L);
 
         assertNotNull(itemDTO);
-//        assertEquals(1, itemDTO.getId());
     }
 
     @Test

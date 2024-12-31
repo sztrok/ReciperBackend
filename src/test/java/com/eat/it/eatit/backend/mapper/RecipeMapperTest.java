@@ -2,6 +2,8 @@ package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -20,10 +22,12 @@ class RecipeMapperTest {
         recipe = new Recipe();
         recipe.setName("test recipe");
         recipe.setDescription("test recipe desc");
+        recipe.setVisibility(Visibility.FRIENDS);
 
         recipeDTO = RecipeMapper.toDTO(recipe);
         assertEquals(recipe.getName(), recipeDTO.getName());
         assertEquals(recipe.getDescription(), recipeDTO.getDescription());
+        assertEquals(recipe.getVisibility(), recipeDTO.getVisibility());
     }
 
     @Test
@@ -31,23 +35,25 @@ class RecipeMapperTest {
         recipeDTO = new RecipeDTO();
         recipeDTO.setName("test recipe DTO");
         recipeDTO.setDescription("test recipe DTO desc");
+        recipeDTO.setVisibility(Visibility.PUBLIC);
 
         recipe = RecipeMapper.toEntity(recipeDTO);
         assertEquals(recipeDTO.getName(), recipe.getName());
         assertEquals(recipeDTO.getDescription(), recipe.getDescription());
+        assertEquals(recipeDTO.getVisibility(), recipe.getVisibility());
     }
 
     @Test
     void testToDTOListConversion() {
         List<Recipe> recipeSet = List.of(
-                new Recipe("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0),
+                new Recipe("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0, Visibility.FRIENDS),
                 new Recipe("recipe 2", "desc 2", new ArrayList<>(), new ArrayList<>(), 0),
-                new Recipe("recipe 3", "desc 3", new ArrayList<>(), new ArrayList<>(), 0)
+                new Recipe("recipe 3", "desc 3", new ArrayList<>(), new ArrayList<>(), 0, Visibility.SHARED)
         );
         List<RecipeDTO> recipeDTOExpectedSet = List.of(
-                new RecipeDTO("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0),
+                new RecipeDTO("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0, Visibility.FRIENDS),
                 new RecipeDTO("recipe 2", "desc 2", new ArrayList<>(), new ArrayList<>(), 0),
-                new RecipeDTO("recipe 3", "desc 3", new ArrayList<>(), new ArrayList<>(), 0)
+                new RecipeDTO("recipe 3", "desc 3", new ArrayList<>(), new ArrayList<>(), 0, Visibility.SHARED)
         );
         List<RecipeDTO> recipeDTOSet = RecipeMapper.toDTOList(recipeSet);
         assertEquals(recipeDTOExpectedSet, recipeDTOSet);
@@ -56,13 +62,13 @@ class RecipeMapperTest {
     @Test
     void testToEntityListConversion() {
         List<RecipeDTO> recipeDTOSet = List.of(
-                new RecipeDTO("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0),
-                new RecipeDTO("recipe 2", "desc 2", new ArrayList<>(), new ArrayList<>(), 0),
+                new RecipeDTO("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0, Visibility.FRIENDS),
+                new RecipeDTO("recipe 2", "desc 2", new ArrayList<>(), new ArrayList<>(), 0, Visibility.PRIVATE, RecipeDifficulty.HARD),
                 new RecipeDTO("recipe 3", "desc 3", new ArrayList<>(), new ArrayList<>(), 0)
         );
         List<Recipe> recipeExpectedSet = List.of(
-                new Recipe("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0),
-                new Recipe("recipe 2", "desc 2", new ArrayList<>(), new ArrayList<>(), 0),
+                new Recipe("recipe 1", "desc 1", new ArrayList<>(), new ArrayList<>(), 0, Visibility.FRIENDS),
+                new Recipe("recipe 2", "desc 2", new ArrayList<>(), new ArrayList<>(), 0, Visibility.PRIVATE, RecipeDifficulty.HARD),
                 new Recipe("recipe 3", "desc 3", new ArrayList<>(), new ArrayList<>(), 0)
         );
         List<Recipe> recipeSet = RecipeMapper.toEntityList(recipeDTOSet);

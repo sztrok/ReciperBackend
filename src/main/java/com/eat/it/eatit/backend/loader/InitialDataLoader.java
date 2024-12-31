@@ -89,11 +89,24 @@ class InitialDataLoader {
         accounts.add(generateAccount("Noah", "Miller", false));
         accounts.add(generateAccount("Grace", "Anderson", true));
         accounts.add(generateAccount("Oliver", "Swift", false));
+
         Account adminAccount = new Account();
         adminAccount.setUsername("admin");
         adminAccount.setAccountRoles(Set.of(AccountRole.ROLE_ADMIN));
         adminAccount.setPassword("secret");
         accountRepository.save(adminAccount);
+
+        Account sakuAdmAccount = new Account();
+        sakuAdmAccount.setUsername("sakuadm");
+        sakuAdmAccount.setAccountRoles(Set.of(AccountRole.ROLE_ADMIN));
+        sakuAdmAccount.setPassword("1234");
+        accountRepository.save(sakuAdmAccount);
+
+        Account konioAdmAccount = new Account();
+        konioAdmAccount.setUsername("konioadm");
+        konioAdmAccount.setAccountRoles(Set.of(AccountRole.ROLE_ADMIN));
+        konioAdmAccount.setPassword("1234");
+        accountRepository.save(konioAdmAccount);
         return accounts;
     }
 
@@ -245,11 +258,11 @@ class InitialDataLoader {
 
     private void linkAccountAndRecipes(List<Account> accounts, List<Recipe> recipes) {
 
-        accounts.get(0).setRecipes(List.of(recipes.get(0), recipes.get(1), recipes.get(2)));
-        accounts.get(2).setRecipes(List.of(recipes.get(3), recipes.get(4)));
-        accounts.get(5).setRecipes(List.of(recipes.get(5), recipes.get(6)));
-        accounts.get(6).setRecipes(List.of(recipes.get(7)));
-        accounts.get(9).setRecipes(List.of(recipes.get(10), recipes.get(11), recipes.get(12), recipes.get(13), recipes.get(14), recipes.get(15)));
+        accounts.get(0).setAccountRecipes(List.of(recipes.get(0), recipes.get(1), recipes.get(2)));
+        accounts.get(2).setAccountRecipes(List.of(recipes.get(3), recipes.get(4)));
+        accounts.get(5).setAccountRecipes(List.of(recipes.get(5), recipes.get(6)));
+        accounts.get(6).setAccountRecipes(List.of(recipes.get(7)));
+        accounts.get(9).setAccountRecipes(List.of(recipes.get(10), recipes.get(11), recipes.get(12), recipes.get(13), recipes.get(14), recipes.get(15)));
         recipeRepository.saveAll(recipes);
     }
 

@@ -34,6 +34,7 @@ public class SecurityConfig {
         httpSecurity.formLogin(Customizer.withDefaults());
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
+                        .requestMatchers(HttpMethod.POST,"/api/v1/account/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/**").permitAll()
                         .anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable);

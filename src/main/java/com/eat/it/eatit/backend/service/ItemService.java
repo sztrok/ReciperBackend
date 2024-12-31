@@ -257,7 +257,7 @@ public class ItemService {
     }
 
     @Transactional
-    protected Item createNewItem(ItemDTO itemDTO) {
+    public Item createNewItem(ItemDTO itemDTO) {
         Item existingItem = findItemByName(itemDTO.getName());
         if (existingItem != null) {
             return existingItem;

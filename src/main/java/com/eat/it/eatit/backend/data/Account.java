@@ -38,7 +38,15 @@ public class Account {
 
     @OneToMany
     @JoinColumn(name = "owner_id")
-    private List<Recipe> recipes = new ArrayList<>();
+    private List<Recipe> accountRecipes = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "accounts_liked_recipes",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+    private List<Recipe> likedRecipes = new ArrayList<>();
 
     @ElementCollection(targetClass = AccountRole.class)
     @Enumerated(EnumType.STRING)
@@ -53,22 +61,37 @@ public class Account {
         this.premium = premium;
     }
 
-    public Account(String username, String mail, String password, Fridge fridge, List<Recipe> recipes, Set<AccountRole> accountRoles, Boolean premium) {
+    public Account(String username, String mail, String password, Fridge fridge, List<Recipe> accountRecipes, Set<AccountRole> accountRoles, Boolean premium) {
         this.username = username;
         this.mail = mail;
         this.password = password;
         this.fridge = fridge;
-        this.recipes = recipes;
+        this.accountRecipes = accountRecipes;
         this.accountRoles = accountRoles;
         this.premium = premium;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = new ArrayList<>(recipes);
+    public Account(String username, String mail, String password, Fridge fridge, List<Recipe> accountRecipes, List<Recipe> likedRecipes, Set<AccountRole> accountRoles, Boolean premium) {
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+        this.fridge = fridge;
+        this.accountRecipes = accountRecipes;
+        this.likedRecipes = likedRecipes;
+        this.accountRoles = accountRoles;
+        this.premium = premium;
+    }
+
+    public void setAccountRecipes(List<Recipe> recipes) {
+        this.accountRecipes = new ArrayList<>(recipes);
     }
 
     public void setAccountRoles(Set<AccountRole> accountRoles) {
         this.accountRoles = new HashSet<>(accountRoles);
+    }
+
+    public void setLikedRecipes(List<Recipe> likedRecipes) {
+        this.likedRecipes = new ArrayList<>(likedRecipes);
     }
 
     public void addRole(AccountRole accountRole) {
@@ -83,7 +106,7 @@ public class Account {
                 ", mail='" + mail + '\'' +
                 ", password='" + password + '\'' +
                 ", fridge=" + fridge +
-                ", recipes=" + recipes +
+                ", recipes=" + accountRecipes +
                 ", roles=" + accountRoles +
                 ", premium=" + premium +
                 '}';
