@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,11 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final RoleHierarchyService roleHierarchyService;
+    private final AccountDetailsServiceImpl accountDetailsService;
+    private final CustomGrantedAuthorityMapper authorityMapper;
 
     @Autowired
-    public SecurityConfig(RoleHierarchyService roleHierarchyService) {
-        this.roleHierarchyService = roleHierarchyService;
+    public SecurityConfig(AccountDetailsServiceImpl accountDetailsService, CustomGrantedAuthorityMapper authorityMapper) {
+        this.accountDetailsService = accountDetailsService;
+        this.authorityMapper = authorityMapper;
     }
 
     @Bean
@@ -35,11 +41,25 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers(HttpMethod.POST,"/api/v1/account/register").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/**").permitAll()
-                        .anyRequest().permitAll())
-                .csrf(AbstractHttpConfigurer::disable);
+                        .requestMatchers(HttpMethod.POST,"/**").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .userDetailsService(accountDetailsService);
         return httpSecurity.build();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(accountDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setAuthoritiesMapper(authorityMapper::mapAuthorities);
+        return provider;
+    }
 
 }
