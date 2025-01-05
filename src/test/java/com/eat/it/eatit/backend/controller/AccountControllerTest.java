@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.controller.admin;
+package com.eat.it.eatit.backend.controller;
 
 import com.eat.it.eatit.backend.IntegrationTest;
 import com.eat.it.eatit.backend.data.Account;

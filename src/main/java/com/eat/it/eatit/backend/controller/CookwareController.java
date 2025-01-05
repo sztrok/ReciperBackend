@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +42,8 @@ public class CookwareController {
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
-    @Operation(summary = "Add new cookware", description = "Adds a new cookware item to the inventory.")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPPORT')")
+    @Operation(summary = "Add new cookware", description = "Adds a new cookware to database.")
     @ApiResponse(responseCode = "200", description = "Cookware added successfully")
     public ResponseEntity<CookwareDTO> addNewCookware(@RequestBody CookwareDTO cookwareDTO) {
         CookwareDTO cookware = cookwareService.addNewCookware(cookwareDTO);
@@ -49,6 +51,7 @@ public class CookwareController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPPORT')")
     @Operation(summary = "Update cookware", description = "Updates the details of an existing cookware item by ID.")
     @ApiResponse(responseCode = "200", description = "Cookware updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid ID or cookware not found")
@@ -60,6 +63,7 @@ public class CookwareController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Delete cookware", description = "Deletes the cookware item identified by the given ID.")
     @ApiResponse(responseCode = "200", description = "Cookware deleted successfully")
     @ApiResponse(responseCode = "400", description = "Invalid ID or cookware not found")

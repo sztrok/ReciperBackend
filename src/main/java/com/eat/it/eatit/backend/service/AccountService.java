@@ -53,7 +53,7 @@ public class AccountService {
     public AccountDTO createAccount(AccountCreationRequest request) {
         // Sprawdzenie, czy użytkownik z podanym e-mailem już istnieje
         if (accountRepository.existsByMail(request.getEmail())) {
-            throw new IllegalArgumentException("Konto z podanym adresem e-mail już istnieje");
+            return new AccountDTO();
         }
 
         // Tworzenie nowego konta
@@ -179,6 +179,10 @@ public class AccountService {
         return RecipeMapper.toDTOList(account.getAccountRecipes());
     }
 
+    public AccountDTO getAccountByName(String username) {
+        return toDTO(accountRepository.findByUsername(username));
+    }
+
     /**
      * Retrieves an account by its ID.
      *
@@ -188,5 +192,6 @@ public class AccountService {
     private Account findAccount(Long id) {
         return accountRepository.findById(id).orElse(null);
     }
+
 
 }

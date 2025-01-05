@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/general")
+@RequestMapping("/api/v1/global/general")
 public class GeneralController {
 
     AccountService accountService;

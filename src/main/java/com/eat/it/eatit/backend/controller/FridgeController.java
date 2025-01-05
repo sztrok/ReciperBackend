@@ -25,6 +25,7 @@ public class FridgeController {
         this.fridgeService = fridgeService;
     }
 
+    // ALL ale user tylko swoją może zobaczyć, wiec moze to jakos rozdzielic?
     @GetMapping("/{id}")
     @Operation(summary = "Retrieve fridge by ID.")
     @ApiResponse(responseCode = "200", description = "Fridge found successfully.")
@@ -35,7 +36,7 @@ public class FridgeController {
                 ? ResponseEntity.ok(fridge)
                 : ResponseEntity.badRequest().build();
     }
-
+    // ADMIN / SUPPORT
     @GetMapping("/all")
     @Operation(summary = "Retrieve all fridges.")
     @ApiResponse(responseCode = "200", description = "All fridges retrieved successfully.")
@@ -44,6 +45,7 @@ public class FridgeController {
         return ResponseEntity.ok(fridges);
     }
 
+    // ALL ale user tylko do swojej lodowki
     @PostMapping("/item")
     @Operation(summary = "Add item to fridge.")
     @ApiResponse(responseCode = "200", description = "Item added to fridge successfully.")

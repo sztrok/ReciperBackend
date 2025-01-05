@@ -38,10 +38,16 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.formLogin(Customizer.withDefaults());
+
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers(HttpMethod.POST,"/api/v1/account/register").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/general/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/general/profile").authenticated()
+        );
+
+        httpSecurity.authorizeHttpRequests(
+                auth -> auth
+                        .requestMatchers(HttpMethod.DELETE,"/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(accountDetailsService);
