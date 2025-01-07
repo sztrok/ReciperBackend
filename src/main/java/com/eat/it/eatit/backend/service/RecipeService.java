@@ -11,6 +11,7 @@ import com.eat.it.eatit.backend.mapper.CookwareMapper;
 import com.eat.it.eatit.backend.mapper.ItemInRecipeMapper;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
+import com.eat.it.eatit.backend.service.user.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +30,20 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeService {
 
-    private final AccountService accountService;
-    RecipeRepository recipeRepository;
-    ItemService itemService;
-    ItemInRecipeService itemInRecipeService;
-    CookwareService cookwareService;
+    private final RecipeRepository recipeRepository;
+    private final UserAccountService accountService;
+    private final ItemService itemService;
+    private final ItemInRecipeService itemInRecipeService;
+    private final CookwareService cookwareService;
 
     @Autowired
     public RecipeService(
             RecipeRepository recipeRepository,
             ItemService itemService,
             ItemInRecipeService itemInRecipeService,
-            CookwareService cookwareService, AccountService accountService) {
+            CookwareService cookwareService,
+            UserAccountService accountService
+    ) {
         this.recipeRepository = recipeRepository;
         this.itemService = itemService;
         this.itemInRecipeService = itemInRecipeService;
@@ -56,12 +59,28 @@ public class RecipeService {
      * or a ResponseEntity with a not found status if the recipe does not exist
      */
     public RecipeDTO getRecipeById(Long id) {
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        Recipe recipe = findRecipeById(id);
         if (recipe == null) {
             return null;
         }
         return toDTO(recipe);
     }
+
+    public RecipeDTO getPublicRecipeById(Long id) {
+        Recipe recipe = findRecipeById(id);
+        if (recipe == null) {
+            return null;
+        }
+        if (recipe.getVisibility() != Visibility.PUBLIC) {
+            return null;
+        }
+        return toDTO(recipe);
+    }
+
+//    public List<RecipeDTO> getAllRecipesForUser(String username) {
+//        Long accountId = accountService.getAccountByName(username).getId();
+//        return getAllRecipesFromDatabase().stream().filter(recipe -> recipe.get)
+//    }
 
     public List<RecipeDTO> getAllRecipes() {
         return toDTOList(getAllRecipesFromDatabase());
@@ -104,8 +123,13 @@ public class RecipeService {
     @Transactional
     public RecipeDTO addNewRecipe(RecipeDTO recipeDTO) {
         Recipe recipe = toEntity(recipeDTO);
-        recipe = recipeRepository.save(recipe);
+        recipe = saveRecipe(recipe);
         return toDTO(recipe);
+    }
+
+    @Transactional
+    public void addNewRecipes(List<Recipe> recipeList) {
+        saveRecipes(recipeList);
     }
 
     @Transactional
@@ -114,7 +138,7 @@ public class RecipeService {
         if (recipe == null) {
             return false;
         }
-        recipeRepository.delete(recipe);
+        deleteRecipe(recipe);
         return true;
     }
 
@@ -199,6 +223,18 @@ public class RecipeService {
 
     private Recipe findRecipeById(Long recipeId) {
         return recipeRepository.findById(recipeId).orElse(null);
+    }
+
+    private Recipe saveRecipe(Recipe recipe) {
+        return recipeRepository.save(recipe);
+    }
+
+    private void saveRecipes(List<Recipe> recipes) {
+        recipeRepository.saveAll(recipes);
+    }
+
+    private void deleteRecipe(Recipe recipe) {
+        recipeRepository.delete(recipe);
     }
 
     private List<Recipe> getAllRecipesFromDatabase() {

@@ -6,6 +6,7 @@ import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.enums.Operations;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
+import com.eat.it.eatit.backend.service.user.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,25 @@ public class FridgeService {
     private final FridgeRepository fridgeRepository;
     private final ItemService itemService;
     private final ItemInFridgeService itemInFridgeService;
+    private final UserAccountService accountService;
 
     @Autowired
-    public FridgeService(FridgeRepository fridgeRepository, ItemService itemService, ItemInFridgeService itemInFridgeService) {
+    public FridgeService(
+            FridgeRepository fridgeRepository,
+            ItemService itemService,
+            ItemInFridgeService itemInFridgeService,
+            UserAccountService accountService
+    ) {
         this.fridgeRepository = fridgeRepository;
         this.itemService = itemService;
         this.itemInFridgeService = itemInFridgeService;
+        this.accountService = accountService;
+    }
+
+    protected Fridge createFridge(Long accountId) {
+        Fridge fridge = new Fridge();
+        fridge.setOwnerId(accountId);
+        return fridgeRepository.save(fridge);
     }
 
     /**
@@ -60,6 +74,10 @@ public class FridgeService {
         return fridgeDTOList;
     }
 
+    public FridgeDTO getFridgeByAccountName(String accountName) {
+        return accountService.getAccountByName(accountName).getFridge();
+    }
+
     /**
      * Adds an item to the fridge. If the item already exists in the fridge, the amount is increased.
      * Otherwise, a new item entry is created in the fridge.
@@ -85,6 +103,16 @@ public class FridgeService {
             addNewItemToFridge(fridge, item, amount);
         }
 
+        return toDTO(fridge);
+    }
+
+    @Transactional
+    public FridgeDTO deleteItemFromFridge(Long itemId, Long fridgeId) {
+        Fridge fridge = findFridgeById(fridgeId);
+        if (fridge == null) {
+            return null;
+        }
+        fridge.getItems().removeIf(item -> item.getId().equals(itemId));
         return toDTO(fridge);
     }
 

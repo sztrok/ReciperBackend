@@ -7,11 +7,9 @@ import com.eat.it.eatit.backend.dto.simple.AccountCreationRequest;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.mapper.FridgeMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
-import com.eat.it.eatit.backend.repository.FridgeRepository;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
-import com.eat.it.eatit.backend.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 import static com.eat.it.eatit.backend.mapper.AccountMapper.*;
@@ -32,23 +29,22 @@ import static com.eat.it.eatit.backend.mapper.AccountMapper.*;
 public class AccountService {
 
     AccountRepository accountRepository;
-    FridgeRepository fridgeRepository;
-    RecipeRepository recipeRepository;
+    FridgeService fridgeService;
+    RecipeService recipeService;
     PasswordEncoder passwordEncoder;
 
     @Autowired
     public AccountService(
             AccountRepository accountRepository,
-            FridgeRepository fridgeRepository,
+            FridgeService fridgeService,
             PasswordEncoder passwordEncoder,
-            RecipeRepository recipeRepository
+            RecipeService recipeService
     ) {
         this.accountRepository = accountRepository;
-        this.fridgeRepository = fridgeRepository;
+        this.fridgeService = fridgeService;
         this.passwordEncoder = passwordEncoder;
-        this.recipeRepository = recipeRepository;
+        this.recipeService = recipeService;
     }
-
 
     public AccountDTO createAccount(AccountCreationRequest request) {
         // Sprawdzenie, czy użytkownik z podanym e-mailem już istnieje
@@ -62,9 +58,11 @@ public class AccountService {
         account.setMail(request.getEmail());
         account.setPassword(passwordEncoder.encode(request.getPassword()));
         account.setAccountRoles(Collections.singleton(AccountRole.ROLE_USER));
-
+        accountRepository.save(account);
+        Fridge fridge = fridgeService.createFridge(account.getId());
+        account.setFridge(fridge);
         // Zapis do bazy danych
-        return toDTO(accountRepository.save(account));
+        return toDTO(account);
     }
 
 
@@ -96,6 +94,22 @@ public class AccountService {
         return accountDTOList;
     }
 
+    public List<RecipeDTO> getAccountRecipes(Long id) {
+        Account account = findAccount(id);
+        if (account == null) {
+            return Collections.emptyList();
+        }
+        return toDTO(account).getAccountRecipes();
+    }
+
+    public List<RecipeDTO> getLikedRecipes(Long id) {
+        Account account = findAccount(id);
+        if (account == null) {
+            return Collections.emptyList();
+        }
+        return toDTO(account).getLikedRecipes();
+    }
+
     /**
      * Adds a new account to the repository, encrypting the password, mapping the DTO to an entity,
      * and setting up an associated fridge for the new account.
@@ -103,16 +117,13 @@ public class AccountService {
      * @param accountDTO the data transfer object containing account details to be added
      * @return a ResponseEntity containing the AccountDTO of the newly created account
      */
-    @Transactional
     public AccountDTO addNewAccount(AccountDTO accountDTO) {
         String encryptedPassword = passwordEncoder.encode(accountDTO.getPassword());
         accountDTO.setPassword(encryptedPassword);
         Account account = toEntity(accountDTO);
-        Fridge fridge = new Fridge();
-        account.setFridge(fridge);
         accountRepository.save(account);
-        fridge.setOwnerId(account.getId());
-        fridgeRepository.save(fridge);
+        Fridge fridge = fridgeService.createFridge(account.getId());
+        account.setFridge(fridge);
         return toDTO(account);
     }
 
@@ -171,15 +182,62 @@ public class AccountService {
         if (account == null) {
             return null;
         }
-        List<Recipe> accountRecipes = account.getAccountRecipes().stream().sorted().collect(Collectors.toList());
+        List<Recipe> accountRecipes = account.getAccountRecipes();
         accountRecipes.addAll(RecipeMapper.toEntityList(recipes));
         account.setAccountRecipes(accountRecipes);
-        recipeRepository.saveAll(accountRecipes);
+        recipeService.addNewRecipes(accountRecipes);
         accountRepository.save(account);
         return RecipeMapper.toDTOList(account.getAccountRecipes());
     }
 
-    public AccountDTO getAccountByName(String username) {
+    @Transactional
+    public List<RecipeDTO> addLikedRecipes(Long id, List<RecipeDTO> recipes) {
+        Account account = findAccount(id);
+        if (account == null) {
+            return Collections.emptyList();
+        }
+        List<Recipe> likedRecipes = account.getLikedRecipes();
+        likedRecipes.addAll(RecipeMapper.toEntityList(recipes));
+        account.setLikedRecipes(likedRecipes);
+        return RecipeMapper.toDTOList(account.getLikedRecipes());
+    }
+
+    //TODO: przemyśleć jak powinno wyglądać usuwanie przepisu z bazy przez użytkownika
+    @Transactional
+    public boolean deleteAccountRecipe(Long id, Long recipeId) {
+        Account account = findAccount(id);
+        RecipeDTO accountRecipe = recipeService.getRecipeById(recipeId);
+        if (account == null || accountRecipe == null) {
+            return false;
+        }
+//      TODO: recipeService.deleteRecipeById(recipeId);
+        account.getAccountRecipes()
+                .stream()
+                .filter(recipe -> recipe.getId().equals(recipeId))
+                .findFirst()
+                .ifPresent(recipe -> account.getAccountRecipes().remove(recipe));
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteLikedRecipe(Long id, Long recipeId) {
+        Account account = findAccount(id);
+        if (account == null) {
+            return false;
+        }
+        account.getLikedRecipes()
+                .stream()
+                .filter(recipe -> recipe.getId().equals(recipeId))
+                .findFirst()
+                .ifPresent(recipe -> account.getLikedRecipes().remove(recipe));
+        return true;
+    }
+
+    public Long getAccountIdByName(String username) {
+        return getAccountByName(username).getId();
+    }
+
+    private AccountDTO getAccountByName(String username) {
         return toDTO(accountRepository.findByUsername(username));
     }
 
@@ -193,5 +251,6 @@ public class AccountService {
         return accountRepository.findById(id).orElse(null);
     }
 
+    //TODO: wszystkie metody korzystające z repo zrobić jako private - wtedy można w nich validację ustawić lepszą, będzie lepsza kontrola nad tym co jest zapisywane na bazie
 
 }

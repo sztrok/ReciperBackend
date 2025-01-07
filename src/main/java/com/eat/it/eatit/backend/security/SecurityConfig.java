@@ -37,6 +37,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
+        String userApiPath = "/api/v1/user";
+
         httpSecurity.formLogin(Customizer.withDefaults());
 
         httpSecurity.authorizeHttpRequests(
@@ -47,8 +49,16 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
+                        .requestMatchers(HttpMethod.GET, userApiPath+"/**").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.PUT, userApiPath+"/**").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.DELETE, userApiPath+"/**").hasAuthority("USER")
+        );
+
+        httpSecurity.authorizeHttpRequests(
+                auth -> auth
                         .requestMatchers(HttpMethod.DELETE,"/**").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                        )
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(accountDetailsService);
         return httpSecurity.build();
