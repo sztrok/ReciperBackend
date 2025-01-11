@@ -2,7 +2,7 @@ package com.eat.it.eatit.backend.controller.internal;
 
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.enums.Operations;
-import com.eat.it.eatit.backend.service.FridgeService;
+import com.eat.it.eatit.backend.service.internal.InternalFridgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,16 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/internal/fridge")
-@PreAuthorize("hasAuthority('ROLE_USER')")
+@PreAuthorize("hasAuthority('ROLE_SUPPORT')")
 public class InternalFridgeController {
 
-    FridgeService fridgeService;
+    InternalFridgeService fridgeService;
 
     @Autowired
-    public InternalFridgeController(FridgeService fridgeService) {
+    public InternalFridgeController(InternalFridgeService fridgeService) {
         this.fridgeService = fridgeService;
     }
 
-    // ALL ale user tylko swoją może zobaczyć, wiec moze to jakos rozdzielic?
     @GetMapping("/{id}")
     @Operation(summary = "Retrieve fridge by ID.")
     @ApiResponse(responseCode = "200", description = "Fridge found successfully.")
@@ -38,7 +37,18 @@ public class InternalFridgeController {
                 ? ResponseEntity.ok(fridge)
                 : ResponseEntity.badRequest().build();
     }
-    // ADMIN / SUPPORT
+
+    @GetMapping("/account")
+    @Operation(summary = "Retrieve fridge by ID.")
+    @ApiResponse(responseCode = "200", description = "Fridge found successfully.")
+    @ApiResponse(responseCode = "400", description = "Invalid fridge ID.")
+    public ResponseEntity<FridgeDTO> getFridgeById(@RequestParam String username) {
+        FridgeDTO fridge = fridgeService.getFridgeByAccountName(username);
+        return fridge != null
+                ? ResponseEntity.ok(fridge)
+                : ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/all")
     @Operation(summary = "Retrieve all fridges.")
     @ApiResponse(responseCode = "200", description = "All fridges retrieved successfully.")
@@ -47,7 +57,6 @@ public class InternalFridgeController {
         return ResponseEntity.ok(fridges);
     }
 
-    // ALL ale user tylko do swojej lodowki
     @PostMapping("/item")
     @Operation(summary = "Add item to fridge.")
     @ApiResponse(responseCode = "200", description = "Item added to fridge successfully.")
@@ -63,6 +72,20 @@ public class InternalFridgeController {
                 : ResponseEntity.badRequest().build();
     }
 
+    @DeleteMapping("/item")
+    @Operation(summary = "Remove item from fridge.")
+    @ApiResponse(responseCode = "200", description = "Item removed successfully.")
+    @ApiResponse(responseCode = "400", description = "Invalid operation or data.")
+    public ResponseEntity<FridgeDTO> deleteItemFromFridge(
+            @RequestParam Long itemId,
+            @RequestParam Long fridgeId
+    ) {
+        FridgeDTO fridgeDTO = fridgeService.deleteItemFromFridge(itemId, fridgeId);
+        return fridgeDTO != null
+                ? ResponseEntity.ok(fridgeDTO)
+                : ResponseEntity.badRequest().build();
+    }
+
     @PatchMapping("/item/amount")
     @Operation(summary = "Adjust the amount of an item in the fridge.")
     @ApiResponse(responseCode = "200", description = "Item amount updated successfully.")
@@ -73,14 +96,11 @@ public class InternalFridgeController {
             @RequestParam Double amount,
             @RequestParam Operations operation
     ) {
-        FridgeDTO fridgeDTO;
-        if (operation == Operations.ADD) {
-            fridgeDTO = fridgeService.increaseItemAmount(itemId, fridgeId, amount);
-        } else {
-            fridgeDTO = fridgeService.reduceItemAmount(itemId, fridgeId, amount);
-        }
+        FridgeDTO fridgeDTO = fridgeService.changeItemAmountInFridge(itemId, fridgeId, amount, operation);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
     }
+
+
 }

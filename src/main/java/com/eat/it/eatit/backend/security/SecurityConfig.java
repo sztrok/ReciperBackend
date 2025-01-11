@@ -23,6 +23,14 @@ public class SecurityConfig {
     private final AccountDetailsServiceImpl accountDetailsService;
     private final CustomGrantedAuthorityMapper authorityMapper;
 
+    private static final String USER_AUTHORITY = "ROLE_USER";
+    private static final String SUPPORT_AUTHORITY = "ROLE_SUPPORT";
+    private static final String ADMIN_AUTHORITY = "ROLE_ADMIN";
+    private static final String GLOBAL_API_PATH = "/api/v1/global";
+    private static final String USER_API_PATH = "/api/v1/user";
+    private static final String INTERNAL_API_PATH = "/api/v1/internal";
+    private static final String ADMIN_API_PATH = "/api/v1/admin";
+
     @Autowired
     public SecurityConfig(AccountDetailsServiceImpl accountDetailsService, CustomGrantedAuthorityMapper authorityMapper) {
         this.accountDetailsService = accountDetailsService;
@@ -37,27 +45,51 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        String userApiPath = "/api/v1/user";
+
 
         httpSecurity.formLogin(Customizer.withDefaults());
-
+ 
+        // GLOBAL
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/general/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/general/profile").authenticated()
+                        // GENERAL
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
+                        // COOKWARE
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware").permitAll()
+                        // ITEM
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/item").permitAll()
+                        // RECIPE
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/recipe").permitAll()
         );
 
+        // USER
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers(HttpMethod.GET, userApiPath+"/**").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.PUT, userApiPath+"/**").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.DELETE, userApiPath+"/**").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.GET, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
+                        .requestMatchers(HttpMethod.POST, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
+                        .requestMatchers(HttpMethod.PUT, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
+                        .requestMatchers(HttpMethod.DELETE, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
+                        .requestMatchers(HttpMethod.PATCH, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
+        );
+        
+        // INTERNAL (SUPPORT + ADMIN)
+        httpSecurity.authorizeHttpRequests(
+                auth -> auth
+                        .requestMatchers(HttpMethod.GET, INTERNAL_API_PATH + "/**").hasAnyAuthority(SUPPORT_AUTHORITY, ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.POST, INTERNAL_API_PATH + "/**").hasAnyAuthority(SUPPORT_AUTHORITY, ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.PUT, INTERNAL_API_PATH + "/**").hasAnyAuthority(SUPPORT_AUTHORITY, ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.PATCH, INTERNAL_API_PATH + "/**").hasAnyAuthority(SUPPORT_AUTHORITY, ADMIN_AUTHORITY)
         );
 
+        // ADMIN
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers(HttpMethod.DELETE,"/**").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.POST,"/**").hasAuthority(ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.PUT,"/**").hasAuthority(ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.PATCH,"/**").hasAuthority(ADMIN_AUTHORITY)
+                        .requestMatchers(HttpMethod.DELETE,"/**").hasAuthority(ADMIN_AUTHORITY)
                         )
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(accountDetailsService);

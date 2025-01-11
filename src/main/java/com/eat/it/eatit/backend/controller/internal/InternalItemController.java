@@ -2,7 +2,7 @@ package com.eat.it.eatit.backend.controller.internal;
 
 import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
-import com.eat.it.eatit.backend.service.ItemService;
+import com.eat.it.eatit.backend.service.internal.InternalItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasAuthority('ROLE_SUPPORT')")
 public class InternalItemController {
 
-    ItemService itemService;
+    InternalItemService itemService;
 
     @Autowired
-    public InternalItemController(ItemService itemService) {
+    public InternalItemController(InternalItemService itemService) {
         this.itemService = itemService;
     }
 
@@ -30,18 +30,7 @@ public class InternalItemController {
         return ResponseEntity.ok(addedItem);
     }
 
-    //TODO: poprawić, bo jest jako klucz obcy w fridge i recipe, więc z tamtąd też by tzeba usunąć
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete an item by its ID")
-    @ApiResponse(responseCode = "200", description = "Item deleted successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid Item ID")
-    public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
-        return itemService.deleteItemById(id)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", consumes = "application/json")
     @Operation(summary = "Update an item by its ID")
     @ApiResponse(responseCode = "200", description = "Item updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid Item ID or data")
@@ -52,7 +41,7 @@ public class InternalItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/{id}/info")
+    @PatchMapping(path = "/{id}/info", consumes = "application/json")
     @Operation(summary = "Update an item's general information")
     @ApiResponse(responseCode = "200", description = "Item information updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid update data")
@@ -67,7 +56,7 @@ public class InternalItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/{id}/nutrition")
+    @PatchMapping(path = "/{id}/nutrition", consumes = "application/json")
     @Operation(summary = "Update an item's nutrition details")
     @ApiResponse(responseCode = "200", description = "Item nutrition details updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid nutrition data")
@@ -79,6 +68,17 @@ public class InternalItemController {
             @RequestParam(required = false) Double carbs
     ) {
         return itemService.updateItemNutrition(id, calories, proteins, fats, carbs)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    //TODO: poprawić, bo jest jako klucz obcy w fridge i recipe, więc z tamtąd też by tzeba usunąć
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an item by its ID")
+    @ApiResponse(responseCode = "200", description = "Item deleted successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid Item ID")
+    public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
+        return itemService.deleteItemById(id)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }

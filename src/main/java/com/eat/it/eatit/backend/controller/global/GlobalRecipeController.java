@@ -24,7 +24,7 @@ public class GlobalRecipeController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get Recipe by ID", description = "Retrieve the details of a recipe by providing its unique ID.")
+    @Operation(summary = "Get Recipe by ID", description = "Retrieve the details of a public recipe by providing its unique ID.")
     @ApiResponse(responseCode = "200", description = "Recipe retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
     public ResponseEntity<RecipeDTO> getPublicRecipeById(@PathVariable Long id) {
