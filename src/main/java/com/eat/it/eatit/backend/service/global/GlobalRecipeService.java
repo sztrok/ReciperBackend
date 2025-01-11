@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service.user;
+package com.eat.it.eatit.backend.service.global;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInRecipe;
@@ -18,12 +18,12 @@ import static com.eat.it.eatit.backend.mapper.RecipeMapper.*;
 import static com.eat.it.eatit.backend.mapper.RecipeMapper.toDTO;
 
 @Service
-public class UserRecipeService {
+public class GlobalRecipeService {
 
     private final RecipeRepository recipeRepository;
 
     @Autowired
-    public UserRecipeService(
+    public GlobalRecipeService(
             RecipeRepository recipeRepository
     ) {
         this.recipeRepository = recipeRepository;

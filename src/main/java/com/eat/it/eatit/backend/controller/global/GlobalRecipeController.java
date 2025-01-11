@@ -1,27 +1,25 @@
-package com.eat.it.eatit.backend.controller.user;
+package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
-import com.eat.it.eatit.backend.service.user.UserRecipeService;
+import com.eat.it.eatit.backend.service.global.GlobalRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_USER')")
-@RequestMapping("/api/v1/user/recipe")
-public class UserRecipeController {
+@RequestMapping("/api/v1/global/recipe")
+public class GlobalRecipeController {
 
-    UserRecipeService recipeService;
+    GlobalRecipeService recipeService;
 
     @Autowired
-    public UserRecipeController(UserRecipeService recipeService) {
+    public GlobalRecipeController(GlobalRecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
