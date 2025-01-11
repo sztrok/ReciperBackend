@@ -137,7 +137,7 @@ public class SupportRecipeController {
     @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent item types")
     public ResponseEntity<List<RecipeDTO>> getRecipeByItemTypes(@RequestParam List<ItemType> itemTypes) {
-        List<RecipeDTO> recipes = recipeService.getRecipesByItemTypes(itemTypes);
+        List<RecipeDTO> recipes = recipeService.getAllRecipesByItemTypes(itemTypes);
         return recipes != null && !recipes.isEmpty()
                 ? ResponseEntity.ok(recipes)
                 : ResponseEntity.badRequest().build();
@@ -148,7 +148,7 @@ public class SupportRecipeController {
     @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or unsupported difficulty levels")
     public ResponseEntity<List<RecipeDTO>> getRecipesByDifficulty(@RequestParam List<RecipeDifficulty> difficultyList) {
-        List<RecipeDTO> recipes = recipeService.getRecipesByDifficulty(difficultyList);
+        List<RecipeDTO> recipes = recipeService.getAllRecipesByDifficulty(difficultyList);
         return recipes != null && !recipes.isEmpty()
                 ? ResponseEntity.ok(recipes)
                 : ResponseEntity.badRequest().build();

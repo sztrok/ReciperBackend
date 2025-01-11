@@ -139,7 +139,7 @@ public class InternalRecipeController {
     @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or non-existent item types")
     public ResponseEntity<List<RecipeDTO>> getRecipeByItemTypes(@RequestParam List<ItemType> itemTypes) {
-        List<RecipeDTO> recipes = recipeService.getRecipesByItemTypes(itemTypes);
+        List<RecipeDTO> recipes = recipeService.getAllRecipesByItemTypes(itemTypes);
         return recipes != null && !recipes.isEmpty()
                 ? ResponseEntity.ok(recipes)
                 : ResponseEntity.badRequest().build();
@@ -150,13 +150,10 @@ public class InternalRecipeController {
     @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Invalid or unsupported difficulty levels")
     public ResponseEntity<List<RecipeDTO>> getRecipesByDifficulty(@RequestParam List<RecipeDifficulty> difficultyList) {
-        List<RecipeDTO> recipes = recipeService.getRecipesByDifficulty(difficultyList);
+        List<RecipeDTO> recipes = recipeService.getAllRecipesByDifficulty(difficultyList);
         return recipes != null && !recipes.isEmpty()
                 ? ResponseEntity.ok(recipes)
                 : ResponseEntity.badRequest().build();
     }
 
-
-    // TODO: przemyśleć jak ma działać widoczność i dostęp do przepisów - użytkownik API ma dostęp tylko do jego informacji,
-    //  liczenie total calories i update po zmianie itemów, dodać analogicznie dla macro? chyba tak
 }

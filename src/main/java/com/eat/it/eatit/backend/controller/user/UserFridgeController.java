@@ -2,7 +2,7 @@ package com.eat.it.eatit.backend.controller.user;
 
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.enums.Operations;
-import com.eat.it.eatit.backend.service.FridgeService;
+import com.eat.it.eatit.backend.service.user.UserFridgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user/fridge")
 public class UserFridgeController {
 
-    FridgeService fridgeService;
+    UserFridgeService fridgeService;
 
     @Autowired
-    public UserFridgeController(FridgeService fridgeService) {
+    public UserFridgeController(UserFridgeService fridgeService) {
         this.fridgeService = fridgeService;
     }
 
     @GetMapping()
-    @Operation(summary = "Retrieve fridge by ID.")
+    @Operation(summary = "Retrieve fridge for this account.")
     @ApiResponse(responseCode = "200", description = "Fridge found successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid fridge ID.")
-    public ResponseEntity<FridgeDTO> getFridgeById(Authentication authentication) {
-        Long fridgeId = fridgeService.getFridgeByAccountName(authentication.getName()).getId();
-        FridgeDTO fridge = fridgeService.getFridgeById(fridgeId);
+    public ResponseEntity<FridgeDTO> getAccountFridge(Authentication authentication) {
+        FridgeDTO fridge = fridgeService.getAccountFridge(authentication);
         return fridge != null
                 ? ResponseEntity.ok(fridge)
                 : ResponseEntity.badRequest().build();
@@ -45,8 +44,7 @@ public class UserFridgeController {
             @RequestParam Long itemId,
             @RequestParam Double amount
     ) {
-        Long fridgeId = fridgeService.getFridgeByAccountName(authentication.getName()).getId();
-        FridgeDTO fridgeDTO = fridgeService.addItemToFridge(itemId, fridgeId, amount);
+        FridgeDTO fridgeDTO = fridgeService.addItemToFridge(authentication, itemId, amount);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
@@ -61,7 +59,7 @@ public class UserFridgeController {
             @RequestParam Long itemId
     ) {
         Long fridgeId = fridgeService.getFridgeByAccountName(authentication.getName()).getId();
-        FridgeDTO fridgeDTO = fridgeService.deleteItemFromFridge(itemId, fridgeId);
+        FridgeDTO fridgeDTO = fridgeService.deleteItemFromFridge(authentication, itemId, fridgeId);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
@@ -77,13 +75,7 @@ public class UserFridgeController {
             @RequestParam Double amount,
             @RequestParam Operations operation
     ) {
-        Long fridgeId = fridgeService.getFridgeByAccountName(authentication.getName()).getId();
-        FridgeDTO fridgeDTO;
-        if (operation == Operations.ADD) {
-            fridgeDTO = fridgeService.increaseItemAmount(itemId, fridgeId, amount);
-        } else {
-            fridgeDTO = fridgeService.reduceItemAmount(itemId, fridgeId, amount);
-        }
+        FridgeDTO fridgeDTO = fridgeService.changeItemAmountInFridge(authentication, itemId, amount, operation);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();

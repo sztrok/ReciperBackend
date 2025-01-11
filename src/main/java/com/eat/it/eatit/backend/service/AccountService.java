@@ -5,7 +5,6 @@ import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.simple.AccountCreationRequest;
 import com.eat.it.eatit.backend.enums.AccountRole;
-import com.eat.it.eatit.backend.mapper.FridgeMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -19,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
+import static com.eat.it.eatit.backend.mapper.AccountMapper.toDTO;
 import static com.eat.it.eatit.backend.mapper.AccountMapper.*;
+import static com.eat.it.eatit.backend.utils.account.UpdateAccountFields.updateAccountFields;
+import static com.eat.it.eatit.backend.utils.recipe.UpdateRecipeFields.updateRecipeFields;
 
 /**
  * Service class that handles operations related to user accounts.
@@ -158,14 +159,7 @@ public class AccountService {
         if (account == null) {
             return null;
         }
-        updateField(accountDTO.getUsername(), account::setUsername);
-        updateField(accountDTO.getMail(), account::setMail);
-        updateField(accountDTO.getPassword(), account::setPassword);
-        updateField(accountDTO.getFridge(), f -> account.setFridge(FridgeMapper.toEntity(f))); // Uncomment this if fridge is supposed to be changed
-        updateField(accountDTO.getAccountRecipes(), r -> account.setAccountRecipes(RecipeMapper.toEntityList(r)));
-        updateField(accountDTO.getPremium(), account::setPremium);
-        Account saved = accountRepository.save(account);
-        return toDTO(saved);
+        return updateAccountFields(accountDTO, account, accountRepository);
     }
 
     /**
@@ -202,6 +196,20 @@ public class AccountService {
         return RecipeMapper.toDTOList(account.getLikedRecipes());
     }
 
+    @Transactional
+    public RecipeDTO updateAccountRecipeById(String username, Long recipeId, RecipeDTO recipeDTO) {
+        Account account = getAccountEntityByName(username);
+        if (account == null) {
+            return null;
+        }
+        Recipe recipe = account.getAccountRecipes().stream()
+                .filter(r -> r.getId().equals(recipeId))
+                .findFirst()
+                .orElse(null);
+        return updateRecipeFields(recipeDTO, recipe);
+
+    }
+
     //TODO: przemyśleć jak powinno wyglądać usuwanie przepisu z bazy przez użytkownika
     @Transactional
     public boolean deleteAccountRecipe(Long id, Long recipeId) {
@@ -234,12 +242,17 @@ public class AccountService {
     }
 
     public Long getAccountIdByName(String username) {
-        return getAccountByName(username).getId();
+        return getAccountDTOByName(username).getId();
     }
 
-    private AccountDTO getAccountByName(String username) {
+    private AccountDTO getAccountDTOByName(String username) {
         return toDTO(accountRepository.findByUsername(username));
     }
+
+    private Account getAccountEntityByName(String username) {
+        return accountRepository.findByUsername(username);
+    }
+
 
     /**
      * Retrieves an account by its ID.

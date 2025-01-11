@@ -6,7 +6,6 @@ import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.enums.Operations;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
-import com.eat.it.eatit.backend.service.user.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +24,14 @@ public class FridgeService {
     private final FridgeRepository fridgeRepository;
     private final ItemService itemService;
     private final ItemInFridgeService itemInFridgeService;
-    private final UserAccountService accountService;
+    private final AccountAuthAndAccessService accountService;
 
     @Autowired
     public FridgeService(
             FridgeRepository fridgeRepository,
             ItemService itemService,
             ItemInFridgeService itemInFridgeService,
-            UserAccountService accountService
+            AccountAuthAndAccessService accountService
     ) {
         this.fridgeRepository = fridgeRepository;
         this.itemService = itemService;
@@ -40,7 +39,7 @@ public class FridgeService {
         this.accountService = accountService;
     }
 
-    protected Fridge createFridge(Long accountId) {
+    public Fridge createFridge(Long accountId) {
         Fridge fridge = new Fridge();
         fridge.setOwnerId(accountId);
         return fridgeRepository.save(fridge);

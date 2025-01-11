@@ -7,17 +7,15 @@ import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
-import com.eat.it.eatit.backend.mapper.CookwareMapper;
-import com.eat.it.eatit.backend.mapper.ItemInRecipeMapper;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
-import com.eat.it.eatit.backend.service.user.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.eat.it.eatit.backend.mapper.RecipeMapper.*;
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
+import static com.eat.it.eatit.backend.utils.recipe.UpdateRecipeFields.updateRecipeFields;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,7 +29,7 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final UserAccountService accountService;
+    private final AccountAuthAndAccessService accountService;
     private final ItemService itemService;
     private final ItemInRecipeService itemInRecipeService;
     private final CookwareService cookwareService;
@@ -42,7 +40,7 @@ public class RecipeService {
             ItemService itemService,
             ItemInRecipeService itemInRecipeService,
             CookwareService cookwareService,
-            UserAccountService accountService
+            AccountAuthAndAccessService accountService
     ) {
         this.recipeRepository = recipeRepository;
         this.itemService = itemService;
@@ -100,16 +98,32 @@ public class RecipeService {
                 .toList());
     }
 
-    public List<RecipeDTO> getRecipesByItemTypes(List<ItemType> itemTypes) {
+    public List<RecipeDTO> getAllRecipesByItemTypes(List<ItemType> itemTypes) {
         return toDTOList(getAllRecipesFromDatabase()
                 .stream()
                 .filter(recipe -> getRecipeItemTypes(recipe).containsAll(itemTypes))
                 .toList());
     }
 
-    public List<RecipeDTO> getRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
+    public List<RecipeDTO> getPublicRecipesByItemTypes(List<ItemType> itemTypes) {
         return toDTOList(getAllRecipesFromDatabase()
                 .stream()
+                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
+                .filter(recipe -> getRecipeItemTypes(recipe).containsAll(itemTypes))
+                .toList());
+    }
+
+    public List<RecipeDTO> getAllRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
+        return toDTOList(getAllRecipesFromDatabase()
+                .stream()
+                .filter(recipe -> difficultyList.contains(recipe.getDifficulty()))
+                .toList());
+    }
+
+    public List<RecipeDTO> getPublicRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
+        return toDTOList(getAllRecipesFromDatabase()
+                .stream()
+                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
                 .filter(recipe -> difficultyList.contains(recipe.getDifficulty()))
                 .toList());
     }
@@ -145,18 +159,7 @@ public class RecipeService {
     @Transactional
     public RecipeDTO updateRecipeById(Long id, RecipeDTO recipeDTO) {
         Recipe recipe = findRecipeById(id);
-        if (recipe == null) {
-            return null;
-        }
-        updateField(recipeDTO.getName(), recipe::setName);
-        updateField(recipeDTO.getDescription(), recipe::setDescription);
-        updateField(recipeDTO.getSimpleSteps(), recipe::setSimpleSteps);
-        updateField(recipeDTO.getComplexSteps(), recipe::setComplexSteps);
-        updateField(recipeDTO.getItems(), r -> recipe.setItems(ItemInRecipeMapper.toEntityList(r)));
-        updateField(recipeDTO.getCookware(), r -> recipe.setCookware(CookwareMapper.toEntityList(r)));
-        updateField(recipeDTO.getVisibility(), recipe::setVisibility);
-        updateField(recipeDTO.getDifficulty(), recipe::setDifficulty);
-        return toDTO(recipe);
+        return updateRecipeFields(recipeDTO, recipe);
     }
 
     @Transactional
@@ -225,7 +228,7 @@ public class RecipeService {
         return recipeRepository.findById(recipeId).orElse(null);
     }
 
-    private Recipe saveRecipe(Recipe recipe) {
+    public Recipe saveRecipe(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
 
