@@ -248,7 +248,7 @@ public class ItemService {
      * @param id the ID of the item to be found
      * @return the item if found, otherwise null
      */
-    protected Item findItemById(Long id) {
+    public Item findItemById(Long id) {
         return itemRepository.findById(id).orElse(null);
     }
 

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @IntegrationTest
 @AutoConfigureMockMvc
+@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 class ItemControllerTest {
 
     private static final String ITEM_API_PREFIX = "/api/v1/item/";
@@ -149,18 +151,18 @@ class ItemControllerTest {
 
     @Test
     void shouldHandleNonExistentItem() throws Exception {
-        String urlTemplate = "/api/items/{id}";
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldHandleInvalidItemId() throws Exception {
-        String urlTemplate = "/api/items/{invalid-id}";
+        String urlTemplate = ITEM_API_PREFIX + "{invalid-id}";
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, "invalid id")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
 

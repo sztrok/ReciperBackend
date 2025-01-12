@@ -19,6 +19,7 @@ public class Account {
     private Long id;
 
     @Setter
+    @Column(unique = true)
     private String username;
 
     @Setter
@@ -48,7 +49,7 @@ public class Account {
     )
     private List<Recipe> likedRecipes = new ArrayList<>();
 
-    @ElementCollection(targetClass = AccountRole.class)
+    @ElementCollection(targetClass = AccountRole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> accountRoles = new HashSet<>();
 

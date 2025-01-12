@@ -1,24 +1,27 @@
-package com.eat.it.eatit.backend.service;
+package com.eat.it.eatit.backend.service.internal;
 
-import com.eat.it.eatit.backend.data.*;
+import com.eat.it.eatit.backend.data.Cookware;
+import com.eat.it.eatit.backend.data.Item;
+import com.eat.it.eatit.backend.data.ItemInRecipe;
+import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.CookwareDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.enums.ItemType;
-import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
 import com.eat.it.eatit.backend.repository.RecipeRepository;
+import com.eat.it.eatit.backend.service.AccountAuthAndAccessService;
+import com.eat.it.eatit.backend.service.CookwareService;
+import com.eat.it.eatit.backend.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
+
 import static com.eat.it.eatit.backend.mapper.RecipeMapper.*;
 import static com.eat.it.eatit.backend.utils.UtilsKt.updateField;
 import static com.eat.it.eatit.backend.utils.recipe.UpdateRecipeFields.updateRecipeFields;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service class that provides operations related to recipes.
@@ -26,25 +29,22 @@ import java.util.stream.Collectors;
  * and handles mapping between Recipe and RecipeDTO objects.
  */
 @Service
-public class RecipeService {
+public class InternalRecipeService {
 
     private final RecipeRepository recipeRepository;
     private final AccountAuthAndAccessService accountService;
     private final ItemService itemService;
-    private final ItemInRecipeService itemInRecipeService;
     private final CookwareService cookwareService;
 
     @Autowired
-    public RecipeService(
+    public InternalRecipeService(
             RecipeRepository recipeRepository,
             ItemService itemService,
-            ItemInRecipeService itemInRecipeService,
             CookwareService cookwareService,
             AccountAuthAndAccessService accountService
     ) {
         this.recipeRepository = recipeRepository;
         this.itemService = itemService;
-        this.itemInRecipeService = itemInRecipeService;
         this.cookwareService = cookwareService;
         this.accountService = accountService;
     }
@@ -64,67 +64,14 @@ public class RecipeService {
         return toDTO(recipe);
     }
 
-    public RecipeDTO getPublicRecipeById(Long id) {
-        Recipe recipe = findRecipeById(id);
-        if (recipe == null) {
-            return null;
-        }
-        if (recipe.getVisibility() != Visibility.PUBLIC) {
-            return null;
-        }
-        return toDTO(recipe);
-    }
-
-//    public List<RecipeDTO> getAllRecipesForUser(String username) {
-//        Long accountId = accountService.getAccountByName(username).getId();
-//        return getAllRecipesFromDatabase().stream().filter(recipe -> recipe.get)
-//    }
-
     public List<RecipeDTO> getAllRecipes() {
         return toDTOList(getAllRecipesFromDatabase());
-    }
-
-    public List<RecipeDTO> getAllPublicRecipes() {
-        return toDTOList(getAllRecipesFromDatabase()
-                .stream()
-                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
-                .toList());
     }
 
     public List<RecipeDTO> getRecipesForAccount(Long accountId, List<Visibility> visibilityList) {
         return toDTOList(getAccountRecipes(accountId)
                 .stream()
                 .filter(recipe -> visibilityList.contains(recipe.getVisibility()))
-                .toList());
-    }
-
-    public List<RecipeDTO> getAllRecipesByItemTypes(List<ItemType> itemTypes) {
-        return toDTOList(getAllRecipesFromDatabase()
-                .stream()
-                .filter(recipe -> getRecipeItemTypes(recipe).containsAll(itemTypes))
-                .toList());
-    }
-
-    public List<RecipeDTO> getPublicRecipesByItemTypes(List<ItemType> itemTypes) {
-        return toDTOList(getAllRecipesFromDatabase()
-                .stream()
-                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
-                .filter(recipe -> getRecipeItemTypes(recipe).containsAll(itemTypes))
-                .toList());
-    }
-
-    public List<RecipeDTO> getAllRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
-        return toDTOList(getAllRecipesFromDatabase()
-                .stream()
-                .filter(recipe -> difficultyList.contains(recipe.getDifficulty()))
-                .toList());
-    }
-
-    public List<RecipeDTO> getPublicRecipesByDifficulty(List<RecipeDifficulty> difficultyList) {
-        return toDTOList(getAllRecipesFromDatabase()
-                .stream()
-                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
-                .filter(recipe -> difficultyList.contains(recipe.getDifficulty()))
                 .toList());
     }
 
@@ -139,21 +86,6 @@ public class RecipeService {
         Recipe recipe = toEntity(recipeDTO);
         recipe = saveRecipe(recipe);
         return toDTO(recipe);
-    }
-
-    @Transactional
-    public void addNewRecipes(List<Recipe> recipeList) {
-        saveRecipes(recipeList);
-    }
-
-    @Transactional
-    public boolean deleteRecipeById(Long id) {
-        Recipe recipe = findRecipeById(id);
-        if (recipe == null) {
-            return false;
-        }
-        deleteRecipe(recipe);
-        return true;
     }
 
     @Transactional
@@ -232,14 +164,6 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-    private void saveRecipes(List<Recipe> recipes) {
-        recipeRepository.saveAll(recipes);
-    }
-
-    private void deleteRecipe(Recipe recipe) {
-        recipeRepository.delete(recipe);
-    }
-
     private List<Recipe> getAllRecipesFromDatabase() {
         return recipeRepository.findAll();
     }
@@ -252,18 +176,5 @@ public class RecipeService {
         return account.getAccountRecipes().stream().map(RecipeMapper::toEntity).toList();
     }
 
-    private List<Item> getRecipeItems(Recipe recipe) {
-        if (recipe == null) {
-            return new ArrayList<>();
-        }
-        return recipe.getItems().stream().map(ItemInRecipe::getItem).toList();
-    }
-
-    private Set<ItemType> getRecipeItemTypes(Recipe recipe) {
-        if (recipe == null) {
-            return new HashSet<>();
-        }
-        return getRecipeItems(recipe).stream().map(Item::getItemType).collect(Collectors.toSet());
-    }
 
 }

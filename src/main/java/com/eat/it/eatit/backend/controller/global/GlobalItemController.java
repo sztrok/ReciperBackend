@@ -1,10 +1,10 @@
-package com.eat.it.eatit.backend.controller;
+package com.eat.it.eatit.backend.controller.global;
 
+import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.service.ItemService;
-import com.eat.it.eatit.backend.dto.ItemDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,16 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/item")
-public class ItemController {
+@RequestMapping("/api/v1/global/item")
+public class GlobalItemController {
 
     ItemService itemService;
 
     @Autowired
-    public ItemController(ItemService itemService) {
+    public GlobalItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
-    // ALL
     @GetMapping("/{id}")
     @Operation(summary = "Retrieve an item by its ID")
     @ApiResponse(responseCode = "200", description = "Item retrieved successfully")
@@ -37,7 +36,6 @@ public class ItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    // ALL
     @GetMapping("/all")
     @Operation(summary = "Retrieve all items")
     @ApiResponse(responseCode = "200", description = "All items retrieved successfully")
@@ -46,7 +44,6 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }
 
-    // ALL
     @GetMapping("/name")
     @Operation(summary = "Retrieve an item by its name")
     @ApiResponse(responseCode = "200", description = "Item with the given name retrieved successfully")
@@ -58,7 +55,6 @@ public class ItemController {
                 : ResponseEntity.badRequest().build();
     }
 
-    // ALL
     @GetMapping("/all/name")
     @Operation(summary = "Retrieve all items containing a specific name")
     @ApiResponse(responseCode = "200", description = "Items containing the given name retrieved successfully")
@@ -66,7 +62,6 @@ public class ItemController {
         return itemService.getAllItemsContainingName(name);
     }
 
-    // ALL
     @GetMapping("/barcode")
     @Operation(summary = "Retrieve an item by its barcode")
     @ApiResponse(responseCode = "200", description = "Item with the given barcode retrieved successfully")
@@ -75,68 +70,6 @@ public class ItemController {
         ItemDTO item = itemService.getItemByBarcode(barcode);
         return item != null
                 ? ResponseEntity.ok(item)
-                : ResponseEntity.badRequest().build();
-    }
-
-    // ALL
-    @PostMapping(consumes = "application/json")
-    @Operation(summary = "Add a new item")
-    @ApiResponse(responseCode = "200", description = "New item added successfully")
-    public ResponseEntity<ItemDTO> addNewItem(@RequestBody ItemDTO item) {
-        ItemDTO addedItem = itemService.addNewItem(item);
-        return ResponseEntity.ok(addedItem);
-    }
-
-    //TODO: poprawić, bo jest jako klucz obcy w fridge i recipe, więc z tamtąd też by tzeba usunąć
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete an item by its ID")
-    @ApiResponse(responseCode = "200", description = "Item deleted successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid Item ID")
-    public ResponseEntity<Void> deleteItemById(@PathVariable Long id) {
-        return itemService.deleteItemById(id)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
-    }
-
-    @PutMapping("/{id}")
-    @Operation(summary = "Update an item by its ID")
-    @ApiResponse(responseCode = "200", description = "Item updated successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid Item ID or data")
-    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
-        ItemDTO updatedItem = itemService.updateItem(id, itemDTO);
-        return updatedItem != null
-                ? ResponseEntity.ok(updatedItem)
-                : ResponseEntity.badRequest().build();
-    }
-
-    @PatchMapping("/{id}/info")
-    @Operation(summary = "Update an item's general information")
-    @ApiResponse(responseCode = "200", description = "Item information updated successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid update data")
-    public ResponseEntity<ItemDTO> updateItemInfo(
-            @PathVariable Long id,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Long barcode,
-            @RequestParam(required = false) ItemType itemType
-    ) {
-        return itemService.updateItemInfo(id, name, barcode, itemType)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
-    }
-
-    @PatchMapping("/{id}/nutrition")
-    @Operation(summary = "Update an item's nutrition details")
-    @ApiResponse(responseCode = "200", description = "Item nutrition details updated successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid nutrition data")
-    public ResponseEntity<ItemDTO> updateItemNutrition(
-            @PathVariable Long id,
-            @RequestParam(required = false) Double calories,
-            @RequestParam(required = false) Double proteins,
-            @RequestParam(required = false) Double fats,
-            @RequestParam(required = false) Double carbs
-    ) {
-        return itemService.updateItemNutrition(id, calories, proteins, fats, carbs)
-                ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
 

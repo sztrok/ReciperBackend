@@ -1,10 +1,10 @@
-package com.eat.it.eatit.backend.controller;
+package com.eat.it.eatit.backend.controller.support;
 
+import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.service.ItemService;
-import com.eat.it.eatit.backend.dto.ItemDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/item")
-public class ItemController {
+@RequestMapping("/api/v1/support/item")
+public class SupportItemController {
 
     ItemService itemService;
 
     @Autowired
-    public ItemController(ItemService itemService) {
+    public SupportItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 

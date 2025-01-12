@@ -19,11 +19,11 @@ public class ItemInFridgeService {
         return itemInFridgeRepository.findById(id).orElse(null);
     }
 
-    protected void removeItemFromFridge(ItemInFridge item) {
+    public void removeItemFromFridge(ItemInFridge item) {
         itemInFridgeRepository.delete(item);
     }
 
-    protected void saveItemInFridge(ItemInFridge item) {
+    public void saveItemInFridge(ItemInFridge item) {
         itemInFridgeRepository.save(item);
     }
 }
