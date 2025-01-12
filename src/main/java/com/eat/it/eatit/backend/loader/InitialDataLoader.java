@@ -88,7 +88,7 @@ class InitialDataLoader {
         accounts.add(generateAccount("Ava", "Williams", false));
         accounts.add(generateAccount("Noah", "Miller", false));
         accounts.add(generateAccount("Grace", "Anderson", true));
-        accounts.add(generateAccount("Oliver", "Swift", false));
+        accounts.add(generateAccount("test", "", false));
 
         Account adminAccount = new Account();
         adminAccount.setUsername("admin");

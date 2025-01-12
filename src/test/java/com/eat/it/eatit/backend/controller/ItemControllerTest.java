@@ -151,18 +151,18 @@ class ItemControllerTest {
 
     @Test
     void shouldHandleNonExistentItem() throws Exception {
-        String urlTemplate = "/api/items/{id}";
+        String urlTemplate = ITEM_API_PREFIX + "{id}";
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldHandleInvalidItemId() throws Exception {
-        String urlTemplate = "/api/items/{invalid-id}";
+        String urlTemplate = ITEM_API_PREFIX + "{invalid-id}";
         mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, "invalid id")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
 

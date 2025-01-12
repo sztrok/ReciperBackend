@@ -47,6 +47,7 @@ public class AccountService {
         this.recipeService = recipeService;
     }
 
+    @Transactional
     public AccountDTO createAccount(AccountCreationRequest request) {
         // Sprawdzenie, czy użytkownik z podanym e-mailem już istnieje
         if (accountRepository.existsByMail(request.getEmail())) {

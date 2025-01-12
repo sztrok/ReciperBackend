@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,6 +27,7 @@ public class SecurityConfig {
     private static final String USER_AUTHORITY = "ROLE_USER";
     private static final String SUPPORT_AUTHORITY = "ROLE_SUPPORT";
     private static final String ADMIN_AUTHORITY = "ROLE_ADMIN";
+    private static final String OLD_PATH = "/api/v1";
     private static final String GLOBAL_API_PATH = "/api/v1/global";
     private static final String USER_API_PATH = "/api/v1/user";
     private static final String INTERNAL_API_PATH = "/api/v1/internal";
@@ -45,10 +47,12 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
+        // Swagger and API documentation
+        httpSecurity.authorizeHttpRequests(
+                auth -> auth
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").authenticated()
+        );
 
-
-        httpSecurity.formLogin(Customizer.withDefaults());
- 
         // GLOBAL
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
@@ -72,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
                         .requestMatchers(HttpMethod.PATCH, USER_API_PATH + "/**").hasAuthority(USER_AUTHORITY)
         );
-        
+
         // INTERNAL (SUPPORT + ADMIN)
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
@@ -84,14 +88,16 @@ public class SecurityConfig {
 
         // ADMIN
         httpSecurity.authorizeHttpRequests(
-                auth -> auth
-                        .requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN_AUTHORITY)
-                        .requestMatchers(HttpMethod.POST,"/**").hasAuthority(ADMIN_AUTHORITY)
-                        .requestMatchers(HttpMethod.PUT,"/**").hasAuthority(ADMIN_AUTHORITY)
-                        .requestMatchers(HttpMethod.PATCH,"/**").hasAuthority(ADMIN_AUTHORITY)
-                        .requestMatchers(HttpMethod.DELETE,"/**").hasAuthority(ADMIN_AUTHORITY)
-                        )
+                        auth -> auth
+                                .requestMatchers(HttpMethod.GET, OLD_PATH + "/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.POST, OLD_PATH + "/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.PUT, OLD_PATH + "/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.PATCH, OLD_PATH + "/**").hasAuthority(ADMIN_AUTHORITY)
+                                .requestMatchers(HttpMethod.DELETE, OLD_PATH + "/**").hasAuthority(ADMIN_AUTHORITY)
+                )
                 .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(accountDetailsService);
         return httpSecurity.build();
     }

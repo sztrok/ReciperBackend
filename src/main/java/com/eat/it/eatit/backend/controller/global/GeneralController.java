@@ -6,6 +6,7 @@ import com.eat.it.eatit.backend.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,12 @@ public class GeneralController {
 
     AccountService accountService;
 
-    @PostMapping("register")
+    @Autowired
+    public GeneralController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
+    @PostMapping("/register")
     @Operation(summary = "Register new account", description = "Creates new account based on account creation request.")
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
     @ApiResponse(responseCode = "500", description = "Error while registering an account")
