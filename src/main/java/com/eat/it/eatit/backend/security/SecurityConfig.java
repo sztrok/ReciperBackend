@@ -51,6 +51,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").authenticated()
+                        .requestMatchers("/", "/home").permitAll()
         );
 
         // GLOBAL
