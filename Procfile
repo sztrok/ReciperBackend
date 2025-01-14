@@ -1,1 +1,1 @@
-web: java -Dspring.profiles.active=loadInitialData -jar target/EatItBackend-0.0.1-SNAPSHOT.jar
+web: java -Dspring.profiles.active=loadInitialData -jar target/EatItBackend-0.0.1-SNAPSHOT.jar -p $PORT
