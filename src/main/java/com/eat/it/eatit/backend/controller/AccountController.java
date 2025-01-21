@@ -7,6 +7,7 @@ import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/v1/account")
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AccountController {

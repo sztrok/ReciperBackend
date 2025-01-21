@@ -6,13 +6,14 @@ import com.eat.it.eatit.backend.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/global/general")
 public class GeneralController {
@@ -29,6 +30,8 @@ public class GeneralController {
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
     @ApiResponse(responseCode = "500", description = "Error while registering an account")
     public ResponseEntity<AccountDTO> register(@Valid @RequestBody AccountCreationRequest account) {
+
+        log.info("Registering account username: {} email: {}", account.getUsername(), account.getEmail());
         AccountDTO accountDTO = accountService.createAccount(account);
         return accountDTO.getId() != null
                 ? ResponseEntity.status(HttpStatus.CREATED).build()
