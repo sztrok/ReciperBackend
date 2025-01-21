@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.security;
 
+import com.eat.it.eatit.backend.security.service.AccountDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +25,7 @@ public class SecurityConfig {
 
     private final AccountDetailsServiceImpl accountDetailsService;
     private final CustomGrantedAuthorityMapper authorityMapper;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final String USER_AUTHORITY = "ROLE_USER";
     private static final String SUPPORT_AUTHORITY = "ROLE_SUPPORT";
@@ -34,9 +37,10 @@ public class SecurityConfig {
     private static final String ADMIN_API_PATH = "/api/v1/admin";
 
     @Autowired
-    public SecurityConfig(AccountDetailsServiceImpl accountDetailsService, CustomGrantedAuthorityMapper authorityMapper) {
+    public SecurityConfig(AccountDetailsServiceImpl accountDetailsService, CustomGrantedAuthorityMapper authorityMapper, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.accountDetailsService = accountDetailsService;
         this.authorityMapper = authorityMapper;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -59,6 +63,8 @@ public class SecurityConfig {
                 auth -> auth
                         // GENERAL
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/refresh").permitAll()
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
                         // COOKWARE
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware").permitAll()
@@ -99,7 +105,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .userDetailsService(accountDetailsService);
+                .userDetailsService(accountDetailsService)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
