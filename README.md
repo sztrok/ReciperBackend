@@ -1,3 +1,5 @@
+## Backend application for cooking and shopping.
+
 Odpalenie dockera - 
 `docker compose build`
 `docker compose up`
