@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.security;
+package com.eat.it.eatit.backend.security.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

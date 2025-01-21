@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.security;
 
+import com.eat.it.eatit.backend.security.service.RoleHierarchyService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 

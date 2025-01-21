@@ -1,7 +1,8 @@
-package com.eat.it.eatit.backend.security;
+package com.eat.it.eatit.backend.security.service;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.repository.AccountRepository;
+import com.eat.it.eatit.backend.security.AccountDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
