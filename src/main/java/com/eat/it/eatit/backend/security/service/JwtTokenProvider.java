@@ -15,7 +15,7 @@ import java.util.Set;
 public class JwtTokenProvider {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000L; // 15 minut
-    private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // 7 dni
+    private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L * 4; // 28 dni
 
     // Generowanie Access Tokena
     public String generateAccessToken(String username, Set<String> roles) {
