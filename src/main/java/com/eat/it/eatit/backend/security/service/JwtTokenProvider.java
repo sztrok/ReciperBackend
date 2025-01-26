@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class JwtTokenProvider {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000L; // 15 minut
-    private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // 7 dni
+    private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // 28 dni
 
     // Generowanie Access Tokena
-    public String generateAccessToken(String username, Set<String> roles) {
+    public String generateAccessToken(String username, List<String> roles) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles)
@@ -48,14 +48,14 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public Set<String> getRolesFromToken(String token) {
+    public List<String> getRolesFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.get("roles", Set.class);
+        return claims.get("roles", List.class);
     }
 
     // Walidacja tokena

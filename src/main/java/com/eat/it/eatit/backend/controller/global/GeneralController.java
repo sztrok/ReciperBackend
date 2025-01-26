@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,7 @@ public class GeneralController {
     @Operation(summary = "Get profile information", description = "Retrieves information about user profile.")
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
     public ResponseEntity<AccountDTO> getProfile(Authentication authentication) {
+        log.info("Get profile info for user {}", authentication.getName());
         String username = authentication.getName();
         return ResponseEntity.ok(accountService.getAllAccounts().stream().filter(acc -> acc.getUsername().equals(username)).findFirst().orElse(new AccountDTO()));
     }
@@ -66,7 +68,7 @@ public class GeneralController {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        Set<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         String accessToken = jwtTokenProvider.generateAccessToken(authentication.getName(), roles);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
@@ -85,7 +87,7 @@ public class GeneralController {
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
 
         // Wygenerowanie nowych tokenów
-        Set<String> roles = jwtTokenProvider.getRolesFromToken(refreshToken);
+        List<String> roles = jwtTokenProvider.getRolesFromToken(refreshToken);
         String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
 
