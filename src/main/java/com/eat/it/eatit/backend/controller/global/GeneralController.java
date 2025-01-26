@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.simple.AccountCreationRequest;
 import com.eat.it.eatit.backend.dto.simple.AuthenticationResponse;
 import com.eat.it.eatit.backend.dto.simple.LoginRequest;
 import com.eat.it.eatit.backend.dto.simple.RefreshTokenRequest;
+import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
 import com.eat.it.eatit.backend.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,11 +45,13 @@ public class GeneralController {
     @Operation(summary = "Register new account", description = "Creates new account based on account creation request.")
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
     @ApiResponse(responseCode = "500", description = "Error while registering an account")
-    public ResponseEntity<AccountDTO> register(@Valid @RequestBody AccountCreationRequest account) {
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody AccountCreationRequest account) {
         log.info("Registering account username: {} email: {}", account.getUsername(), account.getEmail());
         AccountDTO accountDTO = accountService.createAccount(account);
+        String newAccessToken = jwtTokenProvider.generateAccessToken(accountDTO.getUsername(), List.of(AccountRole.ROLE_USER.toString()));
+        String newRefreshToken = jwtTokenProvider.generateRefreshToken(accountDTO.getUsername());
         return accountDTO.getId() != null
-                ? ResponseEntity.status(HttpStatus.CREATED).build()
+                ? ResponseEntity.status(HttpStatus.CREATED).body(new AuthenticationResponse(newAccessToken, newRefreshToken))
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
@@ -87,7 +90,7 @@ public class GeneralController {
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
 
         // Wygenerowanie nowych tokenów
-        List<String> roles = jwtTokenProvider.getRolesFromToken(refreshToken);
+        List<String> roles = accountService.getAccountRoles(username);
         String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
 

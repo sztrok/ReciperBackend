@@ -96,6 +96,14 @@ public class AccountService {
         return accountDTOList;
     }
 
+    public List<String> getAccountRoles(String username) {
+        Account account = getAccountEntityByName(username);
+        if (account == null) {
+            return Collections.emptyList();
+        }
+        return account.getAccountRoles().stream().map(Enum::toString).toList();
+    }
+
     public List<RecipeDTO> getAccountRecipes(Long id) {
         Account account = findAccount(id);
         if (account == null) {
