@@ -65,6 +65,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/register").permitAll()
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/login").permitAll()
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/refresh").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/accessToken").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/refreshToken").permitAll()
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
                         // COOKWARE
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware").permitAll()
