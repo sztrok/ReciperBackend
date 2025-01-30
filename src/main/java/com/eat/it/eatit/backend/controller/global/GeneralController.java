@@ -1,8 +1,8 @@
 package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.simple.AccountCreationRequest;
-import com.eat.it.eatit.backend.dto.simple.AuthenticationResponse;
+import com.eat.it.eatit.backend.dto.auth.AccountCreationRequest;
+import com.eat.it.eatit.backend.dto.auth.AuthenticationResponse;
 import com.eat.it.eatit.backend.dto.simple.LoginRequest;
 import com.eat.it.eatit.backend.dto.simple.RefreshTokenRequest;
 import com.eat.it.eatit.backend.enums.AccountRole;
@@ -22,8 +22,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
