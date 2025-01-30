@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.dto.simple;
+package com.eat.it.eatit.backend.dto.auth;
 
 import lombok.Data;
 
