@@ -1,6 +1,8 @@
 package com.eat.it.eatit.backend.data;
 
+import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "item_in_recipe")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class ItemInRecipe {
@@ -25,6 +28,9 @@ public class ItemInRecipe {
     private Item item;
 
     private Double amount;
+
+    @Enumerated(EnumType.STRING)
+    private UnitOfMeasure unit;
 
     public ItemInRecipe(Long recipeId, Item item, Double amount) {
         this.recipeId = recipeId;

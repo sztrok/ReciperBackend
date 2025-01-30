@@ -1,7 +1,10 @@
 package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.simple.*;
+import com.eat.it.eatit.backend.dto.auth.AccountCreationRequest;
+import com.eat.it.eatit.backend.dto.auth.AuthenticationResponse;
+import com.eat.it.eatit.backend.dto.simple.LoginRequest;
+import com.eat.it.eatit.backend.dto.simple.RefreshTokenRequest;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
 import com.eat.it.eatit.backend.service.AccountService;
@@ -78,7 +81,7 @@ public class GeneralController {
     public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         log.info("Refresh token: {}", refreshToken);
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
+        if(!jwtTokenProvider.validateToken(refreshToken)) {
             log.info("Refresh token not valid");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -91,24 +94,5 @@ public class GeneralController {
 
         return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, newRefreshToken));
     }
-
-    @PostMapping("/accessToken")
-    public ResponseEntity<AuthenticationResponse> validateAccessToken(@RequestBody AccessTokenRequest accessTokenRequest) {
-        log.info("Validate access token: {}", accessTokenRequest.getAccessToken());
-        log.info("Result: {}", jwtTokenProvider.validateToken(accessTokenRequest.getAccessToken()));
-        return jwtTokenProvider.validateToken(accessTokenRequest.getAccessToken())
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @PostMapping("/refreshToken")
-    public ResponseEntity<AuthenticationResponse> validateRefreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        log.info("Validate refresh token: {}", refreshTokenRequest.getRefreshToken());
-        log.info("Result: {}", jwtTokenProvider.validateToken(refreshTokenRequest.getRefreshToken()));
-        return jwtTokenProvider.validateToken(refreshTokenRequest.getRefreshToken())
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
 
 }
