@@ -2,8 +2,6 @@ package com.eat.it.eatit.backend.controller.admin;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
-import com.eat.it.eatit.backend.mapper.simple.AccountSimpleMapper;
 import com.eat.it.eatit.backend.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +23,7 @@ public class AdminAccountController {
     public AdminAccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+
     // ADMIN / SUPPORT
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Retrieve account by ID", description = "Retrieves an account by its ID and returns it as an AccountDTO.")
@@ -37,17 +36,16 @@ public class AdminAccountController {
                 ? ResponseEntity.ok(account)
                 : ResponseEntity.badRequest().build();
     }
+
     // ADMIN / SUPPORT
     @Operation(summary = "Retrieve all accounts", description = "Retrieves all accounts and returns them as a list of AccountSimpleDTO.")
     @GetMapping(value = "all")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all accounts.")
-    public ResponseEntity<List<AccountSimpleDTO>> getAllAccounts() {
-        List<AccountSimpleDTO> accounts = accountService.getAllAccounts()
-                .stream()
-                .map(AccountSimpleMapper::toSimple)
-                .toList();
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
+        List<AccountDTO> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
+
     // ADMIN / SUPPORT
     @Operation(summary = "Add a new account", description = "Adds a new account based on the provided AccountDTO.")
     @PostMapping(consumes = "application/json")
@@ -57,6 +55,7 @@ public class AdminAccountController {
         AccountDTO account = accountService.addNewAccount(accountDTO);
         return ResponseEntity.ok(account);
     }
+
     // ADMIN
     @Operation(summary = "Delete an account by ID", description = "Deletes an account identified by its ID.")
     @DeleteMapping(value = "/{id}")
@@ -67,6 +66,7 @@ public class AdminAccountController {
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
+
     // ALL, ale user moze tylko swoje updateowac
     @Operation(summary = "Update an account by ID", description = "Updates an existing account identified by its ID based on the provided AccountDTO.")
     @PutMapping(value = "/{id}")
@@ -78,6 +78,7 @@ public class AdminAccountController {
                 ? ResponseEntity.ok(account)
                 : ResponseEntity.badRequest().build();
     }
+
     // ALL ale ograniczenia ze user moze tylko swoje
     @Operation(summary = "Add recipes to an account", description = "Adds a list of recipes to an existing account identified by its ID.")
     @PutMapping(value = "/{id}/recipes")

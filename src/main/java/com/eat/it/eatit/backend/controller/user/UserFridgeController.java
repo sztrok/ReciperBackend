@@ -1,6 +1,6 @@
 package com.eat.it.eatit.backend.controller.user;
 
-import com.eat.it.eatit.backend.dto.FridgeDTO;
+import com.eat.it.eatit.backend.dto.simple.FridgeSimpleDTO;
 import com.eat.it.eatit.backend.enums.Operations;
 import com.eat.it.eatit.backend.service.user.UserFridgeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,8 +28,8 @@ public class UserFridgeController {
     @Operation(summary = "Retrieve fridge for this account.")
     @ApiResponse(responseCode = "200", description = "Fridge found successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid fridge ID.")
-    public ResponseEntity<FridgeDTO> getAccountFridge(Authentication authentication) {
-        FridgeDTO fridge = fridgeService.getAccountFridge(authentication);
+    public ResponseEntity<FridgeSimpleDTO> getAccountFridge(Authentication authentication) {
+        FridgeSimpleDTO fridge = fridgeService.getAccountFridge(authentication);
         return fridge != null
                 ? ResponseEntity.ok(fridge)
                 : ResponseEntity.badRequest().build();
@@ -39,12 +39,12 @@ public class UserFridgeController {
     @Operation(summary = "Add item to fridge.")
     @ApiResponse(responseCode = "200", description = "Item added to fridge successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid fridge or item data.")
-    public ResponseEntity<FridgeDTO> addItemToFridge(
+    public ResponseEntity<FridgeSimpleDTO> addItemToFridge(
             Authentication authentication,
             @RequestParam Long itemId,
             @RequestParam Double amount
     ) {
-        FridgeDTO fridgeDTO = fridgeService.addItemToFridge(authentication, itemId, amount);
+        FridgeSimpleDTO fridgeDTO = fridgeService.addItemToFridge(authentication, itemId, amount);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
@@ -54,12 +54,12 @@ public class UserFridgeController {
     @Operation(summary = "Delete item from fridge.")
     @ApiResponse(responseCode = "200", description = "Item deleted from fridge successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid item data.")
-    public ResponseEntity<FridgeDTO> deleteItemFromFridge(
+    public ResponseEntity<FridgeSimpleDTO> deleteItemFromFridge(
             Authentication authentication,
             @RequestParam Long itemId
     ) {
         Long fridgeId = fridgeService.getFridgeByAccountName(authentication.getName()).getId();
-        FridgeDTO fridgeDTO = fridgeService.deleteItemFromFridge(authentication, itemId, fridgeId);
+        FridgeSimpleDTO fridgeDTO = fridgeService.deleteItemFromFridge(authentication, itemId, fridgeId);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
@@ -69,13 +69,13 @@ public class UserFridgeController {
     @Operation(summary = "Adjust the amount of an item in the fridge.")
     @ApiResponse(responseCode = "200", description = "Item amount updated successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid operation or data.")
-    public ResponseEntity<FridgeDTO> adjustItemAmount(
+    public ResponseEntity<FridgeSimpleDTO> adjustItemAmount(
             Authentication authentication,
             @RequestParam Long itemId,
             @RequestParam Double amount,
             @RequestParam Operations operation
     ) {
-        FridgeDTO fridgeDTO = fridgeService.changeItemAmountInFridge(authentication, itemId, amount, operation);
+        FridgeSimpleDTO fridgeDTO = fridgeService.changeItemAmountInFridge(authentication, itemId, amount, operation);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();

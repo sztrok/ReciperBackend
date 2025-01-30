@@ -8,14 +8,14 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class SimpleFridgeDTO {
+public class FridgeSimpleDTO {
 
     @Nullable
     private Long id;
     private Long ownerId;
     private List<ItemWithAmountDTO> items;
 
-    public SimpleFridgeDTO(@Nullable Long id, Long ownerId, List<ItemWithAmountDTO> items) {
+    public FridgeSimpleDTO(@Nullable Long id, Long ownerId, List<ItemWithAmountDTO> items) {
         this.id = id;
         this.ownerId = ownerId;
         this.items = items;

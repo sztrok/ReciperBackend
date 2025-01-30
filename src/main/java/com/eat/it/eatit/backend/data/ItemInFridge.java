@@ -30,7 +30,7 @@ public class ItemInFridge {
     private Double amount;
 
     @Enumerated(EnumType.STRING)
-    private UnitOfMeasure unit;
+    private UnitOfMeasure unit = UnitOfMeasure.GRAM;
 
     public ItemInFridge(Long fridgeId, Item item, Double amount) {
         this.fridgeId = fridgeId;

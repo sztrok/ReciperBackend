@@ -8,6 +8,6 @@ public class ItemWithAmountDTO {
     private String name;
     private String itemType;
     private Double amount;
-    private String unitOfMeasure;
+    private String unit;
 
 }

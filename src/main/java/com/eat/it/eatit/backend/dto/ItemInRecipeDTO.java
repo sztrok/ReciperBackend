@@ -1,6 +1,5 @@
 package com.eat.it.eatit.backend.dto;
 
-import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ public class ItemInRecipeDTO {
     private Long recipeId;
     private ItemDTO item;
     private Double amount;
-    private UnitOfMeasure unit;
+    private String unit;
 
     public ItemInRecipeDTO(@Nullable Long id, Long recipeId, ItemDTO item, Double amount) {
         this.id = id;

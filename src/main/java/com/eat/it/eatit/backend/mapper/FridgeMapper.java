@@ -2,7 +2,8 @@ package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
-import com.eat.it.eatit.backend.dto.simple.SimpleFridgeDTO;
+import com.eat.it.eatit.backend.dto.simple.FridgeSimpleDTO;
+import com.eat.it.eatit.backend.mapper.simple.ItemWithAmountMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,17 @@ public class FridgeMapper {
                 fridge.getId(),
                 fridge.getOwnerId(),
                 ItemInFridgeMapper.toDTOList(fridge.getItems()));
+    }
+
+    public static FridgeSimpleDTO toSimpleDTO(Fridge fridge) {
+        if (fridge == null) {
+            return new FridgeSimpleDTO();
+        }
+        return new FridgeSimpleDTO(
+                fridge.getId(),
+                fridge.getOwnerId(),
+                fridge.getItems().stream().map(ItemWithAmountMapper::toDTO).toList()
+        );
     }
 
     public static Fridge toEntity(FridgeDTO fridgeDTO) {

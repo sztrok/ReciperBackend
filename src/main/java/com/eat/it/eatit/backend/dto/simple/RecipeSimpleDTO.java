@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class SimpleRecipeDTO {
+public class RecipeSimpleDTO {
 
     @Nullable
     private Long id;

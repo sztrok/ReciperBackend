@@ -1,7 +1,5 @@
 package com.eat.it.eatit.backend.controller;
 
-import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
-import com.eat.it.eatit.backend.mapper.simple.AccountSimpleMapper;
 import com.eat.it.eatit.backend.service.AccountService;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -43,11 +41,8 @@ public class AccountController {
     @Operation(summary = "Retrieve all accounts", description = "Retrieves all accounts and returns them as a list of AccountSimpleDTO.")
     @GetMapping(value = "all")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all accounts.")
-    public ResponseEntity<List<AccountSimpleDTO>> getAllAccounts() {
-        List<AccountSimpleDTO> accounts = accountService.getAllAccounts()
-                .stream()
-                .map(AccountSimpleMapper::toSimple)
-                .toList();
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
+        List<AccountDTO> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
     // ADMIN / SUPPORT

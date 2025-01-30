@@ -4,6 +4,8 @@ import com.eat.it.eatit.backend.data.ItemInFridge;
 import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.dto.simple.ItemWithAmountDTO;
 
+import java.util.List;
+
 public class ItemWithAmountMapper {
 
     private ItemWithAmountMapper() {
@@ -14,7 +16,7 @@ public class ItemWithAmountMapper {
         item.setName(itemInRecipe.getItem().getName());
         item.setItemType(itemInRecipe.getItem().getItemType().getDescription());
         item.setAmount(itemInRecipe.getAmount());
-        item.setUnitOfMeasure(itemInRecipe.getUnit().getUnit());
+        item.setUnit(itemInRecipe.getUnit().getUnit());
         return item;
     }
 
@@ -23,8 +25,16 @@ public class ItemWithAmountMapper {
         item.setName(itemInFridge.getItem().getName());
         item.setItemType(itemInFridge.getItem().getItemType().getDescription());
         item.setAmount(itemInFridge.getAmount());
-        item.setUnitOfMeasure(itemInFridge.getUnit().getUnit());
+        item.setUnit(itemInFridge.getUnit().getUnit());
         return item;
+    }
+
+    public static List<ItemWithAmountDTO> toDTOFromFridge(List<ItemInFridge> itemInFridgeList) {
+        return itemInFridgeList.stream().map(ItemWithAmountMapper::toDTO).toList();
+    }
+
+    public static List<ItemWithAmountDTO> toDTOFromRecipe(List<ItemInRecipe> itemInRecipeList) {
+        return itemInRecipeList.stream().map(ItemWithAmountMapper::toDTO).toList();
     }
 
 
