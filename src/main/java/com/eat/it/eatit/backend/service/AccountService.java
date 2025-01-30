@@ -4,7 +4,9 @@ import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.auth.AccountCreationRequest;
+import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
+import com.eat.it.eatit.backend.mapper.AccountMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
@@ -14,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,11 +90,12 @@ public class AccountService {
      */
     public List<AccountDTO> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
-        List<AccountDTO> accountDTOList = new ArrayList<>();
-        for (Account account : accounts) {
-            accountDTOList.add(toDTO(account));
-        }
-        return accountDTOList;
+        return accounts.stream().map(AccountMapper::toDTO).toList();
+    }
+
+    public List<AccountSimpleDTO> getAllAccountsSimple() {
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream().map(AccountMapper::toSimpleDTO).toList();
     }
 
     public List<String> getAccountRoles(String username) {

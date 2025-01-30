@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.auth.AccountCreationRequest;
 import com.eat.it.eatit.backend.dto.auth.AuthenticationResponse;
 import com.eat.it.eatit.backend.dto.auth.LoginRequest;
 import com.eat.it.eatit.backend.dto.auth.RefreshTokenRequest;
+import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
 import com.eat.it.eatit.backend.service.AccountService;
@@ -56,10 +57,10 @@ public class GeneralController {
     @GetMapping("/profile")
     @Operation(summary = "Get profile information", description = "Retrieves information about user profile.")
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
-    public ResponseEntity<AccountDTO> getProfile(Authentication authentication) {
+    public ResponseEntity<AccountSimpleDTO> getProfile(Authentication authentication) {
         log.info("Get profile info for user {}", authentication.getName());
         String username = authentication.getName();
-        return ResponseEntity.ok(accountService.getAllAccounts().stream().filter(acc -> acc.getUsername().equals(username)).findFirst().orElse(new AccountDTO()));
+        return ResponseEntity.ok(accountService.getAllAccountsSimple().stream().filter(acc -> acc.getUsername().equals(username)).findFirst().orElse(new AccountSimpleDTO()));
     }
 
     @PostMapping("/login")
