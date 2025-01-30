@@ -2,6 +2,7 @@ package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.FridgeDTO;
+import com.eat.it.eatit.backend.dto.simple.SimpleFridgeDTO;
 
 import java.util.ArrayList;
 import java.util.List;
