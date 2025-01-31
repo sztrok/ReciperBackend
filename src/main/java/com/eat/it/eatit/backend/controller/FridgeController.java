@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * NIE MOŻNA ZROBIC DELETE FRIDGE BO JEST ŚCISLE ZWIĄZANA Z ACCOUNT
+ * @deprecated
  */
 @RestController
 @RequestMapping("/api/v1/fridge")
+@Deprecated(forRemoval = true)
 public class FridgeController {
 
     FridgeService fridgeService;
@@ -36,6 +37,7 @@ public class FridgeController {
                 ? ResponseEntity.ok(fridge)
                 : ResponseEntity.badRequest().build();
     }
+
     // ADMIN / SUPPORT
     @GetMapping("/all")
     @Operation(summary = "Retrieve all fridges.")

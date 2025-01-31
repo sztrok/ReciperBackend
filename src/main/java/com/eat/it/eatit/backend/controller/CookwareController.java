@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @deprecated
+ */
 @RestController
 @RequestMapping("/api/v1/cookware")
+@Deprecated(forRemoval = true)
 public class CookwareController {
 
     CookwareService cookwareService;

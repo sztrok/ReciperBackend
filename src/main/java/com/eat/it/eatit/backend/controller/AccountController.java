@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @deprecated
+ */
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/account")
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@Deprecated(forRemoval = true)
 public class AccountController {
 
     AccountService accountService;

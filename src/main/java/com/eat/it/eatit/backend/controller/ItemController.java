@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @deprecated
+ */
 @RestController
 @RequestMapping("/api/v1/item")
+@Deprecated(forRemoval = true)
 public class ItemController {
 
     ItemService itemService;
