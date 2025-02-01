@@ -3,7 +3,6 @@ package com.eat.it.eatit.backend.mapper;
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
-import com.eat.it.eatit.backend.mapper.simple.RecipeSimpleMapper;
 
 public class AccountMapper {
 
@@ -47,8 +46,8 @@ public class AccountMapper {
                 account.getUsername(),
                 account.getMail(),
                 account.getPremium(),
-                RecipeSimpleMapper.toSimpleDTOList(account.getAccountRecipes()),
-                RecipeSimpleMapper.toSimpleDTOList(account.getLikedRecipes()),
+                RecipeMapper.toSimpleDTOList(account.getAccountRecipes()),
+                RecipeMapper.toSimpleDTOList(account.getLikedRecipes()),
                 account.getAccountRoles()
         );
     }

@@ -1,6 +1,7 @@
-package com.eat.it.eatit.backend.dto.simple;
+package com.eat.it.eatit.backend.dto.recipe;
 
 import com.eat.it.eatit.backend.dto.CookwareDTO;
+import com.eat.it.eatit.backend.dto.simple.ItemWithAmountDTO;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import jakarta.annotation.Nullable;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class RecipeSimpleDTO {
+public class RecipeDetailsDTO {
 
     @Nullable
     private Long id;

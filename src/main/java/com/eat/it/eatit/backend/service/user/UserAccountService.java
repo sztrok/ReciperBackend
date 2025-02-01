@@ -4,9 +4,9 @@ import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.dto.simple.RecipeSimpleDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDetailsDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeSimpleDTO;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
-import com.eat.it.eatit.backend.mapper.simple.RecipeSimpleMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.service.FridgeService;
 import com.eat.it.eatit.backend.service.RecipeService;
@@ -49,8 +49,19 @@ public class UserAccountService {
         if (account == null) {
             return Collections.emptyList();
         }
-        return RecipeSimpleMapper.toSimpleDTOList(account.getAccountRecipes());
-//        return toDTO(account).getAccountRecipes();
+        return RecipeMapper.toSimpleDTOList(account.getAccountRecipes());
+    }
+
+    public RecipeDetailsDTO getAccountRecipeDetails(Authentication authentication, Long recipeId) {
+        Account account = getAccountEntityByName(authentication.getName());
+        if (account == null) {
+            return null;
+        }
+        Recipe recipe = account.getAccountRecipes().stream().filter(it -> it.getId().equals(recipeId)).findFirst().orElse(null);
+        if (recipe == null) {
+            return new RecipeDetailsDTO();
+        }
+        return RecipeMapper.toDetailsDTO(recipe);
     }
 
     public List<RecipeDTO> getLikedRecipes(Authentication authentication) {
@@ -75,7 +86,7 @@ public class UserAccountService {
     public List<RecipeDTO> addRecipesToAccount(Authentication authentication, List<RecipeDTO> recipes) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<Recipe> accountRecipes = account.getAccountRecipes();
         accountRecipes.addAll(RecipeMapper.toEntityList(recipes));
@@ -110,8 +121,6 @@ public class UserAccountService {
         return updateRecipeFields(recipeDTO, recipe);
 
     }
-
-    //TODO: przemyśleć jak powinno wyglądać usuwanie przepisu z bazy przez użytkownika
     @Transactional
     public boolean deleteAccountRecipe(Authentication authentication, Long recipeId) {
         Account account = getAccountEntityByName(authentication.getName());
@@ -119,7 +128,6 @@ public class UserAccountService {
         if (account == null || accountRecipe == null) {
             return false;
         }
-//      TODO: recipeService.deleteRecipeById(recipeId);
         account.getAccountRecipes()
                 .stream()
                 .filter(recipe -> recipe.getId().equals(recipeId))

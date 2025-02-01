@@ -1,5 +1,6 @@
 package com.eat.it.eatit.backend.dto.simple;
 
+import com.eat.it.eatit.backend.dto.recipe.RecipeSimpleDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;

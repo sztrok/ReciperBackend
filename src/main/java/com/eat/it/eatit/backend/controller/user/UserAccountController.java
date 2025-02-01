@@ -2,8 +2,8 @@ package com.eat.it.eatit.backend.controller.user;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.dto.simple.RecipeSimpleDTO;
-import com.eat.it.eatit.backend.service.RecipeService;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDetailsDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeSimpleDTO;
 import com.eat.it.eatit.backend.service.user.UserAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,6 +35,14 @@ public class UserAccountController {
     public ResponseEntity<List<RecipeSimpleDTO>> getAccountRecipes(Authentication authentication) {
         log.info("Get account recipes");
         return ResponseEntity.ok(accountService.getAccountRecipes(authentication));
+    }
+
+    @GetMapping("/account_recipes/{recipeId}")
+    @Operation(summary = "Get recipe details", description = "Returns more detailed recipe data")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved recipe details")
+    public ResponseEntity<RecipeDetailsDTO> getAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
+        log.info("Get account recipe with id {}", recipeId);
+        return ResponseEntity.ok(accountService.getAccountRecipeDetails(authentication, recipeId));
     }
 
     @GetMapping("/liked_recipes")
@@ -115,6 +123,4 @@ public class UserAccountController {
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
-
-    //TODO: dodać więcej endpointów
 }
