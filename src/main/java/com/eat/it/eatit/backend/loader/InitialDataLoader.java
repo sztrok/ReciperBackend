@@ -184,7 +184,7 @@ class InitialDataLoader {
 
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
-        account.setUsername("%s %s".formatted(firstName, lastName));
+        account.setUsername(firstName);
         account.setPassword(passwordEncoder.encode("password" + firstName));
         account.setMail("%s.%s@test.com".formatted(firstName, lastName));
         account.setPremium(premium);

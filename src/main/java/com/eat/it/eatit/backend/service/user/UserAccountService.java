@@ -4,7 +4,9 @@ import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Recipe;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.dto.simple.RecipeSimpleDTO;
 import com.eat.it.eatit.backend.mapper.RecipeMapper;
+import com.eat.it.eatit.backend.mapper.simple.RecipeSimpleMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.service.FridgeService;
 import com.eat.it.eatit.backend.service.RecipeService;
@@ -42,12 +44,13 @@ public class UserAccountService {
         this.recipeService = recipeService;
     }
 
-    public List<RecipeDTO> getAccountRecipes(Authentication authentication) {
+    public List<RecipeSimpleDTO> getAccountRecipes(Authentication authentication) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return Collections.emptyList();
         }
-        return toDTO(account).getAccountRecipes();
+        return RecipeSimpleMapper.toSimpleDTOList(account.getAccountRecipes());
+//        return toDTO(account).getAccountRecipes();
     }
 
     public List<RecipeDTO> getLikedRecipes(Authentication authentication) {

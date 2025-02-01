@@ -1,6 +1,8 @@
 package com.eat.it.eatit.backend.dto;
 
+import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.EnumType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class ItemInRecipeDTO {
 
     @Nullable

@@ -2,6 +2,7 @@ package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.ItemInRecipe;
 import com.eat.it.eatit.backend.dto.ItemInRecipeDTO;
+import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class ItemInRecipeMapper {
         itemInRecipeDTO.setRecipeId(itemInRecipe.getRecipeId());
         itemInRecipeDTO.setItem(ItemMapper.toDTO(itemInRecipe.getItem()));
         itemInRecipeDTO.setAmount(itemInRecipe.getAmount());
+        itemInRecipeDTO.setUnit(itemInRecipeDTO.getUnit());
         return itemInRecipeDTO;
     }
     
@@ -25,6 +27,7 @@ public class ItemInRecipeMapper {
         itemInRecipe.setRecipeId(itemInRecipeDTO.getRecipeId());
         itemInRecipe.setItem(ItemMapper.toEntity(itemInRecipeDTO.getItem()));
         itemInRecipe.setAmount(itemInRecipeDTO.getAmount());
+        itemInRecipe.setUnit(UnitOfMeasure.valueOf(itemInRecipeDTO.getUnit()));
         return itemInRecipe;
     }
 

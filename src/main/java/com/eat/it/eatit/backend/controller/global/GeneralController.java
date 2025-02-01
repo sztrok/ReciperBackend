@@ -1,10 +1,7 @@
 package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.auth.AccountCreationRequest;
-import com.eat.it.eatit.backend.dto.auth.AuthenticationResponse;
-import com.eat.it.eatit.backend.dto.auth.LoginRequest;
-import com.eat.it.eatit.backend.dto.auth.RefreshTokenRequest;
+import com.eat.it.eatit.backend.dto.auth.*;
 import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
@@ -78,8 +75,8 @@ public class GeneralController {
         return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshToken));
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    @PostMapping("/refreshToken")
+    public ResponseEntity<AuthenticationResponse> getRefreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         log.info("Refresh token: {}", refreshToken);
         if(!jwtTokenProvider.validateToken(refreshToken)) {
@@ -94,6 +91,22 @@ public class GeneralController {
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
 
         return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, newRefreshToken));
+    }
+
+    @PostMapping("/accessToken")
+    public ResponseEntity<AuthenticationResponse> getAccessToken(@RequestBody AccessTokenRequest accessTokenRequest) {
+        String accessToken = accessTokenRequest.getAccessToken();
+        log.info("Access token: {}", accessToken);
+        if(!jwtTokenProvider.validateToken(accessToken)) {
+            log.info("Access token not valid");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String username = jwtTokenProvider.getUsernameFromToken(accessToken);
+
+        List<String> roles = accountService.getAccountRoles(username);
+        String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
+
+        return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, null));
     }
 
 }

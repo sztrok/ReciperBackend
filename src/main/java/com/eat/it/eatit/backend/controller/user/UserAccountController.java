@@ -2,9 +2,12 @@ package com.eat.it.eatit.backend.controller.user;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.RecipeDTO;
+import com.eat.it.eatit.backend.dto.simple.RecipeSimpleDTO;
+import com.eat.it.eatit.backend.service.RecipeService;
 import com.eat.it.eatit.backend.service.user.UserAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @PreAuthorize("hasAuthority('ROLE_USER')")
 @RequestMapping("/api/v1/user/account")
@@ -28,7 +32,8 @@ public class UserAccountController {
     @GetMapping("/account_recipes")
     @Operation(summary = "Get account recipes", description = "Returns list of recipes assigned to this account, or empty list if account has no assigned recipes")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes assigned to Account")
-    public ResponseEntity<List<RecipeDTO>> getAccountRecipes(Authentication authentication) {
+    public ResponseEntity<List<RecipeSimpleDTO>> getAccountRecipes(Authentication authentication) {
+        log.info("Get account recipes");
         return ResponseEntity.ok(accountService.getAccountRecipes(authentication));
     }
 

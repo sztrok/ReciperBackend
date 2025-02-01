@@ -27,10 +27,10 @@ public class ItemInRecipe {
     @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
 
-    private Double amount;
+    private Double amount = 0d;
 
     @Enumerated(EnumType.STRING)
-    private UnitOfMeasure unit;
+    private UnitOfMeasure unit = UnitOfMeasure.GRAM;
 
     public ItemInRecipe(Long recipeId, Item item, Double amount) {
         this.recipeId = recipeId;
