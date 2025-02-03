@@ -65,7 +65,8 @@ public class RecipeMapper {
         RecipeSimpleDTO recipeSimpleDTO = new RecipeSimpleDTO();
         recipeSimpleDTO.setId(recipe.getId());
         recipeSimpleDTO.setName(recipe.getName());
-        recipeSimpleDTO.setDescription(recipe.getDescription());
+        recipeSimpleDTO.setDifficulty(recipe.getDifficulty().getDescription());
+        recipeSimpleDTO.setVisibility(recipe.getVisibility().getDescription());
         return recipeSimpleDTO;
     }
 

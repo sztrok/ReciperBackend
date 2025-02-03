@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class RecipeSimpleDTO {
     private Long id;
     private String name;
-    private String description;
+    private String difficulty;
+    private String visibility;
 }
