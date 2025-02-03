@@ -67,16 +67,47 @@ public class GeneralController {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
+        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         String accessToken = jwtTokenProvider.generateAccessToken(authentication.getName(), roles);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
-
         return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshToken));
     }
 
-    @PostMapping("/refreshToken")
-    public ResponseEntity<AuthenticationResponse> getRefreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    @PostMapping("/tokens/refreshToken")
+    public ResponseEntity<Void> checkIfRefreshTokenIsValid(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        String refreshToken = refreshTokenRequest.getRefreshToken();
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/tokens/accessToken")
+    public ResponseEntity<Void> checkIfAccessTokenIsValid(@RequestBody AccessTokenRequest accessTokenRequest) {
+        String accessToken = accessTokenRequest.getAccessToken();
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/tokens/accessToken/new")
+    public ResponseEntity<AuthenticationResponse> getNewAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        String refreshToken = refreshTokenRequest.getRefreshToken();
+        log.info("Access token: {}", refreshToken);
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            log.info("Access token not valid");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
+        List<String> roles = accountService.getAccountRoles(username);
+        String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
+        return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, null));
+    }
+
+    @PostMapping("/tokens")
+    public ResponseEntity<AuthenticationResponse> getNewTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         log.info("Refresh token: {}", refreshToken);
         if(!jwtTokenProvider.validateToken(refreshToken)) {
@@ -93,20 +124,6 @@ public class GeneralController {
         return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, newRefreshToken));
     }
 
-    @PostMapping("/accessToken")
-    public ResponseEntity<AuthenticationResponse> getAccessToken(@RequestBody AccessTokenRequest accessTokenRequest) {
-        String accessToken = accessTokenRequest.getAccessToken();
-        log.info("Access token: {}", accessToken);
-        if(!jwtTokenProvider.validateToken(accessToken)) {
-            log.info("Access token not valid");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String username = jwtTokenProvider.getUsernameFromToken(accessToken);
 
-        List<String> roles = accountService.getAccountRoles(username);
-        String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
-
-        return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, null));
-    }
 
 }

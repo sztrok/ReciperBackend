@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -63,11 +62,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
                         // GENERAL
-                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/refresh").permitAll()
-                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/accessToken").permitAll()
-                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/refreshToken").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/**").permitAll()
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
                         // COOKWARE
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware").permitAll()
