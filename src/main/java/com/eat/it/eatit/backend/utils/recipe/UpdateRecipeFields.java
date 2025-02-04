@@ -20,7 +20,7 @@ public class UpdateRecipeFields {
         updateField(recipeDTO.getName(), recipe::setName);
         updateField(recipeDTO.getDescription(), recipe::setDescription);
         updateField(recipeDTO.getSimpleSteps(), recipe::setSimpleSteps);
-        updateField(recipeDTO.getComplexSteps(), recipe::setComplexSteps);
+        updateField(recipeDTO.getComplexSteps(), recipe::setDetailedSteps);
         updateField(recipeDTO.getItems(), r -> recipe.setItems(ItemInRecipeMapper.toEntityList(r)));
         updateField(recipeDTO.getCookware(), r -> recipe.setCookware(CookwareMapper.toEntityList(r)));
         updateField(recipeDTO.getVisibility(), recipe::setVisibility);

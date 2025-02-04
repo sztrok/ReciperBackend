@@ -32,7 +32,7 @@ public class Recipe {
     private List<String> simpleSteps;
 
     @Convert(converter = ListToStringConverter.class)
-    private List<String> complexSteps;
+    private List<String> detailedSteps;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -79,11 +79,11 @@ public class Recipe {
         this.difficulty = difficulty;
     }
 
-    public Recipe(String name, String description, List<String> simpleSteps, List<String> complexSteps, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
+    public Recipe(String name, String description, List<String> simpleSteps, List<String> detailedSteps, List<ItemInRecipe> items, List<Cookware> cookware, Integer totalCalories, Visibility visibility, RecipeDifficulty difficulty) {
         this.name = name;
         this.description = description;
         this.simpleSteps = simpleSteps;
-        this.complexSteps = complexSteps;
+        this.detailedSteps = detailedSteps;
         this.items = items;
         this.cookware = cookware;
         this.totalCalories = totalCalories;

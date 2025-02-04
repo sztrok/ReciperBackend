@@ -23,7 +23,7 @@ public class RecipeMapper {
                 recipe.getName(),
                 recipe.getDescription(),
                 recipe.getSimpleSteps(),
-                recipe.getComplexSteps(),
+                recipe.getDetailedSteps(),
                 ItemInRecipeMapper.toDTOList(recipe.getItems()),
                 CookwareMapper.toDTOList(recipe.getCookware()),
                 recipe.getTotalCalories(),
@@ -53,7 +53,7 @@ public class RecipeMapper {
         recipeDetailsDTO.setName(recipe.getName());
         recipeDetailsDTO.setDescription(recipe.getDescription());
         recipeDetailsDTO.setSimpleSteps(recipe.getSimpleSteps());
-        recipeDetailsDTO.setComplexSteps(recipe.getComplexSteps());
+        recipeDetailsDTO.setComplexSteps(recipe.getDetailedSteps());
         recipeDetailsDTO.setItems(ItemWithAmountMapper.toDTOFromRecipe(recipe.getItems()));
         recipeDetailsDTO.setCookware(CookwareMapper.toDTOList(recipe.getCookware()));
         recipeDetailsDTO.setVisibility(recipe.getVisibility().getDescription());
