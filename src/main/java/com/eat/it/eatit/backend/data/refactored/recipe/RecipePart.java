@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,4 +25,8 @@ public class RecipePart {
             name = "recipe_part_id"
     )
     private List<RecipeIngredient> recipeIngredients;
+
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+        this.recipeIngredients = new ArrayList<>(recipeIngredients);
+    }
 }

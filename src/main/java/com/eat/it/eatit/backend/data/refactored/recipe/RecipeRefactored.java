@@ -38,5 +38,27 @@ public class RecipeRefactored {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
+    public void setSimpleSteps(List<String> simpleSteps) {
+        this.simpleSteps = new ArrayList<>(simpleSteps);
+    }
 
+    public void setDetailedSteps(List<RecipeStep> detailedSteps) {
+        this.detailedSteps = new ArrayList<>(detailedSteps);
+    }
+
+    public void setTips(List<String> tips) {
+        this.tips = new ArrayList<>(tips);
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = new ArrayList<>(tags);
+    }
+
+    public void setRecipeParts(List<RecipePart> recipeParts) {
+        this.recipeParts = new ArrayList<>(recipeParts);
+    }
+
+    public void setIngredients(List<RecipeIngredient> ingredients) {
+        this.ingredients = new ArrayList<>(ingredients);
+    }
 }

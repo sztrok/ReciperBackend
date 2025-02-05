@@ -25,12 +25,15 @@ public class RecipeIngredient {
     @OneToOne
     @JoinColumn(name = "item_id")
     private Item item;
-//    private List<Item> alternativeItems = new ArrayList<>();
+    //    private List<String> alternativeIngredients = new ArrayList<>();
     private Double quantity;
     @Convert(converter = ListToStringConverter.class)
     private List<String> qualities = new ArrayList<>();
     private UnitOfMeasure unit = UnitOfMeasure.GRAM;
     private Boolean isOptional = false;
 
+    public void setQualities(List<String> qualities) {
+        this.qualities = new ArrayList<>(qualities);
+    }
 
 }
