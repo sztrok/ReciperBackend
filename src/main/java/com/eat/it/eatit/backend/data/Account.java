@@ -2,34 +2,29 @@ package com.eat.it.eatit.backend.data;
 
 import com.eat.it.eatit.backend.enums.AccountRole;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.*;
 
 @Entity
 @Table(name = "account")
 @NoArgsConstructor
-@Getter
+@Data
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @Column(unique = true)
     private String username;
 
-    @Setter
     @Column(unique = true)
     private String mail;
 
-    @Setter
     private String password;
 
-    @Setter
     @OneToOne(
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -53,8 +48,9 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> accountRoles = new HashSet<>();
 
-    @Setter
     private Boolean premium;
+    private Boolean isExpired = false;
+    private Boolean isLocked = false;
 
     public Account(String username, String mail, Boolean premium) {
         this.username = username;
