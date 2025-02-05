@@ -29,7 +29,7 @@ public class RecipeRefactored {
     private List<String> tips = new ArrayList<>();
     private String imageUrl = "";
     @Convert(converter = ListToStringConverter.class)
-    private List<String> tags = new ArrayList<>(); //TODO: zamienic na enum?
+    private List<String> tags = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "recipe_id"
