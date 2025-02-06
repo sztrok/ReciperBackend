@@ -1,7 +1,9 @@
 package com.eat.it.eatit.backend.data;
 
+import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import java.util.*;
 @Entity
 @Table(name = "account")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class Account {
 
@@ -49,6 +52,17 @@ public class Account {
     )
     private List<Recipe> likedRecipes = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerAccount")
+    private List<RecipeRefactored> accountRecipesRefactored = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "accounts_liked_recipes_refactored",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+    private List<RecipeRefactored> likedRecipesRefactored = new ArrayList<>();
+
     @ElementCollection(targetClass = AccountRole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> accountRoles = new HashSet<>();
@@ -68,17 +82,6 @@ public class Account {
         this.password = password;
         this.fridge = fridge;
         this.accountRecipes = accountRecipes;
-        this.accountRoles = accountRoles;
-        this.premium = premium;
-    }
-
-    public Account(String username, String mail, String password, Fridge fridge, List<Recipe> accountRecipes, List<Recipe> likedRecipes, Set<AccountRole> accountRoles, Boolean premium) {
-        this.username = username;
-        this.mail = mail;
-        this.password = password;
-        this.fridge = fridge;
-        this.accountRecipes = accountRecipes;
-        this.likedRecipes = likedRecipes;
         this.accountRoles = accountRoles;
         this.premium = premium;
     }

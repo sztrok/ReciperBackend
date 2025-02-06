@@ -29,15 +29,16 @@ public class AccountMapper {
         if (accountDTO == null) {
             return new Account();
         }
-        return new Account(
-                accountDTO.getUsername(),
-                accountDTO.getMail(),
-                accountDTO.getPassword(),
-                FridgeMapper.toEntity(accountDTO.getFridge()),
-                RecipeMapper.toEntityList(accountDTO.getAccountRecipes()),
-                RecipeMapper.toEntityList(accountDTO.getLikedRecipes()),
-                accountDTO.getAccountRoles(),
-                accountDTO.getPremium());
+        Account account = new Account();
+        account.setUsername(accountDTO.getUsername());
+        account.setMail(accountDTO.getMail());
+        account.setPassword(accountDTO.getPassword());
+        account.setFridge(FridgeMapper.toEntity(accountDTO.getFridge()));
+        account.setAccountRecipes(RecipeMapper.toEntityList(accountDTO.getAccountRecipes()));
+        account.setLikedRecipes(RecipeMapper.toEntityList(accountDTO.getLikedRecipes()));
+        account.setAccountRoles(accountDTO.getAccountRoles());
+        account.setPremium(accountDTO.getPremium());
+        return account;
     }
 
     public static AccountSimpleDTO toSimpleDTO(Account account) {
