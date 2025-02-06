@@ -18,6 +18,8 @@ public class RecipeMapper {
         dto.setImageUrl(recipe.getImageUrl());
         dto.setTags(recipe.getTags());
         dto.setRecipeParts(RecipePartMapper.toDTOList(recipe.getRecipeComponents()));
+        dto.setVisibility(recipe.getVisibility());
+        dto.setDifficulty(recipe.getDifficulty());
         return dto;
     }
 }

@@ -1,5 +1,7 @@
 package com.eat.it.eatit.backend.data.refactored.recipe;
 
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.utils.ListToStringConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,35 +20,28 @@ public class RecipeRefactored {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String description;
-
     @Convert(converter = ListToStringConverter.class)
     private List<String> simpleSteps = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "recipe_id"
     )
     private List<RecipeStep> detailedSteps = new ArrayList<>();
-
     @Convert(converter = ListToStringConverter.class)
     private List<String> tips = new ArrayList<>();
-
     private String imageUrl = "";
-
     @Convert(converter = ListToStringConverter.class)
     private List<String> tags = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "recipe_id"
     )
     private List<RecipeComponent> recipeComponents = new ArrayList<>();
-
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "recipes")
     private List<RecipeIngredient> ingredients = new ArrayList<>();
-
+    private Visibility visibility = Visibility.PUBLIC;
+    private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
     public void setSimpleSteps(List<String> simpleSteps) {
         this.simpleSteps = new ArrayList<>(simpleSteps);
