@@ -283,6 +283,8 @@ class InitialDataLoader {
         r1.setTips(List.of("Super pro tipik!!!!"));
         r1.setRecipeComponents(List.of(r1p1, r1p2));
         r1.setIngredients(List.of(item1, item2, item3));
+        r1.setOwnerAccount(accountRepository.getReferenceById(2L));
+        r1.setLikedAccounts(List.of(accountRepository.getReferenceById(1L), accountRepository.getReferenceById(3L), accountRepository.getReferenceById(4L)));
 
         RecipeRefactored r2 = new RecipeRefactored();
         r2.setDescription("Test recipe 1 description");
@@ -291,12 +293,14 @@ class InitialDataLoader {
         r2.setTips(List.of("Super pro tipik!!!!"));
         r2.setRecipeComponents(List.of(r2p1));
         r2.setIngredients(List.of(item1, item3, item4, item5));
+        r1.setOwnerAccount(accountRepository.getReferenceById(6L));
+        r1.setLikedAccounts(List.of(accountRepository.getReferenceById(3L), accountRepository.getReferenceById(2L)));
 
         recipeRefactoredRepository.saveAll(List.of(r1, r2));
         recipeRefactoredRepository.flush();
 
         // LINK ITEMS TO RECIPES
-        item1.setRecipes(List.of(r1,r2));
+        item1.setRecipes(List.of(r1, r2));
         item2.setRecipes(List.of(r1));
         item3.setRecipes(List.of(r1, r2));
         item4.setRecipes(List.of(r2));
