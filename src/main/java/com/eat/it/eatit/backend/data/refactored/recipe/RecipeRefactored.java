@@ -53,11 +53,13 @@ public class RecipeRefactored {
     )
     private List<RecipeComponent> recipeComponents = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "recipes")
+    @ManyToMany(mappedBy = "recipes", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private Visibility visibility = Visibility.PUBLIC;
 
+    @Enumerated(EnumType.STRING)
     private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
 
