@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeDTO {
+public class RecipeRefactoredDTO {
     private Long id;
     private String description;
     private List<String> simpleSteps = new ArrayList<>();
