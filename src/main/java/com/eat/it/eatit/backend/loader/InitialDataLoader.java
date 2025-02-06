@@ -1,9 +1,18 @@
 package com.eat.it.eatit.backend.loader;
 
 import com.eat.it.eatit.backend.data.*;
+import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
+import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
+import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
 import com.eat.it.eatit.backend.enums.ItemType;
+import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipePartMapper;
 import com.eat.it.eatit.backend.repository.*;
 import com.eat.it.eatit.backend.enums.AccountRole;
+import com.eat.it.eatit.backend.repository.recipe.RecipeComponentRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeIngredientRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeStepRepository;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +38,11 @@ class InitialDataLoader {
     private final CookwareRepository cookwareRepository;
     private final ItemInFridgeRepository itemInFridgeRepository;
     private final ItemInRecipeRepository itemInRecipeRepository;
+
+    private final RecipeComponentRepository recipeComponentRepository;
+    private final RecipeIngredientRepository recipeIngredientRepository;
+    private final RecipeRefactoredRepository recipeRefactoredRepository;
+    private final RecipeStepRepository recipeStepRepository;
     private final PasswordEncoder passwordEncoder;
     private final Random random = new Random();
 
@@ -40,6 +54,10 @@ class InitialDataLoader {
                              CookwareRepository cookwareRepository,
                              ItemInFridgeRepository itemInFridgeRepository,
                              ItemInRecipeRepository itemInRecipeRepository,
+                             RecipeComponentRepository recipeComponentRepository,
+                             RecipeIngredientRepository recipeIngredientRepository,
+                             RecipeRefactoredRepository recipeRefactoredRepository,
+                             RecipeStepRepository recipeStepRepository,
                              PasswordEncoder passwordEncoder
     ) {
         this.accountRepository = accountRepository;
@@ -49,6 +67,10 @@ class InitialDataLoader {
         this.cookwareRepository = cookwareRepository;
         this.itemInFridgeRepository = itemInFridgeRepository;
         this.itemInRecipeRepository = itemInRecipeRepository;
+        this.recipeComponentRepository = recipeComponentRepository;
+        this.recipeIngredientRepository = recipeIngredientRepository;
+        this.recipeRefactoredRepository = recipeRefactoredRepository;
+        this.recipeStepRepository = recipeStepRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,6 +85,7 @@ class InitialDataLoader {
         List<Cookware> cookwares = generateCookware();
         List<Recipe> recipes = generateRecipes();
 
+
         log.info("Finished loading initial data.");
         log.info("Linking entities...");
 
@@ -73,6 +96,8 @@ class InitialDataLoader {
         linkAccountAndRecipes(accounts, recipes);
 
         assingRoles(accounts);
+
+        generateDummyRefactoredRecipes();
 
         log.info("Finished linking entities");
     }
@@ -182,6 +207,102 @@ class InitialDataLoader {
         return recipeRepository.saveAll(recipes);
     }
 
+    private void generateDummyRefactoredRecipes() {
+        // RECIPE INGREDIENT
+        RecipeIngredient item1 = new RecipeIngredient();
+        item1.setItem(itemRepository.getReferenceById(1L));
+        item1.setIsOptional(false);
+        item1.setQuantity(100D);
+        item1.setQualities(List.of("test", "test1", "test323"));
+
+        RecipeIngredient item2 = new RecipeIngredient();
+        item2.setItem(itemRepository.getReferenceById(3L));
+        item2.setIsOptional(false);
+        item2.setQuantity(200D);
+        item2.setQualities(List.of("test00", "test13444"));
+
+        RecipeIngredient item3 = new RecipeIngredient();
+        item3.setItem(itemRepository.getReferenceById(8L));
+        item3.setQuantity(645D);
+
+        RecipeIngredient item4 = new RecipeIngredient();
+        item4.setItem(itemRepository.getReferenceById(7L));
+        item4.setQuantity(45D);
+
+        RecipeIngredient item5 = new RecipeIngredient();
+        item5.setItem(itemRepository.getReferenceById(4L));
+        item5.setQuantity(64D);
+
+        recipeIngredientRepository.saveAll(List.of(item1, item2, item3, item4, item5));
+        recipeIngredientRepository.flush();
+
+        // RECIPE STEP
+        RecipeStep r1s1 = new RecipeStep();
+        r1s1.setDescription("Recipe 1 step 1");
+        r1s1.setIngredients(List.of(item3));
+
+        RecipeStep r1s2 = new RecipeStep();
+        r1s2.setDescription("Recipe 1 step 2");
+        r1s2.setIngredients(List.of(item1, item2));
+
+        RecipeStep r1s3 = new RecipeStep();
+        r1s3.setDescription("Recipe 1 step 3");
+
+        RecipeStep r2s1 = new RecipeStep();
+        r2s1.setDescription("Recipe 2 step 1");
+        r2s1.setIngredients(List.of(item3, item4));
+
+        RecipeStep r2s2 = new RecipeStep();
+        r2s2.setDescription("Recipe 2 step 2");
+        r2s2.setIngredients(List.of(item1, item5));
+
+        recipeStepRepository.saveAll(List.of(r1s1, r1s2, r1s3, r2s1, r2s2));
+        recipeStepRepository.flush();
+
+        //RECIPE COMPONENT
+        RecipeComponent r1p1 = new RecipeComponent();
+        r1p1.setName("Main part");
+        r1p1.setRecipeIngredients(List.of(item3));
+
+        RecipeComponent r1p2 = new RecipeComponent();
+        r1p2.setName("Sauce");
+        r1p2.setRecipeIngredients(List.of(item1, item2));
+
+        RecipeComponent r2p1 = new RecipeComponent();
+        r2p1.setName("DISSSHHHH");
+        r2p1.setRecipeIngredients(List.of(item1, item3, item4, item5));
+
+        recipeComponentRepository.saveAll(List.of(r1p1, r1p2, r2p1));
+        recipeComponentRepository.flush();
+
+        // RECIPE REFACTORED
+        RecipeRefactored r1 = new RecipeRefactored();
+        r1.setDescription("Test recipe 1 description");
+        r1.setSimpleSteps(List.of("Simple step1", "Setp2", "Another step", "another one"));
+        r1.setDetailedSteps(List.of(r1s1, r1s2, r1s3));
+        r1.setTips(List.of("Super pro tipik!!!!"));
+        r1.setRecipeComponents(List.of(r1p1, r1p2));
+        r1.setIngredients(List.of(item1, item2, item3));
+
+        RecipeRefactored r2 = new RecipeRefactored();
+        r2.setDescription("Test recipe 1 description");
+        r2.setSimpleSteps(List.of("Simple step1", "Setp2", "Another step", "another one"));
+        r2.setDetailedSteps(List.of(r2s1, r2s2));
+        r2.setTips(List.of("Super pro tipik!!!!"));
+        r2.setRecipeComponents(List.of(r2p1));
+        r2.setIngredients(List.of(item1, item3, item4, item5));
+
+        recipeRefactoredRepository.saveAll(List.of(r1, r2));
+        recipeRefactoredRepository.flush();
+
+        // LINK ITEMS TO RECIPES
+        item1.setRecipes(List.of(r1,r2));
+        item2.setRecipes(List.of(r1));
+        item3.setRecipes(List.of(r1, r2));
+        item4.setRecipes(List.of(r2));
+        item5.setRecipes(List.of(r2));
+    }
+
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
         Account account = new Account();
         account.setUsername(firstName);
@@ -204,7 +325,7 @@ class InitialDataLoader {
             Set<Integer> ids = new HashSet<>();
             for (int i = 0; i < 7; i++) {
                 int id = random.nextInt(items.size());
-                if(ids.contains(id)) {
+                if (ids.contains(id)) {
                     continue;
                 }
                 ids.add(id);
