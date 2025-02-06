@@ -293,8 +293,8 @@ class InitialDataLoader {
         r2.setTips(List.of("Super pro tipik!!!!"));
         r2.setRecipeComponents(List.of(r2p1));
         r2.setIngredients(List.of(item1, item3, item4, item5));
-        r1.setOwnerAccount(accountRepository.getReferenceById(6L));
-        r1.setLikedAccounts(List.of(accountRepository.getReferenceById(3L), accountRepository.getReferenceById(2L)));
+        r2.setOwnerAccount(accountRepository.getReferenceById(6L));
+        r2.setLikedAccounts(List.of(accountRepository.getReferenceById(3L), accountRepository.getReferenceById(2L)));
 
         recipeRefactoredRepository.saveAll(List.of(r1, r2));
         recipeRefactoredRepository.flush();

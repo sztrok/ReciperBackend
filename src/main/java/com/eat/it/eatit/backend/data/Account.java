@@ -55,12 +55,7 @@ public class Account {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerAccount")
     private List<RecipeRefactored> accountRecipesRefactored = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "accounts_liked_recipes_refactored",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "recipe_id")
-    )
+    @ManyToMany(mappedBy = "likedAccounts")
     private List<RecipeRefactored> likedRecipesRefactored = new ArrayList<>();
 
     @ElementCollection(targetClass = AccountRole.class, fetch = FetchType.EAGER)
