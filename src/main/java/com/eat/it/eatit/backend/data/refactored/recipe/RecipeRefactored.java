@@ -35,7 +35,7 @@ public class RecipeRefactored {
             name = "recipe_id"
     )
     private List<RecipeComponent> recipeComponents = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "recipes")
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     public void setSimpleSteps(List<String> simpleSteps) {

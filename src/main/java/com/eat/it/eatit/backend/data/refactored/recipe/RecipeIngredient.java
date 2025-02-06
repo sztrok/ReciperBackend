@@ -19,9 +19,8 @@ public class RecipeIngredient {
 
     @Id
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    private RecipeRefactored recipe;
+    @ManyToMany
+    private List<RecipeRefactored> recipes = new ArrayList<>();
     @OneToOne
     @JoinColumn(name = "item_id")
     private Item item;
@@ -36,4 +35,7 @@ public class RecipeIngredient {
         this.qualities = new ArrayList<>(qualities);
     }
 
+    public void setRecipes(List<RecipeRefactored> recipes) {
+        this.recipes = new ArrayList<>(recipes);
+    }
 }
