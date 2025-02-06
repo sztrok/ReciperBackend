@@ -18,6 +18,7 @@ import java.util.List;
 public class RecipeIngredient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany
     private List<RecipeRefactored> recipes = new ArrayList<>();
