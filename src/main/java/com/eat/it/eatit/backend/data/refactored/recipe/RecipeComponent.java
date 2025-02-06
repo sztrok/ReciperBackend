@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipePart {
+public class RecipeComponent {
 
     @Id
     private Long id;

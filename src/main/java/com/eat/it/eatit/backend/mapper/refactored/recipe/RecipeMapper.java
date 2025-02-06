@@ -17,7 +17,7 @@ public class RecipeMapper {
         dto.setTips(recipe.getTips());
         dto.setImageUrl(recipe.getImageUrl());
         dto.setTags(recipe.getTags());
-        dto.setRecipeParts(RecipePartMapper.toDTOList(recipe.getRecipeParts()));
+        dto.setRecipeParts(RecipePartMapper.toDTOList(recipe.getRecipeComponents()));
         return dto;
     }
 }

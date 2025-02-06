@@ -34,7 +34,7 @@ public class RecipeRefactored {
     @JoinColumn(
             name = "recipe_id"
     )
-    private List<RecipePart> recipeParts = new ArrayList<>();
+    private List<RecipeComponent> recipeComponents = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
@@ -54,8 +54,8 @@ public class RecipeRefactored {
         this.tags = new ArrayList<>(tags);
     }
 
-    public void setRecipeParts(List<RecipePart> recipeParts) {
-        this.recipeParts = new ArrayList<>(recipeParts);
+    public void setRecipeComponents(List<RecipeComponent> recipeComponents) {
+        this.recipeComponents = new ArrayList<>(recipeComponents);
     }
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
