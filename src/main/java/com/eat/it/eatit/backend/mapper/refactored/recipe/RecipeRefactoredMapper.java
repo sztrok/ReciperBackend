@@ -5,9 +5,9 @@ import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 
 import java.util.List;
 
-public class RecipeMapper {
+public class RecipeRefactoredMapper {
 
-    private RecipeMapper() {
+    private RecipeRefactoredMapper() {
     }
 
     public static RecipeRefactoredDTO toDTO(RecipeRefactored recipe) {
@@ -19,14 +19,14 @@ public class RecipeMapper {
         dto.setTips(recipe.getTips());
         dto.setImageUrl(recipe.getImageUrl());
         dto.setTags(recipe.getTags());
-        dto.setRecipeParts(RecipePartMapper.toDTOList(recipe.getRecipeComponents()));
+        dto.setRecipeParts(RecipeComponentMapper.toDTOList(recipe.getRecipeComponents()));
         dto.setVisibility(recipe.getVisibility());
         dto.setDifficulty(recipe.getDifficulty());
         return dto;
     }
 
     public static List<RecipeRefactoredDTO> toDTOList(List<RecipeRefactored> recipes) {
-        return recipes.stream().map(RecipeMapper::toDTO).toList();
+        return recipes.stream().map(RecipeRefactoredMapper::toDTO).toList();
     }
 }
 

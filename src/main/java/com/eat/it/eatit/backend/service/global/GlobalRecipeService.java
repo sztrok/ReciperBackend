@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeMapper.*;
+import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper.*;
 
 
 @Service

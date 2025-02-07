@@ -20,7 +20,7 @@ public class RecipeRefactoredDTO {
     private List<String> tips = new ArrayList<>();
     private String imageUrl = "";
     private List<String> tags = new ArrayList<>();
-    private List<RecipePartDTO> recipeParts = new ArrayList<>();
+    private List<RecipeComponentDTO> recipeParts = new ArrayList<>();
     private Visibility visibility = Visibility.PUBLIC;
     private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
@@ -40,7 +40,7 @@ public class RecipeRefactoredDTO {
         this.tags = new ArrayList<>(tags);
     }
 
-    public void setRecipeParts(List<RecipePartDTO> recipeParts) {
+    public void setRecipeParts(List<RecipeComponentDTO> recipeParts) {
         this.recipeParts = new ArrayList<>(recipeParts);
     }
 }

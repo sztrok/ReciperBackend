@@ -5,21 +5,20 @@ import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.utils.ListToStringConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeRefactored {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String description;
@@ -53,7 +52,10 @@ public class RecipeRefactored {
     )
     private List<RecipeComponent> recipeComponents = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "recipes", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany
+    @JoinColumn(
+            name = "recipe_id"
+    )
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

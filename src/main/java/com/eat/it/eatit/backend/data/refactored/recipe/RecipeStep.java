@@ -1,28 +1,24 @@
 package com.eat.it.eatit.backend.data.refactored.recipe;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeStep {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String description;
-    @OneToMany
-    @JoinColumn(
-            name = "recipe_step_id"
-    )
-    private List<RecipeIngredient> ingredients;
+    @ManyToMany
+    private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = new ArrayList<>(ingredients);

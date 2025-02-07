@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipePartDTO {
+public class RecipeComponentDTO {
     private Long id;
     private String name;
     private List<RecipeIngredientDTO> ingredients = new ArrayList<>();
