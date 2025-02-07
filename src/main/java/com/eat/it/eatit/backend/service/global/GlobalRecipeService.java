@@ -8,6 +8,10 @@ import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
+import com.eat.it.eatit.backend.service.recipe.RecipeComponentService;
+import com.eat.it.eatit.backend.service.recipe.RecipeIngredientService;
+import com.eat.it.eatit.backend.service.recipe.RecipeRefactoredService;
+import com.eat.it.eatit.backend.service.recipe.RecipeStepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +22,11 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 
 
 @Service
-public class GlobalRecipeService {
-
-    private final RecipeRefactoredRepository recipeRepository;
+public class GlobalRecipeService extends RecipeRefactoredService {
 
     @Autowired
-    public GlobalRecipeService(
-            RecipeRefactoredRepository recipeRepository
-    ) {
-        this.recipeRepository = recipeRepository;
+    protected GlobalRecipeService(RecipeRefactoredRepository repository, RecipeComponentService componentService, RecipeIngredientService ingredientService, RecipeStepService stepService) {
+        super(repository, componentService, ingredientService, stepService);
     }
 
     public RecipeRefactoredDTO getPublicRecipeById(Long id) {
@@ -63,12 +63,20 @@ public class GlobalRecipeService {
                 .toList());
     }
 
+    public void addNewRecipe(RecipeRefactoredDTO recipeDTO) {
+
+        //TODO:
+        // sprawdzić czy item istnieje, jak nie to stworzyć nowy,
+        // stworzyć nowe RecipeIngredients połączone z components i steps,
+        // stworzyć nowe recipe z połączonymi encjami
+    }
+
     private RecipeRefactored findRecipeById(Long recipeId) {
-        return recipeRepository.findById(recipeId).orElse(null);
+        return repository.findById(recipeId).orElse(null);
     }
 
     private List<RecipeRefactored> getAllRecipesFromDatabase() {
-        return recipeRepository.findAll();
+        return repository.findAll();
     }
 
     private List<Item> getRecipeItems(RecipeRefactored recipe) {

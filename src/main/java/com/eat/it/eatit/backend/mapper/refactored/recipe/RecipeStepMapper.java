@@ -13,7 +13,7 @@ public class RecipeStepMapper {
     public static RecipeStepDTO toDTO(RecipeStep recipeStep) {
         RecipeStepDTO dto = new RecipeStepDTO();
         dto.setId(recipeStep.getId());
-        dto.setDescription(recipeStep.getDescription());
+        dto.setStep(recipeStep.getDescription());
         dto.setIngredients(RecipeIngredientMapper.toDTOList(recipeStep.getIngredients()));
         return dto;
     }

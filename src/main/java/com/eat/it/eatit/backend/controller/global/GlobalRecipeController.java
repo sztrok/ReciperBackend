@@ -64,4 +64,10 @@ public class GlobalRecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
+    @PostMapping()
+    public ResponseEntity<RecipeRefactoredDTO> addNewRecipe(@RequestBody RecipeRefactoredDTO recipe) {
+        recipeService.addNewRecipe(recipe);
+        return ResponseEntity.ok().build();
+    }
+
 }
