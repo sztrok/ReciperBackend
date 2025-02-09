@@ -1,25 +1,35 @@
 package com.eat.it.eatit.backend.data.refactored.recipe;
 
+import com.eat.it.eatit.backend.data.Account;
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import com.eat.it.eatit.backend.utils.ListToStringConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeRefactored {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String name;
+
     private String description;
+
+    @ManyToOne
+    private Account ownerAccount;
+
+    @ManyToMany
+    private List<Account> likedAccounts = new ArrayList<>();
 
     @Convert(converter = ListToStringConverter.class)
     private List<String> simpleSteps = new ArrayList<>();
@@ -44,8 +54,17 @@ public class RecipeRefactored {
     )
     private List<RecipeComponent> recipeComponents = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "recipes")
+    @OneToMany
+    @JoinColumn(
+            name = "recipe_id"
+    )
     private List<RecipeIngredient> ingredients = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility = Visibility.PUBLIC;
+
+    @Enumerated(EnumType.STRING)
+    private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
 
     public void setSimpleSteps(List<String> simpleSteps) {
@@ -70,5 +89,17 @@ public class RecipeRefactored {
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = new ArrayList<>(ingredients);
+    }
+
+    public void setLikedAccounts(List<Account> likedAccounts) {
+        this.likedAccounts = new ArrayList<>(likedAccounts);
+    }
+
+    public void addLikedAccount(Account account) {
+        this.likedAccounts.add(account);
+    }
+
+    public void removeLikedAccount(Account account) {
+        this.likedAccounts = this.likedAccounts.stream().filter(acc -> !acc.getId().equals(account.getId())).toList();
     }
 }

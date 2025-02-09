@@ -42,7 +42,7 @@ class ItemServiceTest {
     void testGetItemByName() {
         Item item = new Item();
         item.setName("Test");
-        when(itemRepository.findByNameIgnoreCase("Test")).thenReturn(item);
+        when(itemRepository.findByNameIgnoreCase("Test")).thenReturn(Optional.of(item));
 
         ItemDTO itemDTO = itemService.getItemByName("Test");
 

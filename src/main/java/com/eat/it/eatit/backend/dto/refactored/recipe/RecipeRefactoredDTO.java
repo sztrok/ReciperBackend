@@ -1,5 +1,7 @@
 package com.eat.it.eatit.backend.dto.refactored.recipe;
 
+import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.Visibility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,15 +12,18 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeDTO {
+public class RecipeRefactoredDTO {
     private Long id;
+    private String name;
     private String description;
     private List<String> simpleSteps = new ArrayList<>();
     private List<RecipeStepDTO> detailedSteps = new ArrayList<>();
     private List<String> tips = new ArrayList<>();
     private String imageUrl = "";
     private List<String> tags = new ArrayList<>();
-    private List<RecipePartDTO> recipeParts = new ArrayList<>();
+    private List<RecipeComponentDTO> recipeComponents = new ArrayList<>();
+    private Visibility visibility = Visibility.PUBLIC;
+    private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
     public void setSimpleSteps(List<String> simpleSteps) {
         this.simpleSteps = new ArrayList<>(simpleSteps);
@@ -36,7 +41,7 @@ public class RecipeDTO {
         this.tags = new ArrayList<>(tags);
     }
 
-    public void setRecipeParts(List<RecipePartDTO> recipeParts) {
-        this.recipeParts = new ArrayList<>(recipeParts);
+    public void setRecipeComponents(List<RecipeComponentDTO> recipeComponents) {
+        this.recipeComponents = new ArrayList<>(recipeComponents);
     }
 }

@@ -4,28 +4,23 @@ import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import com.eat.it.eatit.backend.utils.ListToStringConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeIngredient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToMany
-    private List<RecipeRefactored> recipes = new ArrayList<>();
-    @OneToOne
-    @JoinColumn(name = "item_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
-    //    private List<String> alternativeIngredients = new ArrayList<>();
     private Double quantity;
     @Convert(converter = ListToStringConverter.class)
     private List<String> qualities = new ArrayList<>();
@@ -36,7 +31,4 @@ public class RecipeIngredient {
         this.qualities = new ArrayList<>(qualities);
     }
 
-    public void setRecipes(List<RecipeRefactored> recipes) {
-        this.recipes = new ArrayList<>(recipes);
-    }
 }

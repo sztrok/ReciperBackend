@@ -5,6 +5,7 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
+import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.ItemRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import static com.eat.it.eatit.backend.mapper.ItemMapper.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,11 +69,8 @@ public class ItemService {
      * @return an ItemDTO if found, or null if the item does not exist
      */
     public ItemDTO getItemByName(String name) {
-        Item item = itemRepository.findByNameIgnoreCase(name);
-        if (item == null) {
-            return null;
-        }
-        return toDTO(item);
+        Optional<Item> item = itemRepository.findByNameIgnoreCase(name);
+        return item.map(ItemMapper::toDTO).orElse(null);
     }
 
     /**
@@ -252,10 +251,6 @@ public class ItemService {
         return itemRepository.findById(id).orElse(null);
     }
 
-    protected Item findItemByName(String name) {
-        return itemRepository.findByNameIgnoreCase(name);
-    }
-
     @Transactional
     public Item createNewItem(ItemDTO itemDTO) {
         Item existingItem = findItemByName(itemDTO.getName());
@@ -265,6 +260,10 @@ public class ItemService {
         Item item = toEntity(itemDTO);
         itemRepository.save(item);
         return item;
+    }
+
+    public Item findItemByName(String name) {
+        return itemRepository.findByNameIgnoreCase(name).orElse(null);
     }
 
     /**

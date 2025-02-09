@@ -65,11 +65,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/**").permitAll()
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
                         // COOKWARE
-                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware").permitAll()
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware/**").permitAll()
                         // ITEM
-                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/item").permitAll()
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/item/**").permitAll()
                         // RECIPE
-                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/recipe").permitAll()
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/recipe/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/recipe/**").permitAll()
         );
 
         // USER

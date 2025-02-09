@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class RecipeStepDTO {
     private Long id;
-    private String description;
+    private String step;
     private List<RecipeIngredientDTO> ingredients = new ArrayList<>();
 
     public void setIngredients(List<RecipeIngredientDTO> ingredients) {

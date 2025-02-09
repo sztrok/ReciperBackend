@@ -17,7 +17,8 @@ public enum ItemType {
     NUTS_AND_SEEDS("Nuts and seeds"),
     FATS_AND_OILS("Fats and Oils"),
     SWEETS("Sweets"),
-    BEVERAGE("Beverage");
+    BEVERAGE("Beverage"),
+    OTHER("Other");
 
     private final String description;
 
