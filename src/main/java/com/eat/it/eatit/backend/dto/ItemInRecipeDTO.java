@@ -2,7 +2,6 @@ package com.eat.it.eatit.backend.dto;
 
 import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.EnumType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class ItemInRecipeDTO {
     private Long recipeId;
     private ItemDTO item;
     private Double amount;
-    private String unit;
+    private UnitOfMeasure unit = UnitOfMeasure.GRAM;
 
     public ItemInRecipeDTO(@Nullable Long id, Long recipeId, ItemDTO item, Double amount) {
         this.id = id;
