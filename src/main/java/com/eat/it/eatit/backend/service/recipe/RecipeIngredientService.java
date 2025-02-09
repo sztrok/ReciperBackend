@@ -4,13 +4,12 @@ import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
 import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeIngredientDTO;
+import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import com.eat.it.eatit.backend.repository.recipe.RecipeIngredientRepository;
 import com.eat.it.eatit.backend.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeIngredientMapper.*;
 
 @Service
 public class RecipeIngredientService {
@@ -24,12 +23,13 @@ public class RecipeIngredientService {
         this.itemService = itemService;
     }
 
-    public RecipeIngredientDTO addIngredient(RecipeIngredientDTO dto) {
+    public RecipeIngredient save(RecipeIngredientDTO dto) {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         Item item = itemService.findItemByName(dto.getName());
         if (item == null) {
             ItemDTO newSimpleItem = new ItemDTO();
             newSimpleItem.setName(dto.getName());
+            newSimpleItem.setItemType(ItemType.OTHER);
             item = itemService.createNewItem(newSimpleItem);
         }
         recipeIngredient.setItem(item);
@@ -42,7 +42,7 @@ public class RecipeIngredientService {
         }
         recipeIngredient.setIsOptional(dto.getIsOptional());
 
-        return toDTO(repository.save(recipeIngredient));
+        return repository.save(recipeIngredient);
     }
 
 }

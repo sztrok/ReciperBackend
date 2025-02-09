@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/item/**").permitAll()
                         // RECIPE
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/recipe/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/recipe/**").permitAll()
         );
 
         // USER

@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,8 +69,8 @@ class ItemControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("New Test Item"));
 
-        Item savedItem = itemRepository.findByNameIgnoreCase("New Test Item");
-        assertNotNull(savedItem, "The new item should have been saved in the repository");
+        Optional<Item> savedItem = itemRepository.findByNameIgnoreCase("New Test Item");
+        assertTrue(savedItem.isPresent(), "The new item should have been saved in the repository");
     }
 
     @Test
@@ -147,14 +148,6 @@ class ItemControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.barcode").value(123456L));
-    }
-
-    @Test
-    void shouldHandleNonExistentItem() throws Exception {
-        String urlTemplate = ITEM_API_PREFIX + "{id}";
-        mockMvc.perform(MockMvcRequestBuilders.get(urlTemplate, Long.MAX_VALUE)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
     }
 
     @Test

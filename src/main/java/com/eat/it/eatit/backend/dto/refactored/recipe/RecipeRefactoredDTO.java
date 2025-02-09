@@ -14,13 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 public class RecipeRefactoredDTO {
     private Long id;
+    private String name;
     private String description;
     private List<String> simpleSteps = new ArrayList<>();
     private List<RecipeStepDTO> detailedSteps = new ArrayList<>();
     private List<String> tips = new ArrayList<>();
     private String imageUrl = "";
     private List<String> tags = new ArrayList<>();
-    private List<RecipeComponentDTO> recipeParts = new ArrayList<>();
+    private List<RecipeComponentDTO> recipeComponents = new ArrayList<>();
     private Visibility visibility = Visibility.PUBLIC;
     private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
 
@@ -40,7 +41,7 @@ public class RecipeRefactoredDTO {
         this.tags = new ArrayList<>(tags);
     }
 
-    public void setRecipeParts(List<RecipeComponentDTO> recipeParts) {
-        this.recipeParts = new ArrayList<>(recipeParts);
+    public void setRecipeComponents(List<RecipeComponentDTO> recipeComponents) {
+        this.recipeComponents = new ArrayList<>(recipeComponents);
     }
 }

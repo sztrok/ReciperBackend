@@ -1,6 +1,7 @@
 package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
+import com.eat.it.eatit.backend.dto.refactored.recipe.fastapi.RecipeFastApiRequest;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.service.global.GlobalRecipeService;
@@ -64,10 +65,16 @@ public class GlobalRecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<RecipeRefactoredDTO> addNewRecipe(@RequestBody RecipeRefactoredDTO recipe) {
-        recipeService.addNewRecipe(recipe);
-        return ResponseEntity.ok().build();
+        RecipeRefactoredDTO newRecipe = recipeService.addNewRecipe(recipe);
+        return ResponseEntity.ok(newRecipe);
+    }
+
+    @PostMapping("/generator")
+    public ResponseEntity<RecipeRefactoredDTO> generateRecipe(@RequestBody RecipeFastApiRequest recipe) {
+        RecipeRefactoredDTO body = recipeService.generateNewRecipeWithFastApiConnection(recipe);
+        return ResponseEntity.ok(body);
     }
 
 }
