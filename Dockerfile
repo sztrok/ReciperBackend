@@ -1,36 +1,35 @@
 # === Etap 1: Budowanie aplikacji ===
 FROM eclipse-temurin:21-jdk-alpine AS build
 
-# Ustawiamy katalog roboczy w kontenerze
 WORKDIR /app
 
-# Kopiujemy Maven Wrapper oraz plik konfiguracyjny pom.xml
-COPY mvnw pom.xml ./
+# Kopiowanie plików wymaganych do pobrania zależności
+COPY pom.xml mvnw ./
 COPY .mvn .mvn
 
-# Nadajemy uprawnienia do uruchomienia Maven Wrapper (mvnw)
+# Nadaj uprawnienia do uruchomienia Maven Wrapper
 RUN chmod +x mvnw
 
-# Pobieramy zależności w celu ich cache'owania
-RUN ./mvnw dependency:resolve dependency:resolve-plugins -Dmaven.test.skip=true
+# Instalacja Mavena na Alpine (zamiast apt-get używamy apk)
+RUN apk update && apk add maven
 
-# Kopiujemy pozostałe pliki projektu
+# Pobieramy zależności w celu ich cache'owania
+RUN mvn dependency:resolve dependency:resolve-plugins -Dmaven.test.skip=true
+
+# Kopiowanie pozostałych plików projektu
 COPY . .
 
-# Budujemy aplikację przy użyciu Maven
-RUN ./mvnw -Dmaven.test.skip=true package
+# Budowanie aplikacji
+RUN mvn -Dmaven.test.skip=true package
 
 # === Etap 2: Uruchamianie aplikacji ===
 FROM eclipse-temurin:21-jre-alpine
 
-# Ustawiamy katalog roboczy
 WORKDIR /app
 
-# Kopiujemy zbudowaną aplikację z pierwszego etapu
+# Kopiowanie zbudowanej aplikacji
 COPY --from=build /app/target/*.jar app.jar
 
-# Wystawiamy port 8080
 EXPOSE 8080
 
-# Uruchamiamy aplikację
-ENTRYPOINT ["sh", "-c", "java -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
