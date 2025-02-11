@@ -17,10 +17,10 @@ public class FridgeMapper {
         if (fridge == null) {
             return new FridgeDTO();
         }
-        return new FridgeDTO(
-                fridge.getId(),
-                fridge.getOwnerId(),
-                ItemInFridgeMapper.toDTOList(fridge.getItems()));
+        FridgeDTO fridgeDTO = new FridgeDTO();
+        fridgeDTO.setId(fridge.getId());
+        fridgeDTO.setItems(ItemInFridgeMapper.toDTOList(fridge.getItems()));
+        return fridgeDTO;
     }
 
     public static FridgeSimpleDTO toSimpleDTO(Fridge fridge) {
@@ -29,7 +29,6 @@ public class FridgeMapper {
         }
         return new FridgeSimpleDTO(
                 fridge.getId(),
-                fridge.getOwnerId(),
                 fridge.getItems().stream().map(ItemWithAmountMapper::toDTO).toList()
         );
     }

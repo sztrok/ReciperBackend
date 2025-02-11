@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Deprecated
 @RestController
 @RequestMapping("/api/v1/internal/account")
 @PreAuthorize("hasAuthority('ROLE_SUPPORT')")

@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * NIE MOŻNA ZROBIC DELETE FRIDGE BO JEST ŚCISLE ZWIĄZANA Z ACCOUNT
  */
+@Deprecated
 @RestController
 @RequestMapping("/api/v1/internal/fridge")
 @PreAuthorize("hasAuthority('ROLE_SUPPORT')")

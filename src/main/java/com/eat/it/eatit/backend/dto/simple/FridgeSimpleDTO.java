@@ -14,6 +14,5 @@ public class FridgeSimpleDTO {
 
     @Nullable
     private Long id;
-    private Long ownerId;
     private List<ItemWithAmountDTO> items;
 }

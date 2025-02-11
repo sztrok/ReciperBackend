@@ -44,7 +44,6 @@ public class InternalFridgeService {
 
     public Fridge createFridge(Long accountId) {
         Fridge fridge = new Fridge();
-        fridge.setOwnerId(accountId);
         return fridgeRepository.save(fridge);
     }
 

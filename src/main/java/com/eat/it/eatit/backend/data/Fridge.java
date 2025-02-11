@@ -1,6 +1,7 @@
 package com.eat.it.eatit.backend.data;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.*;
 @Entity
 @Table(name = "fridge")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Fridge {
@@ -18,9 +20,6 @@ public class Fridge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @PrimaryKeyJoinColumn(name = "owner_id")
-    private Long ownerId;
-
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -28,8 +27,7 @@ public class Fridge {
     @JoinColumn(name = "fridge_id")
     private List<ItemInFridge> items = new ArrayList<>();
 
-    public Fridge(Long ownerId, List<ItemInFridge> items) {
-        this.ownerId = ownerId;
+    public Fridge(List<ItemInFridge> items) {
         this.items = items;
     }
 
@@ -41,25 +39,4 @@ public class Fridge {
         items.add(item);
     }
 
-    @Override
-    public String toString() {
-        return "Fridge{" +
-                "id=" + id +
-                ", ownerId=" + ownerId +
-                ", items=" + items +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Fridge fridge = (Fridge) o;
-        return Objects.equals(ownerId, fridge.ownerId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ownerId);
-    }
 }

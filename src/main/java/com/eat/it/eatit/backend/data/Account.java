@@ -31,7 +31,7 @@ public class Account {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "fridge")
+    @JoinColumn(name = "fridge_id")
     private Fridge fridge;
 
     @OneToMany

@@ -360,7 +360,6 @@ class InitialDataLoader {
     private void linkAccountAndFridge(List<Fridge> fridges, List<Account> accounts) {
         for (int i = 0; i < accounts.size(); i++) {
             accounts.get(i).setFridge(fridges.get(i));
-            fridges.get(i).setOwnerId(accounts.get(i).getId());
             fridgeRepository.save(fridges.get(i));
             accountRepository.save(accounts.get(i));
         }
