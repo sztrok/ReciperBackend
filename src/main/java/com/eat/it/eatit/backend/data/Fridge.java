@@ -25,6 +25,7 @@ public class Fridge {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JoinColumn(name = "fridge_id")
     private List<ItemInFridge> items = new ArrayList<>();
 
     public Fridge(Long ownerId, List<ItemInFridge> items) {

@@ -320,8 +320,7 @@ class InitialDataLoader {
                 }
                 ids.add(id);
                 ItemInFridge itemInFridge = new ItemInFridge();
-                itemInFridge.setFridgeId(fridge.getId());
-                itemInFridge.setAmount(random.nextDouble(10, 300));
+                itemInFridge.setQuantity(random.nextDouble(10, 300));
                 itemInFridge.setItem(items.get(id));
                 addedItems.add(itemInFridge);
             }

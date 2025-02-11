@@ -14,17 +14,15 @@ public class ItemInFridgeMapper {
     public static ItemInFridgeDTO toDTO(ItemInFridge itemInFridge) {
         ItemInFridgeDTO itemInFridgeDTO = new ItemInFridgeDTO();
         itemInFridgeDTO.setId(itemInFridge.getId());
-        itemInFridgeDTO.setFridgeId(itemInFridge.getFridgeId());
         itemInFridgeDTO.setItem(ItemMapper.toDTO(itemInFridge.getItem()));
-        itemInFridgeDTO.setAmount(itemInFridge.getAmount());
+        itemInFridgeDTO.setAmount(itemInFridge.getQuantity());
         return itemInFridgeDTO;
     }
 
     public static ItemInFridge toEntity(ItemInFridgeDTO itemInFridgeDTO) {
         ItemInFridge itemInFridge = new ItemInFridge();
-        itemInFridge.setFridgeId(itemInFridgeDTO.getFridgeId());
         itemInFridge.setItem(ItemMapper.toEntity(itemInFridgeDTO.getItem()));
-        itemInFridge.setAmount(itemInFridgeDTO.getAmount());
+        itemInFridge.setQuantity(itemInFridgeDTO.getAmount());
         return itemInFridge;
     }
 
