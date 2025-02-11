@@ -24,7 +24,7 @@ public class ItemWithAmountMapper {
         ItemWithAmountDTO item = new ItemWithAmountDTO();
         item.setName(itemInFridge.getItem().getName());
         item.setItemType(itemInFridge.getItem().getItemType().getDescription());
-        item.setAmount(itemInFridge.getAmount());
+        item.setAmount(itemInFridge.getQuantity());
         item.setUnit(itemInFridge.getUnit().getUnit());
         return item;
     }

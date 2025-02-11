@@ -1,63 +1,65 @@
-package com.eat.it.eatit.backend.service.user;
+package com.eat.it.eatit.backend.service.user.account;
 
+import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.ItemInFridge;
-import com.eat.it.eatit.backend.dto.FridgeDTO;
 import com.eat.it.eatit.backend.dto.simple.FridgeSimpleDTO;
 import com.eat.it.eatit.backend.enums.Operations;
+import com.eat.it.eatit.backend.mapper.FridgeMapper;
+import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.repository.FridgeRepository;
-import com.eat.it.eatit.backend.service.AccountAuthAndAccessService;
-import com.eat.it.eatit.backend.service.ItemInFridgeService;
-import com.eat.it.eatit.backend.service.ItemService;
+import com.eat.it.eatit.backend.repository.ItemInFridgeRepository;
+import com.eat.it.eatit.backend.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.eat.it.eatit.backend.mapper.FridgeMapper.toSimpleDTO;
 
 @Service
-public class UserFridgeService {
+public class UserAccountFridgeService {
 
+    private final AccountRepository accountRepository;
     private final FridgeRepository fridgeRepository;
-    private final ItemService itemService;
-    private final ItemInFridgeService itemInFridgeService;
-    private final AccountAuthAndAccessService accountService;
+    private final ItemRepository itemRepository;
+    private final ItemInFridgeRepository itemInFridgeRepository;
 
     @Autowired
-    public UserFridgeService(
+    public UserAccountFridgeService(
+            AccountRepository accountRepository,
             FridgeRepository fridgeRepository,
-            ItemService itemService,
-            ItemInFridgeService itemInFridgeService,
-            AccountAuthAndAccessService accountService
+            ItemRepository itemRepository,
+            ItemInFridgeRepository itemInFridgeRepository
     ) {
+        this.accountRepository = accountRepository;
         this.fridgeRepository = fridgeRepository;
-        this.itemService = itemService;
-        this.itemInFridgeService = itemInFridgeService;
-        this.accountService = accountService;
+        this.itemRepository = itemRepository;
+        this.itemInFridgeRepository = itemInFridgeRepository;
     }
 
-    public FridgeSimpleDTO getAccountFridge(Authentication authentication) {
-        Fridge fridge = getFridgeByUsername(authentication.getName());
-        if (fridge == null) {
+    public FridgeSimpleDTO getFridge(Authentication authentication) {
+        Account account = getAccountEntityByName(authentication.getName());
+        if (account == null) {
             return null;
         }
-        return toSimpleDTO(fridge);
-    }
-
-    public FridgeDTO getFridgeByAccountName(String accountName) {
-        return accountService.getAccountByName(accountName).getFridge();
+        return FridgeMapper.toSimpleDTO(account.getFridge());
     }
 
     @Transactional
     public FridgeSimpleDTO addItemToFridge(Authentication authentication, Long itemId, Double amount) {
-        Item item = itemService.findItemById(itemId);
-        Fridge fridge = getFridgeByUsername(authentication.getName());
+        Account account = getAccountEntityByName(authentication.getName());
+        if (account == null) {
+            return null;
+        }
+        Fridge fridge = account.getFridge();
 
-        if (item == null || fridge == null) {
+        Optional<Item> item = itemRepository.findById(itemId);
+        if (item.isEmpty()|| fridge == null) {
             return null;
         }
 
@@ -65,15 +67,19 @@ public class UserFridgeService {
         if (isItemAlreadyInFridge(itemsInFridge, itemId)) {
             changeItemAmountInFridge(fridge, itemId, amount, Operations.ADD);
         } else {
-            addNewItemToFridge(fridge, item, amount);
+            addNewItemToFridge(fridge, item.get(), amount);
         }
 
         return toSimpleDTO(fridge);
     }
 
     @Transactional
-    public FridgeSimpleDTO deleteItemFromFridge(Authentication authentication, Long itemId, Long fridgeId) {
-        Fridge fridge = getFridgeByUsername(authentication.getName());
+    public FridgeSimpleDTO deleteItemFromFridge(Authentication authentication, Long itemId) {
+        Account account = getAccountEntityByName(authentication.getName());
+        if (account == null) {
+            return null;
+        }
+        Fridge fridge = account.getFridge();
         if (fridge == null) {
             return null;
         }
@@ -83,7 +89,11 @@ public class UserFridgeService {
 
     @Transactional
     public FridgeSimpleDTO changeItemAmountInFridge(Authentication authentication, Long itemId, Double amount, Operations operation) {
-        Fridge fridge = getFridgeByUsername(authentication.getName());
+        Account account = getAccountEntityByName(authentication.getName());
+        if (account == null) {
+            return null;
+        }
+        Fridge fridge = account.getFridge();
         if (fridge == null) {
             return null;
         }
@@ -95,13 +105,17 @@ public class UserFridgeService {
         ItemInFridge itemInFridge = getItemInFridgeOrNull(itemsInFridge, itemId);
         if (itemInFridge == null) {
             if (operation == Operations.ADD) {
-                addNewItemToFridge(fridge, itemService.findItemById(itemId), amount);
+                Optional<Item> item = itemRepository.findById(itemId);
+                if (item.isEmpty()) {
+                    return null;
+                }
+                addNewItemToFridge(fridge, item.get(), amount);
                 return toSimpleDTO(fridge);
             }
             return null;
         }
 
-        double currentAmount = itemInFridge.getAmount();
+        double currentAmount = itemInFridge.getQuantity();
         double newAmount;
         if (operation == Operations.ADD) {
             newAmount = currentAmount + amount;
@@ -111,25 +125,18 @@ public class UserFridgeService {
 
         if (newAmount <= 0) {
             itemsInFridge.remove(itemInFridge);
-            itemInFridgeService.removeItemFromFridge(itemInFridge);
+            itemInFridgeRepository.delete(itemInFridge);
         } else {
-            itemInFridge.setAmount(newAmount);
-            itemInFridgeService.saveItemInFridge(itemInFridge);
+            itemInFridge.setQuantity(newAmount);
+            itemInFridgeRepository.save(itemInFridge);
         }
         return toSimpleDTO(fridge);
     }
 
-    private Fridge getFridgeByUsername(String username) {
-        Long accountId = accountService.getAccountByName(username).getId();
-        return findFridgeByAccountId(accountId);
-    }
-
-    private Fridge findFridgeByAccountId(Long accountId) {
-        return fridgeRepository.getFridgeByOwnerId(accountId);
-    }
-
     private void addNewItemToFridge(Fridge fridge, Item item, Double amount) {
-        ItemInFridge newItemInFridge = new ItemInFridge(fridge.getId(), item, amount);
+        ItemInFridge newItemInFridge = new ItemInFridge();
+        newItemInFridge.setItem(item);
+        newItemInFridge.setQuantity(amount);
         fridge.addItem(newItemInFridge);
         fridgeRepository.save(fridge);
     }
@@ -145,5 +152,8 @@ public class UserFridgeService {
         return itemsInFridge.stream()
                 .map(ItemInFridge::getItem)
                 .anyMatch(item -> item.getId().equals(itemId));
+    }
+    private Account getAccountEntityByName(String username) {
+        return accountRepository.findByUsername(username);
     }
 }

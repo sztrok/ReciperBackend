@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * NIE MOŻNA ZROBIC DELETE FRIDGE BO JEST ŚCISLE ZWIĄZANA Z ACCOUNT
  */
+@Deprecated
 @RestController
 @RequestMapping("/api/v1/admin/fridge")
 public class AdminFridgeController {

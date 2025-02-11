@@ -25,12 +25,12 @@ class ItemInFridgeMapperTest {
         itemInFridge = new ItemInFridge();
         itemInFridge.setId(1009L);
         itemInFridge.setFridgeId(101L);
-        itemInFridge.setAmount(201D);
+        itemInFridge.setQuantity(201D);
 
         itemInFridgeDTO = toDTO(itemInFridge);
         assertEquals(itemInFridge.getId(), itemInFridgeDTO.getId());
         assertEquals(itemInFridge.getFridgeId(), itemInFridgeDTO.getFridgeId());
-        assertEquals(itemInFridge.getAmount(), itemInFridgeDTO.getAmount());
+        assertEquals(itemInFridge.getQuantity(), itemInFridgeDTO.getAmount());
     }
 
     @Test
@@ -41,7 +41,7 @@ class ItemInFridgeMapperTest {
 
         itemInFridge = toEntity(itemInFridgeDTO);
         assertEquals(itemInFridgeDTO.getFridgeId(), itemInFridge.getFridgeId());
-        assertEquals(itemInFridgeDTO.getAmount(), itemInFridge.getAmount());
+        assertEquals(itemInFridgeDTO.getAmount(), itemInFridge.getQuantity());
     }
 
     @Test

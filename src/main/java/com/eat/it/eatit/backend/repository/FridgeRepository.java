@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FridgeRepository extends JpaRepository<Fridge, Long> {
-    Fridge getFridgeByOwnerId(Long ownerId);
-
 }

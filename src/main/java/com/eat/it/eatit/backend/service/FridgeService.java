@@ -41,7 +41,6 @@ public class FridgeService {
 
     public Fridge createFridge(Long accountId) {
         Fridge fridge = new Fridge();
-        fridge.setOwnerId(accountId);
         return fridgeRepository.save(fridge);
     }
 
@@ -166,7 +165,7 @@ public class FridgeService {
             return null;
         }
 
-        double currentAmount = itemInFridge.getAmount();
+        double currentAmount = itemInFridge.getQuantity();
         double newAmount;
         if (operation == Operations.ADD) {
             newAmount = currentAmount + amount;
@@ -178,7 +177,7 @@ public class FridgeService {
             itemsInFridge.remove(itemInFridge);
             itemInFridgeService.removeItemFromFridge(itemInFridge);
         } else {
-            itemInFridge.setAmount(newAmount);
+            itemInFridge.setQuantity(newAmount);
             itemInFridgeService.saveItemInFridge(itemInFridge);
         }
         return toDTO(fridge);
@@ -202,7 +201,9 @@ public class FridgeService {
      * @param amount the amount of the item to be added to the fridge
      */
     private void addNewItemToFridge(Fridge fridge, Item item, Double amount) {
-        ItemInFridge newItemInFridge = new ItemInFridge(fridge.getId(), item, amount);
+        ItemInFridge newItemInFridge = new ItemInFridge();
+        newItemInFridge.setItem(item);
+        newItemInFridge.setQuantity(amount);
         fridge.addItem(newItemInFridge);
         fridgeRepository.save(fridge);
     }

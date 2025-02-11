@@ -320,8 +320,7 @@ class InitialDataLoader {
                 }
                 ids.add(id);
                 ItemInFridge itemInFridge = new ItemInFridge();
-                itemInFridge.setFridgeId(fridge.getId());
-                itemInFridge.setAmount(random.nextDouble(10, 300));
+                itemInFridge.setQuantity(random.nextDouble(10, 300));
                 itemInFridge.setItem(items.get(id));
                 addedItems.add(itemInFridge);
             }
@@ -361,7 +360,6 @@ class InitialDataLoader {
     private void linkAccountAndFridge(List<Fridge> fridges, List<Account> accounts) {
         for (int i = 0; i < accounts.size(); i++) {
             accounts.get(i).setFridge(fridges.get(i));
-            fridges.get(i).setOwnerId(accounts.get(i).getId());
             fridgeRepository.save(fridges.get(i));
             accountRepository.save(accounts.get(i));
         }
