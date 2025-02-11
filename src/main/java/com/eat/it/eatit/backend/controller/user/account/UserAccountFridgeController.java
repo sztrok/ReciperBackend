@@ -1,8 +1,8 @@
-package com.eat.it.eatit.backend.controller.user;
+package com.eat.it.eatit.backend.controller.user.account;
 
 import com.eat.it.eatit.backend.dto.simple.FridgeSimpleDTO;
 import com.eat.it.eatit.backend.enums.Operations;
-import com.eat.it.eatit.backend.service.user.UserFridgeService;
+import com.eat.it.eatit.backend.service.user.account.UserAccountFridgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_USER')")
-@RequestMapping("/api/v1/user/fridge")
-public class UserFridgeController {
+@RequestMapping("/pi/v1/user/account/fridge")
+public class UserAccountFridgeController {
 
-    UserFridgeService fridgeService;
+    UserAccountFridgeService fridgeService;
 
     @Autowired
-    public UserFridgeController(UserFridgeService fridgeService) {
+    public UserAccountFridgeController(UserAccountFridgeService fridgeService) {
         this.fridgeService = fridgeService;
     }
 
@@ -29,7 +29,7 @@ public class UserFridgeController {
     @ApiResponse(responseCode = "200", description = "Fridge found successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid fridge ID.")
     public ResponseEntity<FridgeSimpleDTO> getAccountFridge(Authentication authentication) {
-        FridgeSimpleDTO fridge = fridgeService.getAccountFridge(authentication);
+        FridgeSimpleDTO fridge = fridgeService.getFridge(authentication);
         return fridge != null
                 ? ResponseEntity.ok(fridge)
                 : ResponseEntity.badRequest().build();
@@ -58,8 +58,7 @@ public class UserFridgeController {
             Authentication authentication,
             @RequestParam Long itemId
     ) {
-        Long fridgeId = fridgeService.getFridgeByAccountName(authentication.getName()).getId();
-        FridgeSimpleDTO fridgeDTO = fridgeService.deleteItemFromFridge(authentication, itemId, fridgeId);
+        FridgeSimpleDTO fridgeDTO = fridgeService.deleteItemFromFridge(authentication, itemId);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
