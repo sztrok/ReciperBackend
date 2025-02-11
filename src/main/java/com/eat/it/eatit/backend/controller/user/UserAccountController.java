@@ -2,7 +2,7 @@ package com.eat.it.eatit.backend.controller.user;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
-import com.eat.it.eatit.backend.service.user.account.UserAccountService;
+import com.eat.it.eatit.backend.service.user.account.UserAccountDataService;
 import com.eat.it.eatit.backend.service.user.account.UserAccountRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,11 +21,11 @@ import java.util.List;
 @RequestMapping("/api/v1/user/account")
 public class UserAccountController {
 
-    UserAccountService accountService;
+    UserAccountDataService accountService;
     UserAccountRecipeService recipeService;
 
     @Autowired
-    public UserAccountController(UserAccountService accountService, UserAccountRecipeService recipeService) {
+    public UserAccountController(UserAccountDataService accountService, UserAccountRecipeService recipeService) {
         this.accountService = accountService;
         this.recipeService = recipeService;
     }

@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.eat.it.eatit.backend.utils.account.UpdateAccountFields.updateAccountFields;
 
 @Service
-public class UserAccountService {
+public class UserAccountDataService {
 
     AccountRepository accountRepository;
 
     @Autowired
-    public UserAccountService(AccountRepository accountRepository) {
+    public UserAccountDataService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
