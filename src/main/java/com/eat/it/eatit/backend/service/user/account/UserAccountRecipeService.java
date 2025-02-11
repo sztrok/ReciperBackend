@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service.user;
+package com.eat.it.eatit.backend.service.user.account;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
@@ -25,11 +25,11 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper.toDTOList;
 
 @Service
-public class UserRecipeService extends RecipeRefactoredService {
+public class UserAccountRecipeService extends RecipeRefactoredService {
     private final AccountRepository accountRepository;
 
     @Autowired
-    public UserRecipeService(
+    public UserAccountRecipeService(
             RecipeRefactoredRepository repository,
             RecipeComponentService componentService,
             RecipeIngredientService ingredientService,
@@ -93,6 +93,12 @@ public class UserRecipeService extends RecipeRefactoredService {
             }
         }
         return toDTOList(account.getLikedRecipesRefactored());
+    }
+
+    @Transactional
+    public RecipeRefactoredDTO updateAccountRecipe(Authentication authentication, Long recipeId) {
+        //TODO: zrobic update
+        return new RecipeRefactoredDTO();
     }
 
     private Account getAccountEntityByName(String username) {

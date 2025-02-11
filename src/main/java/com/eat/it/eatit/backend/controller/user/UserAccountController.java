@@ -1,8 +1,9 @@
 package com.eat.it.eatit.backend.controller.user;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.service.user.UserAccountService;
+import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
+import com.eat.it.eatit.backend.service.user.account.UserAccountService;
+import com.eat.it.eatit.backend.service.user.account.UserAccountRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,12 @@ import java.util.List;
 public class UserAccountController {
 
     UserAccountService accountService;
+    UserAccountRecipeService recipeService;
 
     @Autowired
-    public UserAccountController(UserAccountService accountService) {
+    public UserAccountController(UserAccountService accountService, UserAccountRecipeService recipeService) {
         this.accountService = accountService;
+        this.recipeService = recipeService;
     }
 
     @PutMapping()
@@ -38,50 +41,63 @@ public class UserAccountController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/account_recipes")
-    @Operation(summary = "Add recipes to an account", description = "Adds a list of recipes to an existing account identified by its ID.")
-    @ApiResponse(responseCode = "200", description = "Successfully added recipes to the account.")
+    @GetMapping("/account_recipes")
+    @Operation(summary = "Get account recipes", description = "Returns list of recipes assigned to this account, or empty list if account has no assigned recipes")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes assigned to Account")
+    public ResponseEntity<List<RecipeRefactoredDTO>> getAccountRecipes(Authentication authentication) {
+        log.info("Get account recipes");
+        return ResponseEntity.ok(recipeService.getAccountRecipes(authentication));
+    }
+
+    @GetMapping("/account_recipes/{recipeId}")
+    @Operation(summary = "Get account recipe by id")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved recipe details")
+    public ResponseEntity<RecipeRefactoredDTO> getAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
+        RecipeRefactoredDTO result = recipeService.getAccountRecipeById(authentication, recipeId);
+        return result != null
+                ? ResponseEntity.ok(result)
+                : ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/liked_recipes")
+    @Operation(summary = "Get liked recipes", description = "Returns list of recipes liked by this account, or empty list if account has no liked recipes")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes liked by this Account")
+    public ResponseEntity<List<RecipeRefactoredDTO>> getLikedRecipes(Authentication authentication) {
+        return ResponseEntity.ok(recipeService.getLikedRecipes(authentication));
+    }
+
+    @PostMapping(value = "/account_recipes", consumes = "application/json")
+    @Operation(summary = "Create a new Recipe", description = "Add a new recipe to assigned to account.")
+    @ApiResponse(responseCode = "200", description = "Recipe added successfully")
+    public ResponseEntity<RecipeRefactoredDTO> addNewRecipe(Authentication authentication, @RequestBody RecipeRefactoredDTO recipeDTO) {
+        RecipeRefactoredDTO added = recipeService.addNewAccountRecipe(authentication, recipeDTO);
+        return ResponseEntity.ok(added);
+    }
+
+    @PutMapping("/liked_recipes")
+    @Operation(summary = "Add liked recipes", description = "Adds a list of liked recipes to an existing account.")
+    @ApiResponse(responseCode = "200", description = "Successfully added liked recipes.")
     @ApiResponse(responseCode = "400", description = "Account not found.")
-    public ResponseEntity<List<RecipeDTO>> addRecipesToAccount(Authentication authentication, @RequestBody List<RecipeDTO> recipeDTOS) {
-        List<RecipeDTO> addedRecipes = accountService.addRecipesToAccount(authentication, recipeDTOS);
+    public ResponseEntity<List<RecipeRefactoredDTO>> addLikedRecipes(Authentication authentication, @RequestBody List<Long> recipeIds) {
+        List<RecipeRefactoredDTO> addedRecipes = recipeService.addLikedRecipes(authentication, recipeIds);
         return !addedRecipes.isEmpty()
                 ? ResponseEntity.ok(addedRecipes)
                 : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/account_recipe/{recipeId}")
-    @Operation(summary = "Update account Recipe", description = "Update the details of an existing recipe assigned to this account by providing its ID and updated information.")
-    @ApiResponse(responseCode = "200", description = "Recipe updated successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid or non-existent recipe ID")
-    public ResponseEntity<RecipeDTO> updateRecipe(Authentication authentication, @PathVariable Long recipeId, @RequestBody RecipeDTO recipeDTO) {
-        RecipeDTO recipe = accountService.updateAccountRecipeById(authentication, recipeId, recipeDTO);
-        return recipe != null
-                ? ResponseEntity.ok(recipe)
-                : ResponseEntity.badRequest().build();
-    }
-
-    @DeleteMapping("/account_recipe/{recipeId}")
-    @Operation(summary = "Delete account recipes", description = "Delete recipe assigned to this account.")
-    @ApiResponse(responseCode = "200", description = "Successfully deleted account recipe.")
-    @ApiResponse(responseCode = "400", description = "Account or recipe not found.")
-    public ResponseEntity<Void> deleteAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
-        return accountService.deleteAccountRecipe(authentication, recipeId)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
-    }
-
-    @DeleteMapping("/liked_recipes/{recipeId}")
-    @Operation(summary = "Delete liked recipes", description = "Delete recipe from liked list.")
-    @ApiResponse(responseCode = "200", description = "Successfully deleted liked recipe.")
+    @PutMapping("/account_recipes/{recipeId}")
+    @Operation(summary = "Update recipe", description = "Updates account's exisitng recipe.")
+    @ApiResponse(responseCode = "200", description = "Successfully added liked recipes.")
     @ApiResponse(responseCode = "400", description = "Account not found.")
-    public ResponseEntity<Void> deleteLikedRecipe(Authentication authentication, @PathVariable Long recipeId) {
-        return accountService.deleteLikedRecipe(authentication, recipeId)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+    public ResponseEntity<RecipeRefactoredDTO> updateAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
+        RecipeRefactoredDTO updatedRecipe = recipeService.updateAccountRecipe(authentication, recipeId);
+        return ResponseEntity.ok(updatedRecipe);
     }
 
+    //TODO: update'owanie przepisu
     //TODO: wymyślić usuwanie przepisów - jest problematyczne, ponieważ inni użytkownicy mogą mieć do nich odniesienia
     // pomysł:
     // - usunąć przepisy które nie są z nikim innym powiązane
     // - przepisy z powiązaniami ustawić na niewidoczne dla nikogo na frontendzie, więc dla użytkownika będą usunięte
+
 }
