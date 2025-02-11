@@ -1,7 +1,5 @@
 package com.eat.it.eatit.backend.controller.user;
 
-import com.eat.it.eatit.backend.dto.RecipeDTO;
-import com.eat.it.eatit.backend.dto.recipe.RecipeDetailsDTO;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.service.user.UserRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
