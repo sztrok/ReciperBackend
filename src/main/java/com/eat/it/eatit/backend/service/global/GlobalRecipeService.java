@@ -26,7 +26,8 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 @Service
 public class GlobalRecipeService extends RecipeRefactoredService {
 
-    private static final String FAST_API_URL = "http://0.0.0.0:8000/recipe/from_text/single_stage";
+    private static final String FAST_API_GENERATOR_URL = "http://0.0.0.0:8000/recipe/from_text/single_stage";
+    private static final String FAST_API_PROMPT_URL = "http://0.0.0.0:8000/recipe/from_text/single_stage";
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
@@ -35,17 +36,11 @@ public class GlobalRecipeService extends RecipeRefactoredService {
     }
 
     public RecipeRefactoredDTO generateNewRecipeWithFastApiConnection(RecipeFastApiRequest request) {
-        HttpHeaders headers = HttpHeaders.writableHttpHeaders(new HttpHeaders());
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        return getRecipeFromFastApiResponse(FAST_API_GENERATOR_URL, request);
+    }
 
-        HttpEntity<RecipeFastApiRequest> entity = new HttpEntity<>(request, headers);
-        ResponseEntity<RecipeRefactoredDTO> response = restTemplate.exchange(
-                FAST_API_URL, HttpMethod.POST, entity, RecipeRefactoredDTO.class
-        );
-        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            return addNewRecipe(response.getBody());
-        }
-        return new RecipeRefactoredDTO();
+    public RecipeRefactoredDTO generateRecipeFromPrompt(RecipeFastApiRequest request) {
+        return getRecipeFromFastApiResponse(FAST_API_PROMPT_URL, request);
     }
 
 
@@ -88,6 +83,20 @@ public class GlobalRecipeService extends RecipeRefactoredService {
         List<RecipeStep> steps = dto.getDetailedSteps().stream().map(stepService::save).toList();
         RecipeRefactored recipe = getRecipeRefactored(dto, steps, components);
         return toDTO(repository.save(recipe));
+    }
+
+    private RecipeRefactoredDTO getRecipeFromFastApiResponse(String url, RecipeFastApiRequest request) {
+        HttpHeaders headers = HttpHeaders.writableHttpHeaders(new HttpHeaders());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<RecipeFastApiRequest> entity = new HttpEntity<>(request, headers);
+        ResponseEntity<RecipeRefactoredDTO> response = restTemplate.exchange(
+                url, HttpMethod.POST, entity, RecipeRefactoredDTO.class
+        );
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return addNewRecipe(response.getBody());
+        }
+        return new RecipeRefactoredDTO();
     }
 
 }
