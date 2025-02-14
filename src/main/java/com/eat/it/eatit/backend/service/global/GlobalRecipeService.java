@@ -30,7 +30,7 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 public class GlobalRecipeService extends RecipeRefactoredService {
 
     private static final String FAST_API_GENERATOR_URL = "http://0.0.0.0:8000/recipe/from_text/single_stage";
-    private static final String FAST_API_PROMPT_URL = "http://0.0.0.0:8000/recipe/from_text/single_stage";
+    private static final String FAST_API_PROMPT_URL = "http://0.0.0.0:8000/recipe/from_text/from_prompt";
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
@@ -67,6 +67,7 @@ public class GlobalRecipeService extends RecipeRefactoredService {
                             .map(String::toLowerCase) // Ignorowanie wielkości liter w liście wejściowej
                             .allMatch(recipeIngredients::contains);
                 })
+                .sorted(compareByLikes()) //sortuje po ilosci kont ktore polubily przepis
                 .map(RecipeRefactoredMapper::toDTO)
                 .toList();
 
@@ -81,7 +82,6 @@ public class GlobalRecipeService extends RecipeRefactoredService {
 //                .map(RecipeRefactoredMapper::toDTO)
 //                .toList();
     }
-
 
     public RecipeRefactoredDTO getPublicRecipeById(Long id) {
         RecipeRefactored recipe = findRecipeById(id);
@@ -141,6 +141,15 @@ public class GlobalRecipeService extends RecipeRefactoredService {
             return addNewRecipe(response.getBody());
         }
         return new RecipeRefactoredDTO();
+    }
+
+    // Porownuje przepisy na podstawie ilosci kont ktore polubily przepis
+    private Comparator<RecipeRefactored> compareByLikes() {
+        return Comparator.comparingInt((RecipeRefactored recipe) ->
+                        Optional.ofNullable(recipe.getLikedAccounts())
+                                .map(List::size)
+                                .orElse(0))
+                .reversed(); // Sortowanie malejąco
     }
 
 }
