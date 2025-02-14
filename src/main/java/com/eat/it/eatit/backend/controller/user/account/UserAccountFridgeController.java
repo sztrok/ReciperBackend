@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_USER')")
-@RequestMapping("/pi/v1/user/account/fridge")
+@RequestMapping("/api/v1/user/account/fridge")
 public class UserAccountFridgeController {
 
     UserAccountFridgeService fridgeService;
