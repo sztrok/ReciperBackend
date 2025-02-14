@@ -43,7 +43,7 @@ public class RecipeRefactored {
     @Convert(converter = ListToStringConverter.class)
     private List<String> tips = new ArrayList<>();
 
-    private String imageUrl = "";
+    private String imageUrl = null;
 
     @Convert(converter = ListToStringConverter.class)
     private List<String> tags = new ArrayList<>();

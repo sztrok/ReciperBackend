@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: app-service
     ports:
-      - "8080:8080" # Mapa portów: host -> kontener
+      - "0.0.0.0:8080:8080"  # Bind host port 8080 on all network interfaces
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-service:5432/eat_it_db
       SPRING_DATASOURCE_USERNAME: postgres
