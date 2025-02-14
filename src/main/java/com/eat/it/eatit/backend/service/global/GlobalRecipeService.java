@@ -67,6 +67,7 @@ public class GlobalRecipeService extends RecipeRefactoredService {
                             .map(String::toLowerCase) // Ignorowanie wielkości liter w liście wejściowej
                             .allMatch(recipeIngredients::contains);
                 })
+                .sorted(compareByLikes()) //sortuje po ilosci kont ktore polubily przepis
                 .map(RecipeRefactoredMapper::toDTO)
                 .toList();
 
@@ -81,7 +82,6 @@ public class GlobalRecipeService extends RecipeRefactoredService {
 //                .map(RecipeRefactoredMapper::toDTO)
 //                .toList();
     }
-
 
     public RecipeRefactoredDTO getPublicRecipeById(Long id) {
         RecipeRefactored recipe = findRecipeById(id);
@@ -141,6 +141,15 @@ public class GlobalRecipeService extends RecipeRefactoredService {
             return addNewRecipe(response.getBody());
         }
         return new RecipeRefactoredDTO();
+    }
+
+    // Porownuje przepisy na podstawie ilosci kont ktore polubily przepis
+    private Comparator<RecipeRefactored> compareByLikes() {
+        return Comparator.comparingInt((RecipeRefactored recipe) ->
+                        Optional.ofNullable(recipe.getLikedAccounts())
+                                .map(List::size)
+                                .orElse(0))
+                .reversed(); // Sortowanie malejąco
     }
 
 }
