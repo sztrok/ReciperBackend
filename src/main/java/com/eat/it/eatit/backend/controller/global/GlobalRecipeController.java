@@ -66,14 +66,27 @@ public class GlobalRecipeController {
     }
 
     @PostMapping
+    @Operation(summary = "Creates new recipe", description = "Creates new recipe from template and saves it in database")
+    @ApiResponse(responseCode = "200", description = "Recipes created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid or unsupported difficulty levels")
     public ResponseEntity<RecipeRefactoredDTO> addNewRecipe(@RequestBody RecipeRefactoredDTO recipe) {
         RecipeRefactoredDTO newRecipe = recipeService.addNewRecipe(recipe);
         return ResponseEntity.ok(newRecipe);
     }
 
     @PostMapping("/generator")
-    public ResponseEntity<RecipeRefactoredDTO> generateRecipe(@RequestBody RecipeFastApiRequest recipe) {
+    @Operation(summary = "Generate recipe from description", description = "Generates recipe matching template from description containing all necessary information")
+    @ApiResponse(responseCode = "200", description = "Recipes generated successfully")
+    public ResponseEntity<RecipeRefactoredDTO> generateRecipeFromDescription(@RequestBody RecipeFastApiRequest recipe) {
         RecipeRefactoredDTO body = recipeService.generateNewRecipeWithFastApiConnection(recipe);
+        return ResponseEntity.ok(body);
+    }
+
+    @PostMapping("/prompt")
+    @Operation(summary = "Generate recipe from prompt", description = "Generates recipe matching template from simple prompt")
+    @ApiResponse(responseCode = "200", description = "Recipes generated successfully")
+    public ResponseEntity<RecipeRefactoredDTO> generateRecipeFromPrompt(@RequestBody RecipeFastApiRequest recipe) {
+        RecipeRefactoredDTO body = recipeService.generateRecipeFromPrompt(recipe);
         return ResponseEntity.ok(body);
     }
 

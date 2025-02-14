@@ -11,10 +11,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_USER')")
-@RequestMapping("/pi/v1/user/account/fridge")
+@RequestMapping("/api/v1/user/account/fridge")
 public class UserAccountFridgeController {
 
     UserAccountFridgeService fridgeService;
@@ -56,9 +58,9 @@ public class UserAccountFridgeController {
     @ApiResponse(responseCode = "400", description = "Invalid item data.")
     public ResponseEntity<FridgeSimpleDTO> deleteItemFromFridge(
             Authentication authentication,
-            @RequestParam Long itemId
+            @RequestParam List<Long> itemId
     ) {
-        FridgeSimpleDTO fridgeDTO = fridgeService.deleteItemFromFridge(authentication, itemId);
+        FridgeSimpleDTO fridgeDTO = fridgeService.deleteItemsFromFridge(authentication, itemId);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();
@@ -75,6 +77,17 @@ public class UserAccountFridgeController {
             @RequestParam Operations operation
     ) {
         FridgeSimpleDTO fridgeDTO = fridgeService.changeItemAmountInFridge(authentication, itemId, amount, operation);
+        return fridgeDTO != null
+                ? ResponseEntity.ok(fridgeDTO)
+                : ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping("/item/all")
+    @Operation(summary = "Delete item from fridge.")
+    @ApiResponse(responseCode = "200", description = "Item deleted from fridge successfully.")
+    @ApiResponse(responseCode = "400", description = "Invalid item data.")
+    public ResponseEntity<FridgeSimpleDTO> deleteItemFromFridge(Authentication authentication) {
+        FridgeSimpleDTO fridgeDTO = fridgeService.deleteAllItemsFromFridge(authentication);
         return fridgeDTO != null
                 ? ResponseEntity.ok(fridgeDTO)
                 : ResponseEntity.badRequest().build();

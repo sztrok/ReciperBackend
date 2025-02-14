@@ -273,6 +273,7 @@ class InitialDataLoader {
 
         // RECIPE REFACTORED
         RecipeRefactored r1 = new RecipeRefactored();
+        r1.setName("Test recipe 1 name");
         r1.setDescription("Test recipe 1 description");
         r1.setSimpleSteps(List.of("Simple step1", "Setp2", "Another step", "another one"));
         r1.getDetailedSteps().addAll(List.of(r1s1, r1s2, r1s3));
@@ -280,8 +281,9 @@ class InitialDataLoader {
         r1.getRecipeComponents().addAll(List.of(r1p1, r1p2));
         r1.setOwnerAccount(accountRepository.getReferenceById(2L));
         r1.getLikedAccounts().addAll(List.of(accountRepository.getReferenceById(1L), accountRepository.getReferenceById(3L), accountRepository.getReferenceById(4L)));
-
+        
         RecipeRefactored r2 = new RecipeRefactored();
+        r2.setName("Test recipe 2 name");
         r2.setDescription("Test recipe 1 description");
         r2.setSimpleSteps(List.of("Simple step1", "Setp2", "Another step", "another one"));
         r2.getDetailedSteps().addAll(List.of(r2s1, r2s2));

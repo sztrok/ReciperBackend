@@ -74,7 +74,7 @@ public class UserAccountFridgeService {
     }
 
     @Transactional
-    public FridgeSimpleDTO deleteItemFromFridge(Authentication authentication, Long itemId) {
+    public FridgeSimpleDTO deleteItemsFromFridge(Authentication authentication, List<Long> items) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return null;
@@ -83,7 +83,21 @@ public class UserAccountFridgeService {
         if (fridge == null) {
             return null;
         }
-        fridge.getItems().removeIf(item -> item.getId().equals(itemId));
+        fridge.getItems().removeIf(item -> items.contains(item.getId()));
+        return toSimpleDTO(fridge);
+    }
+
+    @Transactional
+    public FridgeSimpleDTO deleteAllItemsFromFridge(Authentication authentication) {
+        Account account = getAccountEntityByName(authentication.getName());
+        if (account == null) {
+            return null;
+        }
+        Fridge fridge = account.getFridge();
+        if (fridge == null) {
+            return null;
+        }
+        fridge.getItems().clear();
         return toSimpleDTO(fridge);
     }
 
