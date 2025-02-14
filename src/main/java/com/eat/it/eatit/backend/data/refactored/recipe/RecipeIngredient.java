@@ -19,7 +19,7 @@ public class RecipeIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Item item;
     private Double quantity;
     @Convert(converter = ListToStringConverter.class)
