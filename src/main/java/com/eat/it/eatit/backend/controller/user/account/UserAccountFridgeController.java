@@ -53,8 +53,8 @@ public class UserAccountFridgeController {
     }
 
     @DeleteMapping("/item")
-    @Operation(summary = "Delete item from fridge.")
-    @ApiResponse(responseCode = "200", description = "Item deleted from fridge successfully.")
+    @Operation(summary = "Delete items from fridge.")
+    @ApiResponse(responseCode = "200", description = "Items deleted from fridge successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid item data.")
     public ResponseEntity<FridgeSimpleDTO> deleteItemFromFridge(
             Authentication authentication,
@@ -84,7 +84,7 @@ public class UserAccountFridgeController {
 
     @DeleteMapping("/item/all")
     @Operation(summary = "Delete item from fridge.")
-    @ApiResponse(responseCode = "200", description = "Item deleted from fridge successfully.")
+    @ApiResponse(responseCode = "200", description = "All items from fridge deleted successfully successfully.")
     @ApiResponse(responseCode = "400", description = "Invalid item data.")
     public ResponseEntity<FridgeSimpleDTO> deleteItemFromFridge(Authentication authentication) {
         FridgeSimpleDTO fridgeDTO = fridgeService.deleteAllItemsFromFridge(authentication);
