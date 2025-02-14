@@ -1,6 +1,8 @@
 package com.eat.it.eatit.backend.service.global;
 
+import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
 import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
 import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
@@ -8,6 +10,7 @@ import com.eat.it.eatit.backend.dto.refactored.recipe.fastapi.RecipeFastApiReque
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
+import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
 import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
 import com.eat.it.eatit.backend.service.recipe.RecipeComponentService;
 import com.eat.it.eatit.backend.service.recipe.RecipeIngredientService;
@@ -41,6 +44,42 @@ public class GlobalRecipeService extends RecipeRefactoredService {
 
     public RecipeRefactoredDTO generateRecipeFromPrompt(RecipeFastApiRequest request) {
         return getRecipeFromFastApiResponse(FAST_API_PROMPT_URL, request);
+    }
+
+    public List<RecipeRefactoredDTO> getRecipes(Optional<List<String>> ingredients) {
+        if (ingredients.isEmpty()) {
+            return getAllPublicRecipes();
+        }
+        List<String> ingredientsList = ingredients.get();
+
+//      Ten kod zwraca tylko przedmioty zawierajace wszystkie przedmioty z listy
+        return getAllRecipesFromDatabase()
+                .stream()
+                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
+                .filter(recipe -> {
+                    List<String> recipeIngredients = recipe.getIngredients().stream()
+                            .map(RecipeIngredient::getItem)
+                            .map(Item::getName)
+                            .map(String::toLowerCase) // Ignorowanie wielkości liter
+                            .toList();
+
+                    return ingredientsList.stream()
+                            .map(String::toLowerCase) // Ignorowanie wielkości liter w liście wejściowej
+                            .allMatch(recipeIngredients::contains);
+                })
+                .map(RecipeRefactoredMapper::toDTO)
+                .toList();
+
+//        Ten kod zwraca jak przepis zawiera jakiekolwiek przedmioty z podanej listy
+//        return getAllRecipesFromDatabase()
+//                .stream()
+//                .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
+//                .filter(recipe -> recipe.getIngredients().stream()
+//                        .map(RecipeIngredient::getItem)
+//                        .map(Item::getName)
+//                        .allMatch(ingredientsList::contains))
+//                .map(RecipeRefactoredMapper::toDTO)
+//                .toList();
     }
 
 
@@ -82,6 +121,11 @@ public class GlobalRecipeService extends RecipeRefactoredService {
         List<RecipeComponent> components = dto.getRecipeComponents().stream().map(componentService::save).toList();
         List<RecipeStep> steps = dto.getDetailedSteps().stream().map(stepService::save).toList();
         RecipeRefactored recipe = getRecipeRefactored(dto, steps, components);
+        Set<RecipeIngredient> ingredients = new HashSet<>();
+        for(RecipeComponent component : components) {
+            ingredients.addAll(component.getIngredients());
+        }
+        recipe.getIngredients().addAll(ingredients);
         return toDTO(repository.save(recipe));
     }
 

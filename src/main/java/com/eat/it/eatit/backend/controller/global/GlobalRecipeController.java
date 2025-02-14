@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/global/recipe")
@@ -35,12 +36,22 @@ public class GlobalRecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/all")
-    @Operation(summary = "Get all public Recipes", description = "Retrieve a list of all public recipes available in the database.")
-    @ApiResponse(responseCode = "200", description = "All public recipes retrieved successfully")
-    public ResponseEntity<List<RecipeRefactoredDTO>> getAllPublicRecipes() {
-        List<RecipeRefactoredDTO> recipes = recipeService.getAllPublicRecipes();
-        return ResponseEntity.ok(recipes);
+//    @GetMapping("/all")
+//    @Operation(summary = "Get all public Recipes", description = "Retrieve a list of all public recipes available in the database.")
+//    @ApiResponse(responseCode = "200", description = "All public recipes retrieved successfully")
+//    public ResponseEntity<List<RecipeRefactoredDTO>> getAllPublicRecipes() {
+//        List<RecipeRefactoredDTO> recipes = recipeService.getAllPublicRecipes();
+//        return ResponseEntity.ok(recipes);
+//    }
+
+    @GetMapping
+    @Operation(summary = "Get public Recipes", description = "Retrieve all public recipes optionally containing specified ingredients.")
+    @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
+    public ResponseEntity<List<RecipeRefactoredDTO>> getPublicRecipes(
+            @RequestParam(required = false) List<String> ingredients) {
+        return ResponseEntity.ok(recipeService.getRecipes(
+                ingredients == null || ingredients.isEmpty() ? Optional.empty() : Optional.of(ingredients)
+        ));
     }
 
     @GetMapping("/items/item_types")
