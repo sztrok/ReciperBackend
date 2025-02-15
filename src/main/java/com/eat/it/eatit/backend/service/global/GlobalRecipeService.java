@@ -33,7 +33,7 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 public class GlobalRecipeService extends RecipeRefactoredService {
 
     private static final String FAST_API_GENERATOR_URL = "http://fastapi-backend:8000/recipe/from_text/single_stage";
-    private static final String FAST_API_PROMPT_URL = "http://fastapi-backend:8000/recipe/from_text/from_prompt";
+    private static final String FAST_API_PROMPT_URL = "http://fastapi-backend:8000/recipe/from_prompt";
     private final RestTemplate restTemplate = new RestTemplate();
     private final AccountAuthAndAccessService authService;
 
