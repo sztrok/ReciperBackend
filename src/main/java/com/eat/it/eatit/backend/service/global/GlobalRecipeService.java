@@ -187,8 +187,9 @@ public class GlobalRecipeService extends RecipeRefactoredService {
     }
 
     private Comparator<RecipeRefactoredDTO> compareByAvailableIngredients() {
-        return Comparator.comparingInt(RecipeRefactoredDTO::getNumberOfAvailableIngredients)
-                .reversed(); // Sortowanie malejąco
+        return Comparator.comparingDouble((RecipeRefactoredDTO dto) ->
+                        (double) dto.getNumberOfAvailableIngredients() / dto.getNumberOfIngredients())
+                .reversed();// Sortowanie malejąco
     }
 
     private Integer getNumberOfAvailableIngredients(AccountDTO account, RecipeRefactored recipe) {
