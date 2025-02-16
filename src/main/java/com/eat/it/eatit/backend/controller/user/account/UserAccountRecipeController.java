@@ -26,7 +26,7 @@ public class UserAccountRecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/recipe/account_recipes")
+    @GetMapping("account_recipes")
     @Operation(summary = "Get account recipes", description = "Returns list of recipes assigned to this account, or empty list if account has no assigned recipes")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes assigned to Account")
     public ResponseEntity<List<RecipeRefactoredDTO>> getAccountRecipes(Authentication authentication) {
@@ -34,7 +34,7 @@ public class UserAccountRecipeController {
         return ResponseEntity.ok(recipeService.getAccountRecipes(authentication));
     }
 
-    @GetMapping("/recipe/account_recipes/{recipeId}")
+    @GetMapping("account_recipes/{recipeId}")
     @Operation(summary = "Get account recipe by id")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipe details")
     public ResponseEntity<RecipeRefactoredDTO> getAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
@@ -44,7 +44,7 @@ public class UserAccountRecipeController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @PostMapping(value = "/recipe/account_recipes", consumes = "application/json")
+    @PostMapping(value = "account_recipes", consumes = "application/json")
     @Operation(summary = "Create a new Recipe", description = "Add a new recipe to assigned to account.")
     @ApiResponse(responseCode = "200", description = "Recipe added successfully")
     public ResponseEntity<RecipeRefactoredDTO> addNewRecipe(Authentication authentication, @RequestBody RecipeRefactoredDTO recipeDTO) {
@@ -52,7 +52,7 @@ public class UserAccountRecipeController {
         return ResponseEntity.ok(added);
     }
 
-    @PutMapping("/recipe/account_recipes/{recipeId}")
+    @PutMapping("account_recipes/{recipeId}")
     @Operation(summary = "Update recipe", description = "Updates account's exisitng recipe.")
     @ApiResponse(responseCode = "200", description = "Successfully added liked recipes.")
     @ApiResponse(responseCode = "400", description = "Account not found.")
@@ -61,14 +61,14 @@ public class UserAccountRecipeController {
         return ResponseEntity.ok(updatedRecipe);
     }
 
-    @GetMapping("/recipe/liked_recipes")
+    @GetMapping("liked_recipes")
     @Operation(summary = "Get liked recipes", description = "Returns list of recipes liked by this account, or empty list if account has no liked recipes")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes liked by this Account")
     public ResponseEntity<List<RecipeRefactoredDTO>> getLikedRecipes(Authentication authentication) {
         return ResponseEntity.ok(recipeService.getLikedRecipes(authentication));
     }
 
-    @PutMapping("/recipe/liked_recipes")
+    @PutMapping("liked_recipes")
     @Operation(summary = "Add liked recipes", description = "Adds a list of liked recipes to an existing account.")
     @ApiResponse(responseCode = "200", description = "Successfully added liked recipes.")
     @ApiResponse(responseCode = "400", description = "Account not found.")
@@ -84,5 +84,6 @@ public class UserAccountRecipeController {
     // pomysł:
     // - usunąć przepisy które nie są z nikim innym powiązane
     // - przepisy z powiązaniami ustawić na niewidoczne dla nikogo na frontendzie, więc dla użytkownika będą usunięte
+    // - wszystkie przepisy ustawiac na niewidoczne
 
 }
