@@ -4,6 +4,7 @@ import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.dto.refactored.recipe.fastapi.RecipeFastApiRequest;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
+import com.eat.it.eatit.backend.enums.SortingParameter;
 import com.eat.it.eatit.backend.service.global.GlobalRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,11 +43,13 @@ public class GlobalRecipeController {
     @ApiResponse(responseCode = "200", description = "Recipes retrieved successfully")
     public ResponseEntity<List<RecipeRefactoredDTO>> getPublicRecipes(
             Authentication authentication,
-            @RequestParam(required = false) List<String> ingredients
-    ) {
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(defaultValue = "NUM_OF_LIKES") SortingParameter sortingParameter
+            ) {
         return ResponseEntity.ok(recipeService.getRecipes(
                 authentication,
-                ingredients == null || ingredients.isEmpty() ? Optional.empty() : Optional.of(ingredients)
+                ingredients == null || ingredients.isEmpty() ? Optional.empty() : Optional.of(ingredients),
+                sortingParameter
         ));
     }
 

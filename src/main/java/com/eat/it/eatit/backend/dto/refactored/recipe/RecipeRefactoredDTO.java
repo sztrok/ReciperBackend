@@ -25,6 +25,7 @@ public class RecipeRefactoredDTO {
     private List<RecipeIngredientDTO> ingredients = new ArrayList<>();
     private Visibility visibility = Visibility.PUBLIC;
     private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
+    private Integer numberOfLikedAccounts = 0;
     private Integer numberOfAvailableIngredients = 0;
     private Integer numberOfIngredients = 0;
 

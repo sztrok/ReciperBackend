@@ -24,6 +24,7 @@ public class RecipeRefactoredMapper {
         dto.setIngredients(RecipeIngredientMapper.toDTOList(recipe.getIngredients()));
         dto.setVisibility(recipe.getVisibility());
         dto.setDifficulty(recipe.getDifficulty());
+        dto.setNumberOfLikedAccounts(recipe.getLikedAccounts().size());
         dto.setNumberOfIngredients(recipe.getIngredients().size());
         return dto;
     }
