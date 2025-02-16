@@ -21,8 +21,10 @@ public class RecipeRefactoredMapper {
         dto.setImageUrl(recipe.getImageUrl());
         dto.setTags(recipe.getTags());
         dto.setRecipeComponents(RecipeComponentMapper.toDTOList(recipe.getRecipeComponents()));
+        dto.setIngredients(RecipeIngredientMapper.toDTOList(recipe.getIngredients()));
         dto.setVisibility(recipe.getVisibility());
         dto.setDifficulty(recipe.getDifficulty());
+        dto.setNumberOfIngredients(recipe.getIngredients().size());
         return dto;
     }
 

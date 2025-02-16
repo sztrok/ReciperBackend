@@ -69,7 +69,7 @@ public class SecurityConfig {
                         // ITEM
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/item/**").permitAll()
                         // RECIPE
-                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/recipe/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/recipe/**").authenticated()
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/recipe/**").permitAll()
         );
 

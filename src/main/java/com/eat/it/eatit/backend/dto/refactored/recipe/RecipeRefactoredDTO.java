@@ -22,8 +22,11 @@ public class RecipeRefactoredDTO {
     private String imageUrl = "";
     private List<String> tags = new ArrayList<>();
     private List<RecipeComponentDTO> recipeComponents = new ArrayList<>();
+    private List<RecipeIngredientDTO> ingredients = new ArrayList<>();
     private Visibility visibility = Visibility.PUBLIC;
     private RecipeDifficulty difficulty = RecipeDifficulty.EASY;
+    private Integer numberOfAvailableIngredients = 0;
+    private Integer numberOfIngredients = 0;
 
     public void setSimpleSteps(List<String> simpleSteps) {
         this.simpleSteps = new ArrayList<>(simpleSteps);
@@ -39,6 +42,10 @@ public class RecipeRefactoredDTO {
 
     public void setTags(List<String> tags) {
         this.tags = new ArrayList<>(tags);
+    }
+
+    public void setIngredients(List<RecipeIngredientDTO> ingredients) {
+        this.ingredients = new ArrayList<>(ingredients);
     }
 
     public void setRecipeComponents(List<RecipeComponentDTO> recipeComponents) {
