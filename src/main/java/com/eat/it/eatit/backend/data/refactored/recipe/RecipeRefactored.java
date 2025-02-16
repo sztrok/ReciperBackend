@@ -23,6 +23,7 @@ public class RecipeRefactored {
 
     private String name;
 
+    @Column(length = 3000)
     private String description;
 
     @ManyToOne
