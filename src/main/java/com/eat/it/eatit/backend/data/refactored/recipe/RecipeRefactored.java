@@ -33,6 +33,7 @@ public class RecipeRefactored {
     private List<Account> likedAccounts = new ArrayList<>();
 
     @Convert(converter = ListToStringConverter.class)
+    @Column(length = 3000)
     private List<String> simpleSteps = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
