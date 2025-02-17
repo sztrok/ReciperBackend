@@ -62,6 +62,7 @@ public class GeneralController {
 
     @PostMapping("/login")
     @Operation(summary = "Log in to application")
+    @ApiResponse(responseCode = "200", description = "User logged in successfully")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
         log.info("Login request for user: {}", loginRequest.getUsername());
 
@@ -75,6 +76,9 @@ public class GeneralController {
     }
 
     @PostMapping("/tokens/refreshToken")
+    @Operation(summary = "Validate refresh token")
+    @ApiResponse(responseCode = "200", description = "Refresh token is valid")
+    @ApiResponse(responseCode = "401", description = "Refresh token is not valid")
     public ResponseEntity<Void> checkIfRefreshTokenIsValid(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         if (!jwtTokenProvider.validateToken(refreshToken)) {
@@ -84,6 +88,9 @@ public class GeneralController {
     }
 
     @PostMapping("/tokens/accessToken")
+    @Operation(summary = "Validate access token")
+    @ApiResponse(responseCode = "200", description = "Access token is valid")
+    @ApiResponse(responseCode = "401", description = "Access token is not valid")
     public ResponseEntity<Void> checkIfAccessTokenIsValid(@RequestBody AccessTokenRequest accessTokenRequest) {
         String accessToken = accessTokenRequest.getAccessToken();
         if (!jwtTokenProvider.validateToken(accessToken)) {
@@ -93,11 +100,12 @@ public class GeneralController {
     }
 
     @PostMapping("/tokens/accessToken/new")
+    @Operation(summary = "Generate new access token")
+    @ApiResponse(responseCode = "200", description = "Successfully generated new access token")
+    @ApiResponse(responseCode = "401", description = "Refresh token is not valid")
     public ResponseEntity<AuthenticationResponse> getNewAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
-        log.info("Access token: {}", refreshToken);
         if (!jwtTokenProvider.validateToken(refreshToken)) {
-            log.info("Access token not valid");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
@@ -107,6 +115,9 @@ public class GeneralController {
     }
 
     @PostMapping("/tokens")
+    @Operation(summary = "Generate new tokens")
+    @ApiResponse(responseCode = "200", description = "Successfully generated new tokens")
+    @ApiResponse(responseCode = "401", description = "Refresh token is not valid")
     public ResponseEntity<AuthenticationResponse> getNewTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         log.info("Refresh token: {}", refreshToken);
@@ -116,7 +127,6 @@ public class GeneralController {
         }
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
 
-        // Wygenerowanie nowych tokenów
         List<String> roles = accountService.getAccountRoles(username);
         String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
