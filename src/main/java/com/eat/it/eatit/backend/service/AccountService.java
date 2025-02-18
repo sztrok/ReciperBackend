@@ -8,6 +8,7 @@ import com.eat.it.eatit.backend.dto.refactored.account.AccountSimpleRefactoredDT
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.mapper.AccountMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
+import com.eat.it.eatit.backend.repository.FridgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,21 +26,18 @@ import static com.eat.it.eatit.backend.mapper.AccountMapper.toDTO;
 public class AccountService {
 
     AccountRepository accountRepository;
-    FridgeService fridgeService;
-    RecipeService recipeService;
+    FridgeRepository fridgeRepository;
     PasswordEncoder passwordEncoder;
 
     @Autowired
     public AccountService(
             AccountRepository accountRepository,
-            FridgeService fridgeService,
-            PasswordEncoder passwordEncoder,
-            RecipeService recipeService
+            FridgeRepository fridgeRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.accountRepository = accountRepository;
-        this.fridgeService = fridgeService;
+        this.fridgeRepository = fridgeRepository;
         this.passwordEncoder = passwordEncoder;
-        this.recipeService = recipeService;
     }
 
     @Transactional
@@ -56,9 +54,9 @@ public class AccountService {
         account.setPassword(passwordEncoder.encode(request.getPassword()));
         account.setAccountRoles(Collections.singleton(AccountRole.ROLE_USER));
         accountRepository.save(account);
-        Fridge fridge = fridgeService.createFridge(account.getId());
+        Fridge fridge = new Fridge();
+        fridgeRepository.save(fridge);
         account.setFridge(fridge);
-        // Zapis do bazy danych
         return toDTO(account);
     }
 
