@@ -45,7 +45,7 @@ public class UserAccountRecipeService extends RecipeRefactoredService {
         if (account == null) {
             return Collections.emptyList();
         }
-        return RecipeRefactoredMapper.toDTOList(account.getAccountRecipesRefactored());
+        return RecipeRefactoredMapper.toDTOList(account.getAccountRecipes());
     }
 
     public RecipeRefactoredDTO getAccountRecipeById(Authentication authentication, Long recipeId) {
@@ -62,7 +62,7 @@ public class UserAccountRecipeService extends RecipeRefactoredService {
         if (account == null) {
             return Collections.emptyList();
         }
-        return RecipeRefactoredMapper.toDTOList(account.getLikedRecipesRefactored());
+        return RecipeRefactoredMapper.toDTOList(account.getLikedRecipes());
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class UserAccountRecipeService extends RecipeRefactoredService {
         List<RecipeStep> steps = dto.getDetailedSteps().stream().map(stepService::save).toList();
         RecipeRefactored recipe = getRecipeRefactored(dto, steps, components);
         recipe.setOwnerAccount(account);
-        account.getAccountRecipesRefactored().add(recipe);
+        account.getAccountRecipes().add(recipe);
         return toDTO(recipe);
     }
 
@@ -87,12 +87,12 @@ public class UserAccountRecipeService extends RecipeRefactoredService {
         }
         List<RecipeRefactored> recipes = repository.findAllById(ids);
         for(RecipeRefactored recipe : recipes) {
-            if(!account.getLikedRecipesRefactored().contains(recipe)) {
-                account.getLikedRecipesRefactored().add(recipe);
+            if(!account.getLikedRecipes().contains(recipe)) {
+                account.getLikedRecipes().add(recipe);
                 recipe.getLikedAccounts().add(account);
             }
         }
-        return toDTOList(account.getLikedRecipesRefactored());
+        return toDTOList(account.getLikedRecipes());
     }
 
     @Transactional

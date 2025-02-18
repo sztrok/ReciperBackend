@@ -34,19 +34,11 @@ public class Account {
     @JoinColumn(name = "fridge_id")
     private Fridge fridge;
 
-    @ManyToMany
-    @JoinTable(
-            name = "accounts_liked_recipes",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "recipe_id")
-    )
-    private List<Recipe> likedRecipes = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerAccount")
-    private List<RecipeRefactored> accountRecipesRefactored = new ArrayList<>();
+    private List<RecipeRefactored> accountRecipes = new ArrayList<>();
 
     @ManyToMany(mappedBy = "likedAccounts")
-    private List<RecipeRefactored> likedRecipesRefactored = new ArrayList<>();
+    private List<RecipeRefactored> likedRecipes = new ArrayList<>();
 
     @ElementCollection(targetClass = AccountRole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -66,10 +58,6 @@ public class Account {
 
     public void setAccountRoles(Set<AccountRole> accountRoles) {
         this.accountRoles = new HashSet<>(accountRoles);
-    }
-
-    public void setLikedRecipes(List<Recipe> likedRecipes) {
-        this.likedRecipes = new ArrayList<>(likedRecipes);
     }
 
     public void addRole(AccountRole accountRole) {

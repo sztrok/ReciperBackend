@@ -20,7 +20,6 @@ public class AccountMapper {
                 account.getMail(),
                 account.getPassword(),
                 FridgeMapper.toDTO(account.getFridge()),
-                RecipeMapper.toDTOList(account.getLikedRecipes()),
                 account.getPremium(),
                 account.getAccountRoles());
     }
@@ -34,7 +33,6 @@ public class AccountMapper {
         account.setMail(accountDTO.getMail());
         account.setPassword(accountDTO.getPassword());
         account.setFridge(FridgeMapper.toEntity(accountDTO.getFridge()));
-        account.setLikedRecipes(RecipeMapper.toEntityList(accountDTO.getLikedRecipes()));
         account.setAccountRoles(accountDTO.getAccountRoles());
         account.setPremium(accountDTO.getPremium());
         return account;
@@ -46,8 +44,8 @@ public class AccountMapper {
                 account.getUsername(),
                 account.getMail(),
                 account.getPremium(),
-                RecipeRefactoredMapper.toDTOList(account.getAccountRecipesRefactored()),
-                RecipeRefactoredMapper.toDTOList(account.getLikedRecipesRefactored()),
+                RecipeRefactoredMapper.toDTOList(account.getAccountRecipes()),
+                RecipeRefactoredMapper.toDTOList(account.getLikedRecipes()),
                 account.getAccountRoles()
         );
     }
