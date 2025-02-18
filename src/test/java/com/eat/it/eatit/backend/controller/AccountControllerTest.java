@@ -3,7 +3,6 @@ package com.eat.it.eatit.backend.controller;
 import com.eat.it.eatit.backend.IntegrationTest;
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.RecipeDTO;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;

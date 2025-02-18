@@ -10,7 +10,7 @@ import com.eat.it.eatit.backend.repository.*;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.repository.recipe.RecipeComponentRepository;
 import com.eat.it.eatit.backend.repository.recipe.RecipeIngredientRepository;
-import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
 import com.eat.it.eatit.backend.repository.recipe.RecipeStepRepository;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,6 @@ class InitialDataLoader {
 
     private final AccountRepository accountRepository;
     private final ItemRepository itemRepository;
-    private final RecipeRepository recipeRepository;
     private final FridgeRepository fridgeRepository;
     private final CookwareRepository cookwareRepository;
     private final ItemInFridgeRepository itemInFridgeRepository;
@@ -40,7 +39,7 @@ class InitialDataLoader {
 
     private final RecipeComponentRepository recipeComponentRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final RecipeRefactoredRepository recipeRefactoredRepository;
+    private final RecipeRepository recipeRepository;
     private final RecipeStepRepository recipeStepRepository;
     private final PasswordEncoder passwordEncoder;
     private final Random random = new Random();
@@ -48,27 +47,25 @@ class InitialDataLoader {
     @Autowired
     public InitialDataLoader(AccountRepository accountRepository,
                              ItemRepository itemRepository,
-                             RecipeRepository recipeRepository,
                              FridgeRepository fridgeRepository,
                              CookwareRepository cookwareRepository,
                              ItemInFridgeRepository itemInFridgeRepository,
                              ItemInRecipeRepository itemInRecipeRepository,
                              RecipeComponentRepository recipeComponentRepository,
                              RecipeIngredientRepository recipeIngredientRepository,
-                             RecipeRefactoredRepository recipeRefactoredRepository,
+                             RecipeRepository recipeRepository,
                              RecipeStepRepository recipeStepRepository,
                              PasswordEncoder passwordEncoder
     ) {
         this.accountRepository = accountRepository;
         this.itemRepository = itemRepository;
-        this.recipeRepository = recipeRepository;
         this.fridgeRepository = fridgeRepository;
         this.cookwareRepository = cookwareRepository;
         this.itemInFridgeRepository = itemInFridgeRepository;
         this.itemInRecipeRepository = itemInRecipeRepository;
         this.recipeComponentRepository = recipeComponentRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
-        this.recipeRefactoredRepository = recipeRefactoredRepository;
+        this.recipeRepository = recipeRepository;
         this.recipeStepRepository = recipeStepRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -81,17 +78,13 @@ class InitialDataLoader {
         List<Account> accounts = generateAccounts();
         List<Item> items = generateItems();
         List<Fridge> fridges = generateFridges();
-        List<Cookware> cookwares = generateCookware();
-        List<Recipe> recipes = generateRecipes();
-
+        generateCookware();
 
         log.info("Finished loading initial data.");
         log.info("Linking entities...");
 
         linkFridgeAndItems(fridges, items);
         linkAccountAndFridge(fridges, accounts);
-        linkCookwareAndRecipes(cookwares, recipes);
-        linkRecipeAndItems(recipes, items);
 
         assingRoles(accounts);
 
@@ -176,33 +169,6 @@ class InitialDataLoader {
         cookwares.add(new Cookware("Nóż"));
         cookwares.add(new Cookware("Termomix"));
         return cookwareRepository.saveAll(cookwares);
-    }
-
-    private List<Recipe> generateRecipes() {
-        List<Recipe> recipes = new ArrayList<>();
-        recipes.add(new Recipe("Recipe 1", "Test recipe 1 desc"));
-        recipes.add(new Recipe("Recipe 2", "Test recipe 2 desc"));
-        recipes.add(new Recipe("Recipe 3", "Test recipe 3 desc"));
-        recipes.add(new Recipe("Recipe 4", "Test recipe 4 desc"));
-        recipes.add(new Recipe("Recipe 5", "Test recipe 5 desc"));
-        recipes.add(new Recipe("Recipe 6", "Test recipe 6 desc"));
-        recipes.add(new Recipe("Recipe 7", "Test recipe 7 desc"));
-        recipes.add(new Recipe("Recipe 8", "Test recipe 8 desc"));
-        recipes.add(new Recipe("Recipe 9", "Test recipe 9 desc"));
-        recipes.add(new Recipe("Recipe 10", "Test recipe 10 desc"));
-        recipes.add(new Recipe("Recipe 11", "Test recipe 11 desc"));
-        recipes.add(new Recipe("Recipe 12", "Test recipe 12 desc"));
-        recipes.add(new Recipe("Recipe 13", "Test recipe 13 desc"));
-        recipes.add(new Recipe("Recipe 14", "Test recipe 14 desc"));
-        recipes.add(new Recipe("Recipe 15", "Test recipe 15 desc"));
-        recipes.add(new Recipe("Recipe 16", "Test recipe 16 desc"));
-        recipes.add(new Recipe("Recipe 17", "Test recipe 17 desc"));
-        recipes.add(new Recipe("Recipe 18", "Test recipe 18 desc"));
-        recipes.add(new Recipe("Recipe 19", "Test recipe 19 desc"));
-        recipes.add(new Recipe("Recipe 20", "Test recipe 20 desc"));
-        recipes.add(new Recipe("Recipe 21", "Test recipe 21 desc"));
-        recipes.add(new Recipe("Recipe 22", "Test recipe 22 desc"));
-        return recipeRepository.saveAll(recipes);
     }
 
     private void generateDummyRefactoredRecipes() {
@@ -293,7 +259,7 @@ class InitialDataLoader {
         r2.getLikedAccounts().addAll(List.of(accountRepository.getReferenceById(3L), accountRepository.getReferenceById(2L)));
         r2.getIngredients().addAll(List.of(item3, item4, item5));
 
-        recipeRefactoredRepository.saveAll(List.of(r1, r2));
+        recipeRepository.saveAll(List.of(r1, r2));
     }
 
     private Account generateAccount(String firstName, String lastName, Boolean premium) {
@@ -330,33 +296,6 @@ class InitialDataLoader {
             itemInFridgeRepository.saveAll(addedItems);
             fridge.setItems(addedItems);
             fridgeRepository.save(fridge);
-        }
-    }
-
-    private void linkRecipeAndItems(List<Recipe> recipes, List<Item> items) {
-        for (Recipe recipe : recipes) {
-            List<ItemInRecipe> addedItems = new ArrayList<>();
-            for (int i = 0; i < 7; i++) {
-                ItemInRecipe itemInRecipe = new ItemInRecipe();
-                itemInRecipe.setRecipeId(recipe.getId());
-                itemInRecipe.setAmount(random.nextDouble(10, 300));
-                itemInRecipe.setItem(items.get(random.nextInt(items.size())));
-                addedItems.add(itemInRecipe);
-            }
-            itemInRecipeRepository.saveAll(addedItems);
-            recipe.setItems(addedItems);
-            recipeRepository.save(recipe);
-        }
-    }
-
-    private void linkCookwareAndRecipes(List<Cookware> cookwares, List<Recipe> recipes) {
-        for (Recipe recipe : recipes) {
-            List<Cookware> addedCookwares = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                addedCookwares.add(cookwares.get(random.nextInt(cookwares.size())));
-            }
-            recipe.setCookware(addedCookwares);
-            recipeRepository.save(recipe);
         }
     }
 

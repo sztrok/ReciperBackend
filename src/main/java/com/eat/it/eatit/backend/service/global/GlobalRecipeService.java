@@ -12,11 +12,11 @@ import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.SortingParameter;
 import com.eat.it.eatit.backend.enums.Visibility;
-import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
 import com.eat.it.eatit.backend.service.AccountAuthAndAccessService;
 import com.eat.it.eatit.backend.service.recipe.RecipeComponentService;
 import com.eat.it.eatit.backend.service.recipe.RecipeIngredientService;
-import com.eat.it.eatit.backend.service.recipe.RecipeRefactoredService;
+import com.eat.it.eatit.backend.service.recipe.RecipeService;
 import com.eat.it.eatit.backend.service.recipe.RecipeStepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -30,7 +30,7 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 
 
 @Service
-public class GlobalRecipeService extends RecipeRefactoredService {
+public class GlobalRecipeService extends RecipeService {
 
     private static final String FAST_API_GENERATOR_URL = "http://fastapi-backend:8000/recipe/from_text/single_stage";
     private static final String FAST_API_PROMPT_URL = "http://fastapi-backend:8000/recipe/from_prompt";
@@ -39,7 +39,7 @@ public class GlobalRecipeService extends RecipeRefactoredService {
 
     @Autowired
     protected GlobalRecipeService(
-            RecipeRefactoredRepository repository,
+            RecipeRepository repository,
             RecipeComponentService componentService,
             RecipeIngredientService ingredientService,
             RecipeStepService stepService,

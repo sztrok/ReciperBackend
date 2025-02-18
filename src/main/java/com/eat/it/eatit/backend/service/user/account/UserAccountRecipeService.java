@@ -7,10 +7,10 @@ import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
-import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
 import com.eat.it.eatit.backend.service.recipe.RecipeComponentService;
 import com.eat.it.eatit.backend.service.recipe.RecipeIngredientService;
-import com.eat.it.eatit.backend.service.recipe.RecipeRefactoredService;
+import com.eat.it.eatit.backend.service.recipe.RecipeService;
 import com.eat.it.eatit.backend.service.recipe.RecipeStepService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper.toDTOList;
 
 @Service
-public class UserAccountRecipeService extends RecipeRefactoredService {
+public class UserAccountRecipeService extends RecipeService {
     private final AccountRepository accountRepository;
 
     @Autowired
     public UserAccountRecipeService(
-            RecipeRefactoredRepository repository,
+            RecipeRepository repository,
             RecipeComponentService componentService,
             RecipeIngredientService ingredientService,
             RecipeStepService stepService,

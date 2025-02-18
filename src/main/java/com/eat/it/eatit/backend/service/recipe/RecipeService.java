@@ -7,7 +7,7 @@ import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
 import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
-import com.eat.it.eatit.backend.repository.recipe.RecipeRefactoredRepository;
+import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-public abstract class RecipeRefactoredService {
+public abstract class RecipeService {
 
-    protected final RecipeRefactoredRepository repository;
+    protected final RecipeRepository repository;
     protected final RecipeComponentService componentService;
     protected final RecipeIngredientService ingredientService;
     protected final RecipeStepService stepService;
 
-    protected RecipeRefactoredService(RecipeRefactoredRepository repository, RecipeComponentService componentService, RecipeIngredientService ingredientService, RecipeStepService stepService) {
+    protected RecipeService(RecipeRepository repository, RecipeComponentService componentService, RecipeIngredientService ingredientService, RecipeStepService stepService) {
         this.repository = repository;
         this.componentService = componentService;
         this.ingredientService = ingredientService;
