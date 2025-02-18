@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.dto.refactored.recipe;
+package com.eat.it.eatit.backend.dto.recipe;
 
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.Visibility;
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeRefactoredDTO {
+public class RecipeDTO {
     private Long id;
     private String name;
     private String description;

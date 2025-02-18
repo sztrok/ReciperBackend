@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.dto.refactored.recipe.fastapi;
+package com.eat.it.eatit.backend.dto.recipe.fastapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

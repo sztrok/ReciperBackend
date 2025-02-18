@@ -1,6 +1,6 @@
 package com.eat.it.eatit.backend.dto.auth.response;
 
-import com.eat.it.eatit.backend.dto.refactored.account.AccountSimpleRefactoredDTO;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleRefactoredDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

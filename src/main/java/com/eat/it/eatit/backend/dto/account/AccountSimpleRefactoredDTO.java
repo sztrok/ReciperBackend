@@ -1,6 +1,6 @@
-package com.eat.it.eatit.backend.dto.refactored.account;
+package com.eat.it.eatit.backend.dto.account;
 
-import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class AccountSimpleRefactoredDTO {
     private String username;
     private String mail;
     private Boolean premium;
-    private List<RecipeRefactoredDTO> accountRecipes = new ArrayList<>();
-    private List<RecipeRefactoredDTO> likedRecipes = new ArrayList<>();
+    private List<RecipeDTO> accountRecipes = new ArrayList<>();
+    private List<RecipeDTO> likedRecipes = new ArrayList<>();
     private Set<AccountRole> accountRoles;
 }

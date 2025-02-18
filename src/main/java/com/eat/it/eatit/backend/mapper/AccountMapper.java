@@ -2,7 +2,7 @@ package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.refactored.account.AccountSimpleRefactoredDTO;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleRefactoredDTO;
 import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
 
 public class AccountMapper {

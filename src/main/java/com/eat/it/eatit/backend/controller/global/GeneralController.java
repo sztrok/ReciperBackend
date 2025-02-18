@@ -7,7 +7,7 @@ import com.eat.it.eatit.backend.dto.auth.request.LoginRequest;
 import com.eat.it.eatit.backend.dto.auth.request.RefreshTokenRequest;
 import com.eat.it.eatit.backend.dto.auth.response.LoginAndRegisterResponse;
 import com.eat.it.eatit.backend.dto.auth.response.TokenResponse;
-import com.eat.it.eatit.backend.dto.refactored.account.AccountSimpleRefactoredDTO;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleRefactoredDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
 import com.eat.it.eatit.backend.service.AccountService;

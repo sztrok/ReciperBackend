@@ -4,7 +4,7 @@ import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
 import com.eat.it.eatit.backend.data.recipe.Recipe;
 import com.eat.it.eatit.backend.data.recipe.RecipeStep;
-import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
 import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
@@ -40,7 +40,7 @@ public class UserAccountRecipeService extends RecipeService {
         this.accountRepository = accountRepository;
     }
 
-    public List<RecipeRefactoredDTO> getAccountRecipes(Authentication authentication) {
+    public List<RecipeDTO> getAccountRecipes(Authentication authentication) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return Collections.emptyList();
@@ -48,7 +48,7 @@ public class UserAccountRecipeService extends RecipeService {
         return RecipeRefactoredMapper.toDTOList(account.getAccountRecipes());
     }
 
-    public RecipeRefactoredDTO getAccountRecipeById(Authentication authentication, Long recipeId) {
+    public RecipeDTO getAccountRecipeById(Authentication authentication, Long recipeId) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return null;
@@ -57,7 +57,7 @@ public class UserAccountRecipeService extends RecipeService {
         return recipe.map(RecipeRefactoredMapper::toDTO).orElse(null);
     }
 
-    public List<RecipeRefactoredDTO> getLikedRecipes(Authentication authentication) {
+    public List<RecipeDTO> getLikedRecipes(Authentication authentication) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return Collections.emptyList();
@@ -66,7 +66,7 @@ public class UserAccountRecipeService extends RecipeService {
     }
 
     @Transactional
-    public RecipeRefactoredDTO addNewAccountRecipe(Authentication authentication, RecipeRefactoredDTO dto) {
+    public RecipeDTO addNewAccountRecipe(Authentication authentication, RecipeDTO dto) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return null;
@@ -80,7 +80,7 @@ public class UserAccountRecipeService extends RecipeService {
     }
 
     @Transactional
-    public List<RecipeRefactoredDTO> addLikedRecipes(Authentication authentication, List<Long> ids) {
+    public List<RecipeDTO> addLikedRecipes(Authentication authentication, List<Long> ids) {
         Account account = getAccountEntityByName(authentication.getName());
         if (account == null) {
             return null;
@@ -96,9 +96,9 @@ public class UserAccountRecipeService extends RecipeService {
     }
 
     @Transactional
-    public RecipeRefactoredDTO updateAccountRecipe(Authentication authentication, Long recipeId) {
+    public RecipeDTO updateAccountRecipe(Authentication authentication, Long recipeId) {
         //TODO: zrobic update
-        return new RecipeRefactoredDTO();
+        return new RecipeDTO();
     }
 
     private Account getAccountEntityByName(String username) {

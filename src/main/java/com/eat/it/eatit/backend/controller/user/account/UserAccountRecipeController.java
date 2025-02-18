@@ -1,6 +1,6 @@
 package com.eat.it.eatit.backend.controller.user.account;
 
-import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
 import com.eat.it.eatit.backend.service.user.account.UserAccountRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,7 +29,7 @@ public class UserAccountRecipeController {
     @GetMapping("account_recipes")
     @Operation(summary = "Get account recipes", description = "Returns list of recipes assigned to this account, or empty list if account has no assigned recipes")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes assigned to Account")
-    public ResponseEntity<List<RecipeRefactoredDTO>> getAccountRecipes(Authentication authentication) {
+    public ResponseEntity<List<RecipeDTO>> getAccountRecipes(Authentication authentication) {
         log.info("Get account recipes");
         return ResponseEntity.ok(recipeService.getAccountRecipes(authentication));
     }
@@ -37,8 +37,8 @@ public class UserAccountRecipeController {
     @GetMapping("account_recipes/{recipeId}")
     @Operation(summary = "Get account recipe by id")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipe details")
-    public ResponseEntity<RecipeRefactoredDTO> getAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
-        RecipeRefactoredDTO result = recipeService.getAccountRecipeById(authentication, recipeId);
+    public ResponseEntity<RecipeDTO> getAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
+        RecipeDTO result = recipeService.getAccountRecipeById(authentication, recipeId);
         return result != null
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.badRequest().build();
@@ -47,8 +47,8 @@ public class UserAccountRecipeController {
     @PostMapping(value = "account_recipes", consumes = "application/json")
     @Operation(summary = "Create a new Recipe", description = "Add a new recipe to assigned to account.")
     @ApiResponse(responseCode = "200", description = "Recipe added successfully")
-    public ResponseEntity<RecipeRefactoredDTO> addNewRecipe(Authentication authentication, @RequestBody RecipeRefactoredDTO recipeDTO) {
-        RecipeRefactoredDTO added = recipeService.addNewAccountRecipe(authentication, recipeDTO);
+    public ResponseEntity<RecipeDTO> addNewRecipe(Authentication authentication, @RequestBody RecipeDTO recipeDTO) {
+        RecipeDTO added = recipeService.addNewAccountRecipe(authentication, recipeDTO);
         return ResponseEntity.ok(added);
     }
 
@@ -56,15 +56,15 @@ public class UserAccountRecipeController {
     @Operation(summary = "Update recipe", description = "Updates account's exisitng recipe.")
     @ApiResponse(responseCode = "200", description = "Successfully added liked recipes.")
     @ApiResponse(responseCode = "400", description = "Account not found.")
-    public ResponseEntity<RecipeRefactoredDTO> updateAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
-        RecipeRefactoredDTO updatedRecipe = recipeService.updateAccountRecipe(authentication, recipeId);
+    public ResponseEntity<RecipeDTO> updateAccountRecipe(Authentication authentication, @PathVariable Long recipeId) {
+        RecipeDTO updatedRecipe = recipeService.updateAccountRecipe(authentication, recipeId);
         return ResponseEntity.ok(updatedRecipe);
     }
 
     @GetMapping("liked_recipes")
     @Operation(summary = "Get liked recipes", description = "Returns list of recipes liked by this account, or empty list if account has no liked recipes")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved recipes liked by this Account")
-    public ResponseEntity<List<RecipeRefactoredDTO>> getLikedRecipes(Authentication authentication) {
+    public ResponseEntity<List<RecipeDTO>> getLikedRecipes(Authentication authentication) {
         return ResponseEntity.ok(recipeService.getLikedRecipes(authentication));
     }
 
@@ -72,8 +72,8 @@ public class UserAccountRecipeController {
     @Operation(summary = "Add liked recipes", description = "Adds a list of liked recipes to an existing account.")
     @ApiResponse(responseCode = "200", description = "Successfully added liked recipes.")
     @ApiResponse(responseCode = "400", description = "Account not found.")
-    public ResponseEntity<List<RecipeRefactoredDTO>> addLikedRecipes(Authentication authentication, @RequestBody List<Long> recipeIds) {
-        List<RecipeRefactoredDTO> addedRecipes = recipeService.addLikedRecipes(authentication, recipeIds);
+    public ResponseEntity<List<RecipeDTO>> addLikedRecipes(Authentication authentication, @RequestBody List<Long> recipeIds) {
+        List<RecipeDTO> addedRecipes = recipeService.addLikedRecipes(authentication, recipeIds);
         return !addedRecipes.isEmpty()
                 ? ResponseEntity.ok(addedRecipes)
                 : ResponseEntity.badRequest().build();

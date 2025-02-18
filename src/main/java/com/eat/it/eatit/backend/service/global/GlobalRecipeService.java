@@ -6,8 +6,8 @@ import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
 import com.eat.it.eatit.backend.data.recipe.Recipe;
 import com.eat.it.eatit.backend.data.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
-import com.eat.it.eatit.backend.dto.refactored.recipe.fastapi.RecipeFastApiRequest;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
+import com.eat.it.eatit.backend.dto.recipe.fastapi.RecipeFastApiRequest;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
 import com.eat.it.eatit.backend.enums.SortingParameter;
@@ -49,15 +49,15 @@ public class GlobalRecipeService extends RecipeService {
         this.authService = authService;
     }
 
-    public RecipeRefactoredDTO generateNewRecipeWithFastApiConnection(RecipeFastApiRequest request) {
+    public RecipeDTO generateNewRecipeWithFastApiConnection(RecipeFastApiRequest request) {
         return getRecipeFromFastApiResponse(FAST_API_GENERATOR_URL, request);
     }
 
-    public RecipeRefactoredDTO generateRecipeFromPrompt(RecipeFastApiRequest request) {
+    public RecipeDTO generateRecipeFromPrompt(RecipeFastApiRequest request) {
         return getRecipeFromFastApiResponse(FAST_API_PROMPT_URL, request);
     }
 
-    public List<RecipeRefactoredDTO> getRecipes(
+    public List<RecipeDTO> getRecipes(
             Authentication authentication,
             Optional<List<String>> ingredients,
             SortingParameter sortingParameter
@@ -85,9 +85,9 @@ public class GlobalRecipeService extends RecipeService {
                 })
                 .map(recipe -> {
                     Integer numberOfAvailableIngredients = getNumberOfAvailableIngredients(account, recipe);
-                    RecipeRefactoredDTO recipeRefactoredDTO = toDTO(recipe);
-                    recipeRefactoredDTO.setNumberOfAvailableIngredients(numberOfAvailableIngredients);
-                    return recipeRefactoredDTO;
+                    RecipeDTO recipeDTO = toDTO(recipe);
+                    recipeDTO.setNumberOfAvailableIngredients(numberOfAvailableIngredients);
+                    return recipeDTO;
                 })
                 .sorted(sortingParameter == SortingParameter.NUM_OF_LIKES ? compareByLikes() : compareByAvailableIngredients())//sortuje po ilosci kont ktore polubily przepis LUB po ilosci posiadanych skladnikow
                 .toList();
@@ -104,7 +104,7 @@ public class GlobalRecipeService extends RecipeService {
 //                .toList();
     }
 
-    public RecipeRefactoredDTO getPublicRecipeById(Authentication authentication, Long id) {
+    public RecipeDTO getPublicRecipeById(Authentication authentication, Long id) {
         AccountDTO account = authService.getAccountByName(authentication.getName());
         Recipe recipe = findRecipeById(id);
         if (recipe == null) {
@@ -113,48 +113,48 @@ public class GlobalRecipeService extends RecipeService {
         if (recipe.getVisibility() != Visibility.PUBLIC) {
             return null;
         }
-        RecipeRefactoredDTO recipeRefactoredDTO = toDTO(recipe);
+        RecipeDTO recipeDTO = toDTO(recipe);
         Integer numOfAvailableIngredients = getNumberOfAvailableIngredients(account, recipe);
-        recipeRefactoredDTO.setNumberOfAvailableIngredients(numOfAvailableIngredients);
+        recipeDTO.setNumberOfAvailableIngredients(numOfAvailableIngredients);
         return toDTO(recipe);
     }
 
-    public List<RecipeRefactoredDTO> getAllPublicRecipes() {
+    public List<RecipeDTO> getAllPublicRecipes() {
         return toDTOList(getAllRecipesFromDatabase()
                 .stream()
                 .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
                 .toList());
     }
 
-    public List<RecipeRefactoredDTO> getPublicRecipesByItemTypes(Authentication authentication, List<ItemType> itemTypes) {
+    public List<RecipeDTO> getPublicRecipesByItemTypes(Authentication authentication, List<ItemType> itemTypes) {
         AccountDTO account = authService.getAccountByName(authentication.getName());
         return getAllRecipesFromDatabase()
                 .stream()
                 .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
                 .filter(recipe -> getRecipeItemTypes(recipe).containsAll(itemTypes))
                 .map(recipe -> {
-                    RecipeRefactoredDTO recipeRefactoredDTO = toDTO(recipe);
-                    recipeRefactoredDTO.setNumberOfAvailableIngredients(getNumberOfAvailableIngredients(account, recipe));
-                    return recipeRefactoredDTO;
+                    RecipeDTO recipeDTO = toDTO(recipe);
+                    recipeDTO.setNumberOfAvailableIngredients(getNumberOfAvailableIngredients(account, recipe));
+                    return recipeDTO;
                 })
                 .toList();
     }
 
-    public List<RecipeRefactoredDTO> getPublicRecipesByDifficulty(Authentication authentication, List<RecipeDifficulty> difficultyList) {
+    public List<RecipeDTO> getPublicRecipesByDifficulty(Authentication authentication, List<RecipeDifficulty> difficultyList) {
         AccountDTO account = authService.getAccountByName(authentication.getName());
         return getAllRecipesFromDatabase()
                 .stream()
                 .filter(recipe -> recipe.getVisibility() == Visibility.PUBLIC)
                 .filter(recipe -> difficultyList.contains(recipe.getDifficulty()))
                 .map(recipe -> {
-                    RecipeRefactoredDTO recipeRefactoredDTO = toDTO(recipe);
-                    recipeRefactoredDTO.setNumberOfAvailableIngredients(getNumberOfAvailableIngredients(account, recipe));
-                    return recipeRefactoredDTO;
+                    RecipeDTO recipeDTO = toDTO(recipe);
+                    recipeDTO.setNumberOfAvailableIngredients(getNumberOfAvailableIngredients(account, recipe));
+                    return recipeDTO;
                 })
                 .toList();
     }
 
-    public RecipeRefactoredDTO addNewRecipe(RecipeRefactoredDTO dto) {
+    public RecipeDTO addNewRecipe(RecipeDTO dto) {
         List<RecipeComponent> components = dto.getRecipeComponents().stream().map(componentService::save).toList();
         List<RecipeStep> steps = dto.getDetailedSteps().stream().map(stepService::save).toList();
         Recipe recipe = getRecipeRefactored(dto, steps, components);
@@ -166,28 +166,28 @@ public class GlobalRecipeService extends RecipeService {
         return toDTO(repository.save(recipe));
     }
 
-    private RecipeRefactoredDTO getRecipeFromFastApiResponse(String url, RecipeFastApiRequest request) {
+    private RecipeDTO getRecipeFromFastApiResponse(String url, RecipeFastApiRequest request) {
         HttpHeaders headers = HttpHeaders.writableHttpHeaders(new HttpHeaders());
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<RecipeFastApiRequest> entity = new HttpEntity<>(request, headers);
-        ResponseEntity<RecipeRefactoredDTO> response = restTemplate.exchange(
-                url, HttpMethod.POST, entity, RecipeRefactoredDTO.class
+        ResponseEntity<RecipeDTO> response = restTemplate.exchange(
+                url, HttpMethod.POST, entity, RecipeDTO.class
         );
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
             return addNewRecipe(response.getBody());
         }
-        return new RecipeRefactoredDTO();
+        return new RecipeDTO();
     }
 
     // Porownuje przepisy na podstawie ilosci kont ktore polubily przepis
-    private Comparator<RecipeRefactoredDTO> compareByLikes() {
-        return Comparator.comparingInt(RecipeRefactoredDTO::getNumberOfLikedAccounts)
+    private Comparator<RecipeDTO> compareByLikes() {
+        return Comparator.comparingInt(RecipeDTO::getNumberOfLikedAccounts)
                 .reversed(); // Sortowanie malejąco
     }
 
-    private Comparator<RecipeRefactoredDTO> compareByAvailableIngredients() {
-        return Comparator.comparingDouble((RecipeRefactoredDTO dto) ->
+    private Comparator<RecipeDTO> compareByAvailableIngredients() {
+        return Comparator.comparingDouble((RecipeDTO dto) ->
                         (double) dto.getNumberOfAvailableIngredients() / dto.getNumberOfIngredients())
                 .reversed();// Sortowanie malejąco
     }

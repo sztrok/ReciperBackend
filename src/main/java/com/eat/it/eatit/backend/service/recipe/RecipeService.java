@@ -5,7 +5,7 @@ import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
 import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
 import com.eat.it.eatit.backend.data.recipe.Recipe;
 import com.eat.it.eatit.backend.data.recipe.RecipeStep;
-import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public abstract class RecipeService {
     }
 
     @NotNull
-    protected static Recipe getRecipeRefactored(RecipeRefactoredDTO dto, List<RecipeStep> steps, List<RecipeComponent> components) {
+    protected static Recipe getRecipeRefactored(RecipeDTO dto, List<RecipeStep> steps, List<RecipeComponent> components) {
         Recipe recipe = new Recipe();
         recipe.setName(dto.getName());
         recipe.setDescription(dto.getDescription());

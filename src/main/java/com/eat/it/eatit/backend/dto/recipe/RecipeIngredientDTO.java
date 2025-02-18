@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.dto.refactored.recipe;
+package com.eat.it.eatit.backend.dto.recipe;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.eat.it.eatit.backend.mapper.refactored.recipe;
 
 import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
-import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeIngredientDTO;
+import com.eat.it.eatit.backend.dto.recipe.RecipeIngredientDTO;
 
 import java.util.List;
 

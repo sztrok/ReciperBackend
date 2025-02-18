@@ -4,7 +4,7 @@ import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Fridge;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.auth.request.AccountCreationRequest;
-import com.eat.it.eatit.backend.dto.refactored.account.AccountSimpleRefactoredDTO;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleRefactoredDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.mapper.AccountMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;

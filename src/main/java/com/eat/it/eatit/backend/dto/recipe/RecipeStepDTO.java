@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.dto.refactored.recipe;
+package com.eat.it.eatit.backend.dto.recipe;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +10,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeComponentDTO {
+public class RecipeStepDTO {
     private Long id;
-    private String name;
+    private String step;
     private List<RecipeIngredientDTO> ingredients = new ArrayList<>();
 
     public void setIngredients(List<RecipeIngredientDTO> ingredients) {
