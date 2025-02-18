@@ -34,10 +34,6 @@ public class Account {
     @JoinColumn(name = "fridge_id")
     private Fridge fridge;
 
-    @OneToMany
-    @JoinColumn(name = "owner_id")
-    private List<Recipe> accountRecipes = new ArrayList<>();
-
     @ManyToMany
     @JoinTable(
             name = "accounts_liked_recipes",
@@ -68,20 +64,6 @@ public class Account {
         this.premium = premium;
     }
 
-    public Account(String username, String mail, String password, Fridge fridge, List<Recipe> accountRecipes, Set<AccountRole> accountRoles, Boolean premium) {
-        this.username = username;
-        this.mail = mail;
-        this.password = password;
-        this.fridge = fridge;
-        this.accountRecipes = accountRecipes;
-        this.accountRoles = accountRoles;
-        this.premium = premium;
-    }
-
-    public void setAccountRecipes(List<Recipe> recipes) {
-        this.accountRecipes = new ArrayList<>(recipes);
-    }
-
     public void setAccountRoles(Set<AccountRole> accountRoles) {
         this.accountRoles = new HashSet<>(accountRoles);
     }
@@ -92,20 +74,6 @@ public class Account {
 
     public void addRole(AccountRole accountRole) {
         this.accountRoles.add(accountRole);
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", mail='" + mail + '\'' +
-                ", password='" + password + '\'' +
-                ", fridge=" + fridge +
-                ", recipes=" + accountRecipes +
-                ", roles=" + accountRoles +
-                ", premium=" + premium +
-                '}';
     }
 
     @Override
