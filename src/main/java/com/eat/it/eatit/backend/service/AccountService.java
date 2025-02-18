@@ -70,6 +70,11 @@ public class AccountService {
         return AccountMapper.toSimpleDTO(account);
     }
 
+    public AccountDTO getAccount(String username) {
+        Account account = accountRepository.findByUsername(username);
+        return toDTO(account);
+    }
+
     public List<String> getAccountRoles(String username) {
         Account account = getAccountEntityByName(username);
         if (account == null) {

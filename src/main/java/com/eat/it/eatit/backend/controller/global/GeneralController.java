@@ -49,11 +49,10 @@ public class GeneralController {
     public ResponseEntity<LoginAndRegisterResponse> register(@Valid @RequestBody AccountCreationRequest account) {
         log.info("Registering account username: {} email: {}", account.getUsername(), account.getEmail());
         AccountDTO accountDTO = accountService.createAccount(account);
-        AccountSimpleRefactoredDTO accountSimple = accountService.getAccountSimple(accountDTO.getUsername());
         String newAccessToken = jwtTokenProvider.generateAccessToken(accountDTO.getUsername(), List.of(AccountRole.ROLE_USER.toString()));
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(accountDTO.getUsername());
         return accountDTO.getId() != null
-                ? ResponseEntity.status(HttpStatus.CREATED).body(new LoginAndRegisterResponse(accountSimple, newAccessToken, newRefreshToken))
+                ? ResponseEntity.status(HttpStatus.CREATED).body(new LoginAndRegisterResponse(accountDTO, newAccessToken, newRefreshToken))
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
@@ -74,11 +73,11 @@ public class GeneralController {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        AccountSimpleRefactoredDTO accountSimple = accountService.getAccountSimple(loginRequest.getUsername());
+        AccountDTO accountDTO = accountService.getAccount(loginRequest.getUsername());
         List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         String accessToken = jwtTokenProvider.generateAccessToken(authentication.getName(), roles);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
-        return ResponseEntity.ok(new LoginAndRegisterResponse(accountSimple, accessToken, refreshToken));
+        return ResponseEntity.ok(new LoginAndRegisterResponse(accountDTO, accessToken, refreshToken));
     }
 
     @PostMapping("/tokens/refreshToken")
