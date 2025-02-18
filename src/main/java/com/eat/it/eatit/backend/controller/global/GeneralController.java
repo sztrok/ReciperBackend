@@ -1,8 +1,13 @@
 package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.auth.*;
-import com.eat.it.eatit.backend.dto.simple.AccountSimpleDTO;
+import com.eat.it.eatit.backend.dto.auth.request.AccessTokenRequest;
+import com.eat.it.eatit.backend.dto.auth.request.AccountCreationRequest;
+import com.eat.it.eatit.backend.dto.auth.request.LoginRequest;
+import com.eat.it.eatit.backend.dto.auth.request.RefreshTokenRequest;
+import com.eat.it.eatit.backend.dto.auth.response.LoginAndRegisterResponse;
+import com.eat.it.eatit.backend.dto.auth.response.TokenResponse;
+import com.eat.it.eatit.backend.dto.refactored.account.AccountSimpleRefactoredDTO;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
 import com.eat.it.eatit.backend.service.AccountService;
@@ -41,38 +46,39 @@ public class GeneralController {
     @Operation(summary = "Register new account", description = "Creates new account based on account creation request.")
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
     @ApiResponse(responseCode = "500", description = "Error while registering an account")
-    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody AccountCreationRequest account) {
+    public ResponseEntity<LoginAndRegisterResponse> register(@Valid @RequestBody AccountCreationRequest account) {
         log.info("Registering account username: {} email: {}", account.getUsername(), account.getEmail());
         AccountDTO accountDTO = accountService.createAccount(account);
+        AccountSimpleRefactoredDTO accountSimple = accountService.getAccountSimple(accountDTO.getUsername());
         String newAccessToken = jwtTokenProvider.generateAccessToken(accountDTO.getUsername(), List.of(AccountRole.ROLE_USER.toString()));
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(accountDTO.getUsername());
         return accountDTO.getId() != null
-                ? ResponseEntity.status(HttpStatus.CREATED).body(new AuthenticationResponse(newAccessToken, newRefreshToken))
+                ? ResponseEntity.status(HttpStatus.CREATED).body(new LoginAndRegisterResponse(accountSimple, newAccessToken, newRefreshToken))
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @GetMapping("/profile")
     @Operation(summary = "Get profile information", description = "Retrieves information about user profile.")
     @ApiResponse(responseCode = "200", description = "Account registered successfully")
-    public ResponseEntity<AccountSimpleDTO> getProfile(Authentication authentication) {
+    public ResponseEntity<AccountSimpleRefactoredDTO> getProfile(Authentication authentication) {
         log.info("Get profile info for user {}", authentication.getName());
         String username = authentication.getName();
-        return ResponseEntity.ok(accountService.getAllAccountsSimple().stream().filter(acc -> acc.getUsername().equals(username)).findFirst().orElse(new AccountSimpleDTO()));
+        return ResponseEntity.ok(accountService.getAllAccountsSimple().stream().filter(acc -> acc.getUsername().equals(username)).findFirst().orElse(new AccountSimpleRefactoredDTO()));
     }
 
     @PostMapping("/login")
     @Operation(summary = "Log in to application")
     @ApiResponse(responseCode = "200", description = "User logged in successfully")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginAndRegisterResponse> login(@RequestBody LoginRequest loginRequest) {
         log.info("Login request for user: {}", loginRequest.getUsername());
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+        AccountSimpleRefactoredDTO accountSimple = accountService.getAccountSimple(loginRequest.getUsername());
         List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         String accessToken = jwtTokenProvider.generateAccessToken(authentication.getName(), roles);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
-        return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshToken));
+        return ResponseEntity.ok(new LoginAndRegisterResponse(accountSimple, accessToken, refreshToken));
     }
 
     @PostMapping("/tokens/refreshToken")
@@ -103,7 +109,7 @@ public class GeneralController {
     @Operation(summary = "Generate new access token")
     @ApiResponse(responseCode = "200", description = "Successfully generated new access token")
     @ApiResponse(responseCode = "401", description = "Refresh token is not valid")
-    public ResponseEntity<AuthenticationResponse> getNewAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<TokenResponse> getNewAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -111,17 +117,17 @@ public class GeneralController {
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
         List<String> roles = accountService.getAccountRoles(username);
         String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
-        return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, null));
+        return ResponseEntity.ok(new TokenResponse(newAccessToken, null));
     }
 
     @PostMapping("/tokens")
     @Operation(summary = "Generate new tokens")
     @ApiResponse(responseCode = "200", description = "Successfully generated new tokens")
     @ApiResponse(responseCode = "401", description = "Refresh token is not valid")
-    public ResponseEntity<AuthenticationResponse> getNewTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<TokenResponse> getNewTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         log.info("Refresh token: {}", refreshToken);
-        if(!jwtTokenProvider.validateToken(refreshToken)) {
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
             log.info("Refresh token not valid");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -131,9 +137,8 @@ public class GeneralController {
         String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
 
-        return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, newRefreshToken));
+        return ResponseEntity.ok(new TokenResponse(newAccessToken, newRefreshToken));
     }
-
 
 
 }

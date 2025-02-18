@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.dto.auth;
+package com.eat.it.eatit.backend.dto.auth.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
