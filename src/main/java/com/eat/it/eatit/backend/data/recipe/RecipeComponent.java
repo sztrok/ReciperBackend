@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.data.refactored.recipe;
+package com.eat.it.eatit.backend.data.recipe;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,14 +11,12 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeStep {
+public class RecipeComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    @Column(length = 3000)
-    private String description;
+    private String name;
     @ManyToMany
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 

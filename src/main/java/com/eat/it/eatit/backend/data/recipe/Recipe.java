@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.data.refactored.recipe;
+package com.eat.it.eatit.backend.data.recipe;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.enums.RecipeDifficulty;
@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeRefactored {
+public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

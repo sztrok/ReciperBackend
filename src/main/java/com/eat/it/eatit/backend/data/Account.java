@@ -1,6 +1,6 @@
 package com.eat.it.eatit.backend.data;
 
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
+import com.eat.it.eatit.backend.data.recipe.Recipe;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,10 +35,10 @@ public class Account {
     private Fridge fridge;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerAccount")
-    private List<RecipeRefactored> accountRecipes = new ArrayList<>();
+    private List<Recipe> accountRecipes = new ArrayList<>();
 
     @ManyToMany(mappedBy = "likedAccounts")
-    private List<RecipeRefactored> likedRecipes = new ArrayList<>();
+    private List<Recipe> likedRecipes = new ArrayList<>();
 
     @ElementCollection(targetClass = AccountRole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

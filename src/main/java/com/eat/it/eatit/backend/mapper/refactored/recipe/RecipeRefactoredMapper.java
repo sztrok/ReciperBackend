@@ -1,6 +1,6 @@
 package com.eat.it.eatit.backend.mapper.refactored.recipe;
 
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
+import com.eat.it.eatit.backend.data.recipe.Recipe;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public class RecipeRefactoredMapper {
     private RecipeRefactoredMapper() {
     }
 
-    public static RecipeRefactoredDTO toDTO(RecipeRefactored recipe) {
+    public static RecipeRefactoredDTO toDTO(Recipe recipe) {
         RecipeRefactoredDTO dto = new RecipeRefactoredDTO();
         dto.setId(recipe.getId());
         dto.setName(recipe.getName());
@@ -29,7 +29,7 @@ public class RecipeRefactoredMapper {
         return dto;
     }
 
-    public static List<RecipeRefactoredDTO> toDTOList(List<RecipeRefactored> recipes) {
+    public static List<RecipeRefactoredDTO> toDTOList(List<Recipe> recipes) {
         return recipes.stream().map(RecipeRefactoredMapper::toDTO).toList();
     }
 }

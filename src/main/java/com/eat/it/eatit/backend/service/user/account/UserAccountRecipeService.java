@@ -1,9 +1,9 @@
 package com.eat.it.eatit.backend.service.user.account;
 
 import com.eat.it.eatit.backend.data.Account;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
+import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.recipe.Recipe;
+import com.eat.it.eatit.backend.data.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
@@ -53,7 +53,7 @@ public class UserAccountRecipeService extends RecipeService {
         if (account == null) {
             return null;
         }
-        Optional<RecipeRefactored> recipe = repository.findById(recipeId);
+        Optional<Recipe> recipe = repository.findById(recipeId);
         return recipe.map(RecipeRefactoredMapper::toDTO).orElse(null);
     }
 
@@ -73,7 +73,7 @@ public class UserAccountRecipeService extends RecipeService {
         }
         List<RecipeComponent> components = dto.getRecipeComponents().stream().map(componentService::save).toList();
         List<RecipeStep> steps = dto.getDetailedSteps().stream().map(stepService::save).toList();
-        RecipeRefactored recipe = getRecipeRefactored(dto, steps, components);
+        Recipe recipe = getRecipeRefactored(dto, steps, components);
         recipe.setOwnerAccount(account);
         account.getAccountRecipes().add(recipe);
         return toDTO(recipe);
@@ -85,8 +85,8 @@ public class UserAccountRecipeService extends RecipeService {
         if (account == null) {
             return null;
         }
-        List<RecipeRefactored> recipes = repository.findAllById(ids);
-        for(RecipeRefactored recipe : recipes) {
+        List<Recipe> recipes = repository.findAllById(ids);
+        for(Recipe recipe : recipes) {
             if(!account.getLikedRecipes().contains(recipe)) {
                 account.getLikedRecipes().add(recipe);
                 recipe.getLikedAccounts().add(account);

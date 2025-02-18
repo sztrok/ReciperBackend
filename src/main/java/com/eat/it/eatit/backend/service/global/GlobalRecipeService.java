@@ -1,10 +1,10 @@
 package com.eat.it.eatit.backend.service.global;
 
 import com.eat.it.eatit.backend.data.Item;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
+import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
+import com.eat.it.eatit.backend.data.recipe.Recipe;
+import com.eat.it.eatit.backend.data.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.AccountDTO;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.dto.refactored.recipe.fastapi.RecipeFastApiRequest;
@@ -106,7 +106,7 @@ public class GlobalRecipeService extends RecipeService {
 
     public RecipeRefactoredDTO getPublicRecipeById(Authentication authentication, Long id) {
         AccountDTO account = authService.getAccountByName(authentication.getName());
-        RecipeRefactored recipe = findRecipeById(id);
+        Recipe recipe = findRecipeById(id);
         if (recipe == null) {
             return null;
         }
@@ -157,7 +157,7 @@ public class GlobalRecipeService extends RecipeService {
     public RecipeRefactoredDTO addNewRecipe(RecipeRefactoredDTO dto) {
         List<RecipeComponent> components = dto.getRecipeComponents().stream().map(componentService::save).toList();
         List<RecipeStep> steps = dto.getDetailedSteps().stream().map(stepService::save).toList();
-        RecipeRefactored recipe = getRecipeRefactored(dto, steps, components);
+        Recipe recipe = getRecipeRefactored(dto, steps, components);
         Set<RecipeIngredient> ingredients = new HashSet<>();
         for (RecipeComponent component : components) {
             ingredients.addAll(component.getIngredients());
@@ -192,7 +192,7 @@ public class GlobalRecipeService extends RecipeService {
                 .reversed();// Sortowanie malejąco
     }
 
-    private Integer getNumberOfAvailableIngredients(AccountDTO account, RecipeRefactored recipe) {
+    private Integer getNumberOfAvailableIngredients(AccountDTO account, Recipe recipe) {
         List<String> availableIngredients = account.getFridge().getItems().stream().map(item -> item.getItem().getName()).toList();
         return (int) recipe.getIngredients().stream().filter(ing -> availableIngredients.contains(ing.getItem().getName())).count();
     }

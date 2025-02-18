@@ -1,10 +1,10 @@
 package com.eat.it.eatit.backend.loader;
 
 import com.eat.it.eatit.backend.data.*;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
+import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
+import com.eat.it.eatit.backend.data.recipe.Recipe;
+import com.eat.it.eatit.backend.data.recipe.RecipeStep;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.repository.*;
 import com.eat.it.eatit.backend.enums.AccountRole;
@@ -35,7 +35,6 @@ class InitialDataLoader {
     private final FridgeRepository fridgeRepository;
     private final CookwareRepository cookwareRepository;
     private final ItemInFridgeRepository itemInFridgeRepository;
-    private final ItemInRecipeRepository itemInRecipeRepository;
 
     private final RecipeComponentRepository recipeComponentRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
@@ -50,7 +49,6 @@ class InitialDataLoader {
                              FridgeRepository fridgeRepository,
                              CookwareRepository cookwareRepository,
                              ItemInFridgeRepository itemInFridgeRepository,
-                             ItemInRecipeRepository itemInRecipeRepository,
                              RecipeComponentRepository recipeComponentRepository,
                              RecipeIngredientRepository recipeIngredientRepository,
                              RecipeRepository recipeRepository,
@@ -62,7 +60,6 @@ class InitialDataLoader {
         this.fridgeRepository = fridgeRepository;
         this.cookwareRepository = cookwareRepository;
         this.itemInFridgeRepository = itemInFridgeRepository;
-        this.itemInRecipeRepository = itemInRecipeRepository;
         this.recipeComponentRepository = recipeComponentRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
         this.recipeRepository = recipeRepository;
@@ -86,7 +83,7 @@ class InitialDataLoader {
         linkFridgeAndItems(fridges, items);
         linkAccountAndFridge(fridges, accounts);
 
-        assingRoles(accounts);
+        assignRoles(accounts);
 
         generateDummyRefactoredRecipes();
 
@@ -159,7 +156,7 @@ class InitialDataLoader {
         return fridgeRepository.saveAll(fridges);
     }
 
-    private List<Cookware> generateCookware() {
+    private void generateCookware() {
         List<Cookware> cookwares = new ArrayList<>();
         cookwares.add(new Cookware("Patelnia"));
         cookwares.add(new Cookware("Piekarnik"));
@@ -168,7 +165,7 @@ class InitialDataLoader {
         cookwares.add(new Cookware("Mikser"));
         cookwares.add(new Cookware("Nóż"));
         cookwares.add(new Cookware("Termomix"));
-        return cookwareRepository.saveAll(cookwares);
+        cookwareRepository.saveAll(cookwares);
     }
 
     private void generateDummyRefactoredRecipes() {
@@ -237,7 +234,7 @@ class InitialDataLoader {
         recipeComponentRepository.saveAll(List.of(r1p1, r1p2, r2p1));
 
         // RECIPE REFACTORED
-        RecipeRefactored r1 = new RecipeRefactored();
+        Recipe r1 = new Recipe();
         r1.setName("Test recipe 1 name");
         r1.setDescription("Test recipe 1 description");
         r1.setSimpleSteps(List.of("Simple step1", "Setp2", "Another step", "another one"));
@@ -248,7 +245,7 @@ class InitialDataLoader {
         r1.getLikedAccounts().addAll(List.of(accountRepository.getReferenceById(1L), accountRepository.getReferenceById(3L), accountRepository.getReferenceById(4L)));
         r1.getIngredients().addAll(List.of(item1, item2, item3));
         
-        RecipeRefactored r2 = new RecipeRefactored();
+        Recipe r2 = new Recipe();
         r2.setName("Test recipe 2 name");
         r2.setDescription("Test recipe 1 description");
         r2.setSimpleSteps(List.of("Simple step1", "Setp2", "Another step", "another one"));
@@ -271,7 +268,7 @@ class InitialDataLoader {
         return accountRepository.save(account);
     }
 
-    private void assingRoles(List<Account> accounts) {
+    private void assignRoles(List<Account> accounts) {
         for (Account account : accounts) {
             account.addRole(AccountRole.ROLE_USER);
             accountRepository.save(account);

@@ -1,10 +1,10 @@
 package com.eat.it.eatit.backend.service.recipe;
 
 import com.eat.it.eatit.backend.data.Item;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeRefactored;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
+import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
+import com.eat.it.eatit.backend.data.recipe.Recipe;
+import com.eat.it.eatit.backend.data.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeRefactoredDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
@@ -32,8 +32,8 @@ public abstract class RecipeService {
     }
 
     @NotNull
-    protected static RecipeRefactored getRecipeRefactored(RecipeRefactoredDTO dto, List<RecipeStep> steps, List<RecipeComponent> components) {
-        RecipeRefactored recipe = new RecipeRefactored();
+    protected static Recipe getRecipeRefactored(RecipeRefactoredDTO dto, List<RecipeStep> steps, List<RecipeComponent> components) {
+        Recipe recipe = new Recipe();
         recipe.setName(dto.getName());
         recipe.setDescription(dto.getDescription());
         recipe.setSimpleSteps(dto.getSimpleSteps());
@@ -47,22 +47,22 @@ public abstract class RecipeService {
         return recipe;
     }
 
-    protected RecipeRefactored findRecipeById(Long recipeId) {
+    protected Recipe findRecipeById(Long recipeId) {
         return repository.findById(recipeId).orElse(null);
     }
 
-    protected List<RecipeRefactored> getAllRecipesFromDatabase() {
+    protected List<Recipe> getAllRecipesFromDatabase() {
         return repository.findAll();
     }
 
-    protected List<Item> getRecipeItems(RecipeRefactored recipe) {
+    protected List<Item> getRecipeItems(Recipe recipe) {
         if (recipe == null) {
             return new ArrayList<>();
         }
         return recipe.getIngredients().stream().map(RecipeIngredient::getItem).toList();
     }
 
-    protected Set<ItemType> getRecipeItemTypes(RecipeRefactored recipe) {
+    protected Set<ItemType> getRecipeItemTypes(Recipe recipe) {
         if (recipe == null) {
             return new HashSet<>();
         }

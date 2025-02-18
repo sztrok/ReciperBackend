@@ -1,6 +1,6 @@
 package com.eat.it.eatit.backend.mapper.refactored.recipe;
 
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeStep;
+import com.eat.it.eatit.backend.data.recipe.RecipeStep;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeStepDTO;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.data.refactored.recipe;
+package com.eat.it.eatit.backend.data.recipe;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.enums.UnitOfMeasure;

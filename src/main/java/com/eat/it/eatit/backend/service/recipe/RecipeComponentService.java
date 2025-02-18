@@ -1,7 +1,7 @@
 package com.eat.it.eatit.backend.service.recipe;
 
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeComponent;
-import com.eat.it.eatit.backend.data.refactored.recipe.RecipeIngredient;
+import com.eat.it.eatit.backend.data.recipe.RecipeComponent;
+import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
 import com.eat.it.eatit.backend.dto.refactored.recipe.RecipeComponentDTO;
 import com.eat.it.eatit.backend.repository.recipe.RecipeComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
