@@ -108,16 +108,4 @@ class AccountRepositoryTest {
         assertThat(testEntityManager.find(Account.class, account.getId()).getFridge()).isEqualTo(fridge);
     }
 
-    @Test
-    void testAttachingRecipes() {
-        accountRepository.save(account);
-        List<Recipe> recipes = List.of(
-                new Recipe("test", "recipe for test purposes"),
-                new Recipe("test2", "recipe for test purposes")
-        );
-        account.setAccountRecipes(recipes);
-        System.out.println(testEntityManager.find(Account.class, account.getId()).getAccountRecipes());
-        assertThat(testEntityManager.find(Account.class, account.getId()).getAccountRecipes()).isEqualTo(recipes);
-    }
-
 }

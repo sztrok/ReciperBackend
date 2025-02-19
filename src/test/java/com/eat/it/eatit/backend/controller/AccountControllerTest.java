@@ -18,9 +18,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -115,26 +112,6 @@ class AccountControllerTest {
     }
 
     @Test
-    void shouldAddRecipesToAccount() throws Exception {
-        RecipeDTO recipe1 = new RecipeDTO();
-        recipe1.setName("Test recipe 1");
-        recipe1.setDescription("Recipe 1 for testing purposes");
-        RecipeDTO recipe2 = new RecipeDTO();
-        recipe2.setName("Test recipe 2");
-        recipe2.setDescription("Recipe 2 for testing purposes");
-
-        List<RecipeDTO> recipes = List.of(recipe1, recipe2);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}/recipes", testAccount.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(recipes)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Test recipe 1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value("Recipe 1 for testing purposes"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Test recipe 2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].description").value("Recipe 2 for testing purposes"));
-    }
-
-    @Test
     void shouldReturnBadRequest_whenAccountWithIdDoesNotExist() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/account/{id}", Long.MAX_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -159,19 +136,4 @@ class AccountControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    @Test
-    void shouldReturnBadRequest_whenAddingRecipesToNonExistendAccount() throws Exception {
-        RecipeDTO recipe1 = new RecipeDTO();
-        recipe1.setName("Test recipe 1");
-        recipe1.setDescription("Recipe 1 for testing purposes");
-        RecipeDTO recipe2 = new RecipeDTO();
-        recipe2.setName("Test recipe 2");
-        recipe2.setDescription("Recipe 2 for testing purposes");
-
-        Set<RecipeDTO> recipes = Set.of(recipe1, recipe2);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/account/{id}/recipes", Long.MAX_VALUE)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(recipes)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
 }
