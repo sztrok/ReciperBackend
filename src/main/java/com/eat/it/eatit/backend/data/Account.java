@@ -40,6 +40,9 @@ public class Account {
     @ManyToMany(mappedBy = "likedAccounts")
     private List<Recipe> likedRecipes = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "savedAccounts")
+    private List<Recipe> savedRecipes = new ArrayList<>();
+
     @ElementCollection(targetClass = AccountRole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> accountRoles = new HashSet<>();
@@ -75,5 +78,21 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(username, mail);
+    }
+
+    public void addLikedRecipe(Recipe recipe) {
+        this.likedRecipes.add(recipe);
+    }
+
+    public void removeLikedRecipe(Recipe recipe) {
+        this.likedRecipes = this.likedRecipes.stream().filter(rec -> !rec.getId().equals(recipe.getId())).toList();
+    }
+
+    public void addSavedRecipe(Recipe recipe) {
+        this.savedRecipes.add(recipe);
+    }
+
+    public void removeSavedRecipe(Recipe recipe) {
+        this.savedRecipes = this.savedRecipes.stream().filter(rec -> !rec.getId().equals(recipe.getId())).toList();
     }
 }

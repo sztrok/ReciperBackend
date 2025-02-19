@@ -32,6 +32,9 @@ public class Recipe {
     @ManyToMany
     private List<Account> likedAccounts = new ArrayList<>();
 
+    @ManyToMany
+    private List<Account> savedAccounts = new ArrayList<>();
+
     @Convert(converter = ListToStringConverter.class)
     @Column(length = 3000)
     private List<String> simpleSteps = new ArrayList<>();
@@ -97,11 +100,23 @@ public class Recipe {
         this.likedAccounts = new ArrayList<>(likedAccounts);
     }
 
+    public void setSavedAccounts(List<Account> savedAccounts) {
+        this.savedAccounts = new ArrayList<>(savedAccounts);
+    }
+
     public void addLikedAccount(Account account) {
         this.likedAccounts.add(account);
     }
 
     public void removeLikedAccount(Account account) {
         this.likedAccounts = this.likedAccounts.stream().filter(acc -> !acc.getId().equals(account.getId())).toList();
+    }
+
+    public void addSavedAccount(Account account) {
+        this.savedAccounts.add(account);
+    }
+
+    public void removeSavedAccount(Account account) {
+        this.savedAccounts = this.savedAccounts.stream().filter(acc -> !acc.getId().equals(account.getId())).toList();
     }
 }
