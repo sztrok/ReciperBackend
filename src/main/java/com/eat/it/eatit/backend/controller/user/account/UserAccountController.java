@@ -1,6 +1,7 @@
 package com.eat.it.eatit.backend.controller.user.account;
 
 import com.eat.it.eatit.backend.dto.AccountDTO;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleDTO;
 import com.eat.it.eatit.backend.service.user.account.UserAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +25,15 @@ public class UserAccountController {
         this.accountService = accountService;
     }
 
-    // ACCOUNT DATA
+    @GetMapping()
+    @Operation(summary = "Get profile information", description = "Retrieves information about user profile.")
+    @ApiResponse(responseCode = "200", description = "Account registered successfully")
+    public ResponseEntity<AccountSimpleDTO> getProfile(Authentication authentication) {
+        log.info("Get profile info for user {}", authentication.getName());
+        String username = authentication.getName();
+        return ResponseEntity.ok(accountService.getAccountSimple(username));
+    }
+
     @PutMapping()
     @Operation(summary = "Update account", description = "Updates an existing account identified by its ID based on the provided AccountDTO.")
     @ApiResponse(responseCode = "200", description = "Successfully updated the account.")

@@ -2,6 +2,8 @@ package com.eat.it.eatit.backend.service.user.account;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.dto.AccountDTO;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleDTO;
+import com.eat.it.eatit.backend.mapper.AccountMapper;
 import com.eat.it.eatit.backend.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,11 @@ public class UserAccountService {
             return null;
         }
         return updateAccountFields(accountDTO, account, accountRepository);
+    }
+
+    public AccountSimpleDTO getAccountSimple(String username) {
+        Account account = accountRepository.findByUsername(username);
+        return AccountMapper.toSimpleDTO(account);
     }
 
     private Account getAccountEntityByName(String username) {

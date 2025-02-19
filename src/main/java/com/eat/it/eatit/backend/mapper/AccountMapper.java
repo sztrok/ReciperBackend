@@ -2,8 +2,7 @@ package com.eat.it.eatit.backend.mapper;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.dto.AccountDTO;
-import com.eat.it.eatit.backend.dto.account.AccountSimpleRefactoredDTO;
-import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
+import com.eat.it.eatit.backend.dto.account.AccountSimpleDTO;
 
 public class AccountMapper {
 
@@ -38,14 +37,11 @@ public class AccountMapper {
         return account;
     }
 
-    public static AccountSimpleRefactoredDTO toSimpleDTO(Account account) {
-        return new AccountSimpleRefactoredDTO(
-                account.getId(),
+    public static AccountSimpleDTO toSimpleDTO(Account account) {
+        return new AccountSimpleDTO(
                 account.getUsername(),
                 account.getMail(),
                 account.getPremium(),
-                RecipeRefactoredMapper.toDTOList(account.getAccountRecipes()),
-                RecipeRefactoredMapper.toDTOList(account.getLikedRecipes()),
                 account.getAccountRoles()
         );
     }
