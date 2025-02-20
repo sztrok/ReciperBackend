@@ -55,7 +55,7 @@ public class SecurityConfig {
         // Swagger and API documentation
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").authenticated()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/", "/home").permitAll()
         );
 
