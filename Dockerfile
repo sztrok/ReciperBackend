@@ -32,6 +32,4 @@ COPY --from=build /app/target/*.jar app.jar
 
 ENV PORT=8080
 # Uruchomienie aplikacji (teraz zmienna PORT będzie działać poprawnie)
-ENTRYPOINT exec java -jar app.jar --server.port=${PORT}
-
-# Uruchomienie aplikacji
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT}"]
