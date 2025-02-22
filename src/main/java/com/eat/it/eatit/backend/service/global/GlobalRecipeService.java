@@ -32,8 +32,8 @@ import static com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactored
 @Service
 public class GlobalRecipeService extends RecipeService {
 
-    private static final String FAST_API_GENERATOR_URL = "http://fastapi-backend:8000/recipe/from_text/single_stage";
-    private static final String FAST_API_PROMPT_URL = "http://fastapi-backend:8000/recipe/from_prompt";
+    private static final String FAST_API_GENERATOR_URL = "https://generator-service.onrender.com/recipe/from_text/single_stage";
+    private static final String FAST_API_PROMPT_URL = "https://generator-service.onrender.com/recipe/from_prompt";
     private final RestTemplate restTemplate = new RestTemplate();
     private final AccountAuthAndAccessService authService;
 
