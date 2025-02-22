@@ -8,6 +8,7 @@ import com.eat.it.eatit.backend.enums.SortingParameter;
 import com.eat.it.eatit.backend.service.global.GlobalRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/global/recipe")
 public class GlobalRecipeController {
@@ -97,7 +99,9 @@ public class GlobalRecipeController {
     @Operation(summary = "Generate recipe from description", description = "Generates recipe matching template from description containing all necessary information")
     @ApiResponse(responseCode = "200", description = "Recipes generated successfully")
     public ResponseEntity<RecipeDTO> generateRecipeFromDescription(@RequestBody RecipeFastApiRequest recipe) {
+        log.info("Generate recipe from description");
         RecipeDTO body = recipeService.generateNewRecipeWithFastApiConnection(recipe);
+        log.info("Recipe from description generated successfully");
         return ResponseEntity.ok(body);
     }
 
@@ -105,7 +109,9 @@ public class GlobalRecipeController {
     @Operation(summary = "Generate recipe from prompt", description = "Generates recipe matching template from simple prompt")
     @ApiResponse(responseCode = "200", description = "Recipes generated successfully")
     public ResponseEntity<RecipeDTO> generateRecipeFromPrompt(@RequestBody RecipeFastApiRequest recipe) {
+        log.info("Generate recipe from prompt");
         RecipeDTO body = recipeService.generateRecipeFromPrompt(recipe);
+        log.info("Recipe from prompt generated successfully");
         return ResponseEntity.ok(body);
     }
 
