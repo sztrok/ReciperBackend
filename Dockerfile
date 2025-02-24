@@ -30,6 +30,6 @@ WORKDIR /app
 # Kopiowanie zbudowanej aplikacji
 COPY --from=build /app/target/*.jar app.jar
 
-ENV PORT=8080
+EXPOSE 8080
 # Uruchomienie aplikacji (teraz zmienna PORT będzie działać poprawnie)
-ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT}"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT:-8080}"]
