@@ -31,6 +31,5 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 10000
-# Uruchomienie aplikacji (teraz zmienna PORT będzie działać poprawnie)
-ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT}"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
