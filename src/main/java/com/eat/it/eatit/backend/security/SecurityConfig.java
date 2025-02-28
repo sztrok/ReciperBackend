@@ -68,6 +68,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
                         // GENERAL
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
