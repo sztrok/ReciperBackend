@@ -70,7 +70,7 @@ public class SecurityConfig {
                         // GENERAL
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, GLOBAL_API_PATH + "/general/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, OLD_PATH + "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/general/profile").authenticated()
                         // COOKWARE
                         .requestMatchers(HttpMethod.GET, GLOBAL_API_PATH + "/cookware/**").permitAll()
