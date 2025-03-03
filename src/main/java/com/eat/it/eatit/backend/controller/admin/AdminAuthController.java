@@ -1,7 +1,6 @@
 package com.eat.it.eatit.backend.controller.admin;
 
 import com.eat.it.eatit.backend.dto.auth.request.LoginRequest;
-import com.eat.it.eatit.backend.dto.auth.response.TokenResponse;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.enums.ResponseCookieType;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
@@ -39,7 +38,7 @@ public class AdminAuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Login to admin dashboard")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         log.info("Admin login request: {}", loginRequest);
 
         Authentication authentication = authenticationManager
@@ -53,12 +52,12 @@ public class AdminAuthController {
         String accessToken = jwtTokenProvider.generateAccessToken(authentication.getName(), roles);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
 
-        return getTokenResponseResponseEntity(response, accessToken, refreshToken);
+        return getResponseWithCookiesInHeader(response, accessToken, refreshToken);
     }
 
     @PostMapping("/refresh")
     @Operation(summary = "Refresh tokens")
-    public ResponseEntity<TokenResponse> getNewTokens(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<?> getNewTokens(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
         if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
             return ResponseEntity.status(401).build();
         }
@@ -67,11 +66,35 @@ public class AdminAuthController {
         String newAccessToken = jwtTokenProvider.generateAccessToken(username, roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(username);
 
-        return getTokenResponseResponseEntity(response, newAccessToken, newRefreshToken);
+        return getResponseWithCookiesInHeader(response, newAccessToken, newRefreshToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        ResponseCookie deleteAccessToken = ResponseCookie.from("accessToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        ResponseCookie deleteRefreshToken = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/auth/refresh")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, deleteAccessToken.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, deleteRefreshToken.toString());
+
+        return ResponseEntity.ok().build();
     }
 
     @NotNull
-    private ResponseEntity<TokenResponse> getTokenResponseResponseEntity(HttpServletResponse response, String accessToken, String refreshToken) {
+    private ResponseEntity<?> getResponseWithCookiesInHeader(HttpServletResponse response, String accessToken, String refreshToken) {
         ResponseCookie accessCookie = accountService.getResponseCookie(ResponseCookieType.ACCESS_TOKEN, accessToken);
         ResponseCookie refreshCookie = accountService.getResponseCookie(ResponseCookieType.REFRESH_TOKEN, refreshToken);
 
