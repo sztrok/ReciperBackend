@@ -64,8 +64,10 @@ public class AuthController {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         AccountDTO accountDTO = accountService.getAccount(loginRequest.getUsername());
         List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+
         String accessToken = jwtTokenProvider.generateAccessToken(authentication.getName(), roles);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication.getName());
+
         return ResponseEntity.ok(new LoginAndRegisterResponse(accountDTO, accessToken, refreshToken));
     }
 
