@@ -99,7 +99,7 @@ public class AccountService {
                 .secure(false) //TODO:change to true
                 .path("/")
                 .maxAge(Duration.ofMinutes(15))
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
     }
 
@@ -109,7 +109,7 @@ public class AccountService {
                 .secure(false) //TODO:change to true
                 .path("/")
                 .maxAge(Duration.ofDays(7))
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
     }
 
