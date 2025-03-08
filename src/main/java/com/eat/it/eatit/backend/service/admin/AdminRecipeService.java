@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminRecipeService extends RecipeService {
@@ -20,8 +21,9 @@ public class AdminRecipeService extends RecipeService {
         super(repository, componentService, ingredientService, stepService);
     }
 
-    public List<RecipeDTO> getAllRecipes() {
-        return getAllRecipesFromDatabase().stream().map(RecipeRefactoredMapper::toDTO).toList();
+    public List<RecipeDTO> getAllRecipes(Optional<Long> limit) {
+        List<RecipeDTO> allRecipes = getAllRecipesFromDatabase().stream().map(RecipeRefactoredMapper::toDTO).toList();
+        return limit.map(aLong -> allRecipes.stream().limit(aLong).toList()).orElse(allRecipes);
     }
 
 }
