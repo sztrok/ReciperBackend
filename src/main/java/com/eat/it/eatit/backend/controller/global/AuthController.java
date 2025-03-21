@@ -8,7 +8,7 @@ import com.eat.it.eatit.backend.dto.auth.response.LoginAndRegisterResponse;
 import com.eat.it.eatit.backend.dto.auth.response.TokenResponse;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
-import com.eat.it.eatit.backend.service.AccountService;
+import com.eat.it.eatit.backend.service.general.account.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

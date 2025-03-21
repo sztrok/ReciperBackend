@@ -1,7 +1,7 @@
 package com.eat.it.eatit.backend.controller.admin;
 
 import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
-import com.eat.it.eatit.backend.service.admin.AdminRecipeService;
+import com.eat.it.eatit.backend.service.admin.recipe.AdminRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

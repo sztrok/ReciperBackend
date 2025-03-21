@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service.recipe;
+package com.eat.it.eatit.backend.service.general.recipe;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.recipe.RecipeComponent;

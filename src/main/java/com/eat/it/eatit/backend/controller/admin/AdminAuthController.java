@@ -4,7 +4,7 @@ import com.eat.it.eatit.backend.dto.auth.request.LoginRequest;
 import com.eat.it.eatit.backend.enums.AccountRole;
 import com.eat.it.eatit.backend.enums.ResponseCookieType;
 import com.eat.it.eatit.backend.security.service.JwtTokenProvider;
-import com.eat.it.eatit.backend.service.AccountService;
+import com.eat.it.eatit.backend.service.general.account.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

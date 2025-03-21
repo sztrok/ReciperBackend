@@ -4,7 +4,7 @@ import com.eat.it.eatit.backend.dto.ItemDTO;
 import com.eat.it.eatit.backend.enums.Comparator;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
-import com.eat.it.eatit.backend.service.ItemService;
+import com.eat.it.eatit.backend.service.general.item.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;

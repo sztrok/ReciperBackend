@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service;
+package com.eat.it.eatit.backend.service.general.cookware;
 
 import com.eat.it.eatit.backend.data.Cookware;
 import com.eat.it.eatit.backend.dto.CookwareDTO;

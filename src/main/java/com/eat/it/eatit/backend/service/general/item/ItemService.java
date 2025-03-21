@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service;
+package com.eat.it.eatit.backend.service.general.item;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.dto.ItemDTO;

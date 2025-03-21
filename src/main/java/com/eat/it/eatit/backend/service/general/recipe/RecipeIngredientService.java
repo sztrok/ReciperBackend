@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service.recipe;
+package com.eat.it.eatit.backend.service.general.recipe;
 
 import com.eat.it.eatit.backend.data.Item;
 import com.eat.it.eatit.backend.data.recipe.RecipeIngredient;
@@ -7,7 +7,7 @@ import com.eat.it.eatit.backend.dto.recipe.RecipeIngredientDTO;
 import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.UnitOfMeasure;
 import com.eat.it.eatit.backend.repository.recipe.RecipeIngredientRepository;
-import com.eat.it.eatit.backend.service.ItemService;
+import com.eat.it.eatit.backend.service.general.item.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

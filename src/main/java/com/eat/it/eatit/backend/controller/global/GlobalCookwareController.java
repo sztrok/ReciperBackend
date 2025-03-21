@@ -1,7 +1,7 @@
 package com.eat.it.eatit.backend.controller.global;
 
 import com.eat.it.eatit.backend.dto.CookwareDTO;
-import com.eat.it.eatit.backend.service.CookwareService;
+import com.eat.it.eatit.backend.service.general.cookware.CookwareService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;

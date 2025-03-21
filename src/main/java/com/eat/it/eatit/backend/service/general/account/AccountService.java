@@ -1,4 +1,4 @@
-package com.eat.it.eatit.backend.service;
+package com.eat.it.eatit.backend.service.general.account;
 
 import com.eat.it.eatit.backend.data.Account;
 import com.eat.it.eatit.backend.data.Fridge;

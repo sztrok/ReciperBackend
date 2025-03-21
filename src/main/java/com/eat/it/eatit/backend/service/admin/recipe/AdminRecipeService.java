@@ -1,12 +1,12 @@
-package com.eat.it.eatit.backend.service.admin;
+package com.eat.it.eatit.backend.service.admin.recipe;
 
 import com.eat.it.eatit.backend.dto.recipe.RecipeDTO;
 import com.eat.it.eatit.backend.mapper.refactored.recipe.RecipeRefactoredMapper;
 import com.eat.it.eatit.backend.repository.recipe.RecipeRepository;
-import com.eat.it.eatit.backend.service.recipe.RecipeComponentService;
-import com.eat.it.eatit.backend.service.recipe.RecipeIngredientService;
-import com.eat.it.eatit.backend.service.recipe.RecipeService;
-import com.eat.it.eatit.backend.service.recipe.RecipeStepService;
+import com.eat.it.eatit.backend.service.general.recipe.RecipeComponentService;
+import com.eat.it.eatit.backend.service.general.recipe.RecipeIngredientService;
+import com.eat.it.eatit.backend.service.general.recipe.RecipeService;
+import com.eat.it.eatit.backend.service.general.recipe.RecipeStepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

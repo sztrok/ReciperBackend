@@ -6,6 +6,7 @@ import com.eat.it.eatit.backend.enums.ItemType;
 import com.eat.it.eatit.backend.enums.Macros;
 import com.eat.it.eatit.backend.mapper.ItemMapper;
 import com.eat.it.eatit.backend.repository.ItemRepository;
+import com.eat.it.eatit.backend.service.general.item.ItemService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
