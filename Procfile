@@ -1,1 +1,0 @@
-web: java -jar target/EatItBackend-0.0.1-SNAPSHOT.jar -Dserver.tomcat.connection-timeout=60000 -Dspring.profiles.active=loadInitialData -Dserver.port=$PORT
